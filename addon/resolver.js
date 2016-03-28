@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import EmberResolver from 'ember-resolver';
-import config from './config/environment';
+import config from 'ember-get-config';
 
 var lookupFunctions = [],
   genericModuleNameLookupPatterns = [

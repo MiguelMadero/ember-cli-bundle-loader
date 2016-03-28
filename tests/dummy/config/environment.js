@@ -7,7 +7,8 @@ module.exports = function(environment) {
     modulePrefix: 'dummy',
     environment: environment,
     baseURL: '/',
-    locationType: 'auto',
+    // NOTE: locationType hash is required for links between addons to work correctly
+    locationType: 'hash',
     bundles,
     packageNames,
     EmberENV: {

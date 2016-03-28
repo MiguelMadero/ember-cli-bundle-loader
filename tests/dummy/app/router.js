@@ -6,6 +6,9 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function() {
+  // TODO: move to the blueprint
+  this.route('catchAll', {path: '*:'});
+  this.route('boot');
 });
 
 export default Router;
