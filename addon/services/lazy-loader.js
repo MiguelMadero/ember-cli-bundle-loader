@@ -15,7 +15,7 @@ export default Ember.Service.extend({
   },
   getBundleForUrl (url) {
     return config.bundles.find(bundle=>
-      bundle.handledRoutesPatterns.any(pattern=>
+      bundle.handledRoutesPatterns.find(pattern=>
         url.match(pattern)));
   },
   loadBundleForUrl (url) {

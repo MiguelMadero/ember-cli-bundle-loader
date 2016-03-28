@@ -8,7 +8,6 @@ module.exports = {
   beforeInstall: function (options) {
     var packagesDir = path.join(options.target, 'packages');
     if (!fs.existsSync(packagesDir)) {
-      console.log('Doesn\'t exist');
       fs.mkdirSync(path.join(options.target, 'packages'));
     }
   }
