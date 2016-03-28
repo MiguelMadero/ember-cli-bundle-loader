@@ -9,7 +9,7 @@ function getDSL (PackageRouter) {
   });
 
   function generateDSL() {
-    this.resource('application', { path: "/", overrideNameAssertion: true }, function() {
+    this.route('application', { path: "/", overrideNameAssertion: true }, function() {
       for (var i=0; i < dslCallbacks.length; i++) {
         dslCallbacks[i].call(this);
       }

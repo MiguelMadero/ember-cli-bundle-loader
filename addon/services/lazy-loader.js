@@ -3,6 +3,7 @@ import Ember from 'ember';
 import routingConfigUtil from 'ember-cli-bundle-loader/utils/lazy-routing-configuration';
 import config from 'ember-get-config';
 
+const A = Ember.A;
 const loadedBundles = {};
 config.bundles.forEach(bundle=>loadedBundles[bundle.name] = false);
 
@@ -14,8 +15,8 @@ export default Ember.Service.extend({
     return loadedBundles[bundleName];
   },
   getBundleForUrl (url) {
-    return config.bundles.find(bundle=>
-      bundle.handledRoutesPatterns.find(pattern=>
+    return A(config.bundles).find(bundle=>
+      A(bundle.handledRoutesPatterns).find(pattern=>
         url.match(pattern)));
   },
   loadBundleForUrl (url) {
