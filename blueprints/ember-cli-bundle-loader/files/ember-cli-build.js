@@ -1,5 +1,5 @@
 /*jshint node:true*/
-var EmberAppWithPackages = require('./lib/broccoli/ember-app-with-packages');
+var EmberAppWithPackages = require('ember-cli-bundle-loader/lib/broccoli/ember-app-with-packages');
 
 module.exports = function (defaults) {
   var emberAppWithPackages = new EmberAppWithPackages(defaults, {

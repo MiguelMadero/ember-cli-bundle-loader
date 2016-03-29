@@ -6,6 +6,7 @@
 [ ] Port approvals tests from ember-cli-packages-demo
 [ ] Port acceptance tests. 
 [ ] Update README with info from packages-demo and add stuff about generators
+  Document sass dependency. 
 [ ] Test pods (Zenefits)
 [x] Setup CI
 
