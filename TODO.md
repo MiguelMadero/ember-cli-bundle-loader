@@ -4,6 +4,7 @@
 [x] Extract cli-build API
 [x] Test the addon and generators on a new app 
 [ ] Port approvals tests from ember-cli-packages-demo
+[ ] Port acceptance tests. 
 [ ] Update README with info from packages-demo and add stuff about generators
 [ ] Test pods (Zenefits)
 [x] Setup CI
