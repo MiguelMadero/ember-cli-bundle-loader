@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/MiguelMadero/ember-cli-bundle-loader.svg?branch=master)](https://travis-ci.org/MiguelMadero/ember-cli-bundle-loader)
+
 # Ember-cli-bundle-loader
 
 This README outlines the details of collaborating on this Ember addon.
