@@ -8,9 +8,6 @@ const loadedBundles = {};
 config.bundles.forEach(bundle=>loadedBundles[bundle.name] = false);
 
 export default Ember.Service.extend({
-  // TODO: consider moving to  really need to inject this or if it's better to get as an import as @nathanhammond suggested
-  // TODO: consider removing the $ dependency
-  // ajax: Ember.inject.service(),
   isBundleLoaded (bundleName) {
     return loadedBundles[bundleName];
   },
