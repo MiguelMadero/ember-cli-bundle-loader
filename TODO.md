@@ -2,9 +2,10 @@
 
 [ ] Make catch-all routes re-usable
 [ ] Extract cli-build API
-[ ] Port approvals tests from ember-cli-packages-demo
 [ ] Test the addon and generators on a new app 
+[ ] Port approvals tests from ember-cli-packages-demo
 [ ] Test pods (Zenefits)
+[ ] Setup CI
 
 ## Minor
 [ ] Fix generators for packages (e.g. ember g component my-component --package=package1)

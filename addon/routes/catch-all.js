@@ -1,5 +1,5 @@
 import Ember from 'ember';
-// TODO: move this file to the addon
+
 var retried = false;
 export default Ember.Route.extend({
   lazyLoader: Ember.inject.service(),
