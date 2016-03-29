@@ -3,17 +3,18 @@
 [x] Make catch-all routes re-usable
 [x] Extract cli-build API
 [x] Test the addon and generators on a new app 
-[ ] Port approvals tests from ember-cli-packages-demo
-[ ] Port acceptance tests. 
 [ ] Update README with info from packages-demo and add stuff about generators
   Document sass dependency. 
+[ ] Port approvals tests from ember-cli-packages-demo
+[ ] Port acceptance tests. 
 [ ] Test pods (Zenefits)
 [x] Setup CI
 
 ## Minor
 [ ] Remove deprecation warnings (use getOwner API)
-[ ] Fix generators for packages (e.g. ember g component my-component --package=package1)
-[ ] Decide how to run packages tests. See engines.
+[ ] Fix generators for packages (e.g. ember g component my-component --package=package1). 
+  Check how in-repo addons work today. 
+[ ] Decide how to run packages tests. See in-repo addons
 [ ] Make it work with other history locationType (right now it only works with hash)
 
 ## Later
