@@ -7,7 +7,6 @@ const Router = Ember.Router.extend({
 
 Router.map(function() {
   this.route('catchAll', {path: '*:'});
-  this.route('boot');
 });
 
 export default Router;
