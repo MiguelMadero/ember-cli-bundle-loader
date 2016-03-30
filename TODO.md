@@ -9,6 +9,7 @@
 [ ] Port acceptance tests. 
 [ ] Test pods (Zenefits)
 [x] Setup CI
+[ ] Check if we need to update the resolver for tests and update the generators if we do 
 
 ## Minor
 [ ] Remove deprecation warnings (use getOwner API)
