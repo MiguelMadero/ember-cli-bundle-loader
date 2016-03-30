@@ -47,7 +47,7 @@ The typical output of an Ember App looks something like:
     vedor.js*
     vendor.csss
 
-\* We could also break vendor into smaller assets and define them as a dependency. Moro on this later. 
+\* We could also break vendor into smaller assets and define them as a dependency. More on this later. 
 
 ### Source File Structure
 
@@ -78,6 +78,35 @@ Tests. Currently, all tests live under the traditional folders. It is suggested 
 ### JS
 
 All the JS modules are namespaced with the package name. For example, the route defined in `package1/routes/package1.js` is defined as `define('package1/routes/package1'` in the output code. This is because that's simply the name of the app when building. That gives us the advantage of being explicit about the way we consume and refer in code. However, this also requires a new resolver that can lookup for routes under the packages see `app/resolvers/packages.js` for more info. Please be aware of this namespace, it's especially important for `utils` or any other code that you import, for a hypothetical date-formatter utility under `package1/utils/date-formatter` will be imported as `import dateFormatter from 'package1/utils/date-formatter'`. Please be aware of this for tests.
+
+#### Vendor assets
+
+[ ] TODO: test
+ We can define vendor assets as dependencies. Today, ember-cli supports specifying an `outputFile` when calling `app.import`. This works with static libraries and we'll add support to do it for addons. Once you have different vendor assets, you can simply define them as dependencies in `config/bundles.js`. For example:
+
+```
+// ember-cli-build.js
+var EmberAppWithPackages = require('./lib/broccoli/ember-app-with-packages');
+module.exports = function (defaults) {
+ var app = new EmberAppWithPackages(defaults);
+ app.import('bower_components/moment/moment.js', {outputFile: 'vendor2.js'});
+ app.import('bower_components/lodash/lodash.js', {outputFile: 'vendor3.js'});
+ return app.toTree();
+};
+
+// bundles/config.js
+module.exports = [{
+    name: 'package1',
+    handledRoutesPatterns: ['/package1']
+    dependsOn: ['assets/vendor3.js']
+  }, {
+    name: 'package2',
+    handledRoutesPatterns: ['/package2']
+    dependsOn: ['assets/vendor2.js', 'package1']
+}];
+```
+
+Based on the example above, when we go to `/package2`, we will load `vendor2.js`, `package1.js` and `vendor3.js`, only if they have not been loaded before. While the lbiraries are loaded in parallel, they will be executed in the order they were definied. 
 
 #### Potential issues
 
