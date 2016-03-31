@@ -36,3 +36,4 @@
 ## Documentation 
 [ ] Add links and link-to across routes and update links RFC with the learnings
 [ ] Create RFC for addons {outputFile} similar to what we do today for vendor and bower_components. 
+[ ] Write RFC for tests for in-repo addongs/engines/packages (see https://github.com/ember-cli/ember-cli/issues/4461)

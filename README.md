@@ -11,7 +11,7 @@ We treat each package as an EmberApp, each of them will have its own JS and CSS 
 ## Installation
 
 ```
-ember install ember-cli-bundle-loader # follow the prompts and diff
+ember install MiguelMadero/ember-cli-bundle-loader # follow the prompts and diff
 ember generate package package-name
 ```
 
