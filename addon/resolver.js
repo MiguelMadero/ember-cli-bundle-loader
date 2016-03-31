@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import EmberResolver from 'ember-resolver';
 import config from 'ember-get-config';
+import packageNames from 'ember-cli-bundle-loader/config/package-names';
 
 var lookupFunctions = [],
   genericModuleNameLookupPatterns = [
@@ -42,7 +43,7 @@ var lookupFunctions = [],
 
 // The order is again important
 genericModuleNameLookupPatterns.forEach(function(genericLookupPattern) {
-  config.packageNames.concat(config.modulePrefix).forEach(function(packageName) {
+  packageNames.concat(config.modulePrefix).forEach(function(packageName) {
     lookupFunctions.push(function(parsedName) {
       return genericLookupPattern.call(this, packageName, parsedName);
     });

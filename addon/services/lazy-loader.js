@@ -1,18 +1,18 @@
 /* globals require*/
 import Ember from 'ember';
 import routingConfigUtil from 'ember-cli-bundle-loader/utils/lazy-routing-configuration';
-import config from 'ember-get-config';
+import bundles from 'ember-cli-bundle-loader/config/bundles';
 
 const A = Ember.A;
 const loadedBundles = {};
-config.bundles.forEach(bundle=>loadedBundles[bundle.name] = false);
+bundles.forEach(bundle=>loadedBundles[bundle.name] = false);
 
 export default Ember.Service.extend({
   isBundleLoaded (bundleName) {
     return loadedBundles[bundleName];
   },
   getBundleForUrl (url) {
-    return A(config.bundles).find(bundle=>
+    return A(bundles).find(bundle=>
       A(bundle.handledRoutesPatterns).find(pattern=>
         url.match(pattern)));
   },

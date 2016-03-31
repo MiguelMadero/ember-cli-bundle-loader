@@ -5,6 +5,10 @@ module.exports = [{
   // This will be used later to concat packages into a single bundle. Right now there
   // is a one-one mapping in config, but when we lazy-load we think of bundles not packages
   packages: ['package1'],
+  // Optional url, if not specified we will use ember's defaults.
+  // this names will be used for fingerprinting, so for prod builds, if AssetRev finds it,
+  // it will be fingerprinted and the URL field updated
+  urls: ['assets/package1.js','assets/package1.css'],
   // Routes can handle more than one route segment. We have an array of array since the same bundle
   // can handle a URL like '/package1' and '/other-url'.
   // Each entry is an array, where each element of the nested array represents the name of the route

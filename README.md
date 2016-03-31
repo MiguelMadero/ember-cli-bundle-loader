@@ -94,7 +94,7 @@ module.exports = function (defaults) {
  return app.toTree();
 };
 
-// bundles/config.js
+// /config/bundles.js
 module.exports = [{
     name: 'package1',
     handledRoutesPatterns: ['/package1']
