@@ -1,22 +1,23 @@
-## General 
+## General
 
 [x] Make catch-all routes re-usable
 [x] Extract cli-build API
-[x] Test the addon and generators on a new app 
+[x] Test the addon and generators on a new app
 [ ] Update README with info from packages-demo and add stuff about generators
-  Document sass dependency. 
+  Document sass dependency.
 [ ] Port approvals tests from ember-cli-packages-demo
-[ ] Port acceptance tests. 
+[ ] Port acceptance tests.
 [ ] Test pods (Zenefits)
 [x] Setup CI
-[ ] Check if we need to update the resolver for tests and update the generators if we do 
+[ ] Check if we need to update the resolver for tests and update the generators if we do
 
 ## Minor
 [ ] Remove deprecation warnings (use getOwner API)
-[ ] Fix generators for packages (e.g. ember g component my-component --package=package1). 
-  Check how in-repo addons work today. 
+[ ] Fix generators for packages (e.g. ember g component my-component --package=package1).
+  Check how in-repo addons work today.
 [ ] Decide how to run packages tests. See in-repo addons
 [ ] Make it work with other history locationType (right now it only works with hash)
+[ ] Use path.join instead of concatenating paths in ember-app-with-packages.js [Windows?]
 
 ## Later
 
@@ -33,7 +34,7 @@
   Consider overriding all of  `EmberApp.prototype.javascript` or at least `this.concatFiles(appJs` to remove the `app-config.js` footerFile
 [ ] Test perf
 
-## Documentation 
+## Documentation
 [ ] Add links and link-to across routes and update links RFC with the learnings
-[ ] Create RFC for addons {outputFile} similar to what we do today for vendor and bower_components. 
+[ ] Create RFC for addons {outputFile} similar to what we do today for vendor and bower_components.
 [ ] Write RFC for tests for in-repo addongs/engines/packages (see https://github.com/ember-cli/ember-cli/issues/4461)
