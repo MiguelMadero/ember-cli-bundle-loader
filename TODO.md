@@ -3,8 +3,11 @@
 [x] Make catch-all routes re-usable
 [x] Extract cli-build API
 [x] Test the addon and generators on a new app
-[ ] Update README with info from packages-demo and add stuff about generators
+[x] Update README with info from packages-demo and add stuff about generators
   Document sass dependency.
+[ ] Fix support for URLs
+[ ] Consider turning bundles.js into a service or util that the app could override
+  as needed instead of keeping it in config/bundles so we can put CPs and code to resolve urls, etc.
 [ ] Port approvals tests from ember-cli-packages-demo
 [ ] Port acceptance tests.
 [ ] Test pods (Zenefits)
@@ -38,3 +41,29 @@
 [ ] Add links and link-to across routes and update links RFC with the learnings
 [ ] Create RFC for addons {outputFile} similar to what we do today for vendor and bower_components.
 [ ] Write RFC for tests for in-repo addongs/engines/packages (see https://github.com/ember-cli/ember-cli/issues/4461)
+
+## Old todos for reference (from ember-cli-package-demo)
+[x] Add tests to make sure the files are split and small (node tests)
+[x] Bring packages-resolver (and hard code JS)
+[x] Move packages to packages/
+[x] Lazy load JS
+  [x] Split Router.map?
+  [x] Dynamically determine the package to load for a given route
+  [x] Test LOG_TRANSITIONS_INTERNAL
+  [x] Test Engines to ensure allignment
+[x] Lazy load CSS
+
+
+## Reuse
+
+[x] Consider splitting for better re-use
+  Move to an addon:
+    [x] package-name generator and add them to config/environment changes to get packageNames
+    [x] bundle
+    create a Package object that inherits from EmberApp and takes a config override to clean ember-cli-build
+    Create an EmberAppWithPackages app that does packages and app and takes overrides for both.
+    Expose from addon
+    [x] resolver
+    [x] service:lazy-loader,
+    [x] util:lazy-routing-configuration
+    [x] catch-all route
