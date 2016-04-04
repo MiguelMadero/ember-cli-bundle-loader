@@ -1,0 +1,4 @@
+.boot {
+  background: red; }
+
+/*# sourceMappingURL=dummy.css.map */

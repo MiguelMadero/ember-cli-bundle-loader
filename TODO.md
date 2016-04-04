@@ -10,7 +10,7 @@
   as needed instead of keeping it in config/bundles so we can put CPs and code to resolve urls, etc.
   Note: it was a bad idea since we will use it later to do JS Concat to actually create the bundle.
   Instead the extension points will live in the existing loader service
-[ ] Port approvals tests from ember-cli-packages-demo
+[x] Port approvals tests from ember-cli-packages-demo
 [ ] Port acceptance tests.
 [ ] Test pods (Zenefits)
 [x] Setup CI

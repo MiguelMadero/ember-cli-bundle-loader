@@ -1,0 +1,107 @@
+"use strict";
+
+/* jshint ignore:start */
+
+
+
+/* jshint ignore:end */
+
+define('package2/router', ['exports', 'ember'], function (exports, _ember) {
+
+  var Router = _ember['default'].Router.extend();
+
+  Router.map(function () {
+    this.route('package2');
+  });
+
+  exports['default'] = Router;
+});
+define('package2/routes/package2', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Route.extend({});
+});
+define('package2/templates/catch-all', ['exports', 'ember-cli-bundle-loader/templates/catch-all'], function (exports, _emberCliBundleLoaderTemplatesCatchAll) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberCliBundleLoaderTemplatesCatchAll['default'];
+    }
+  });
+});
+define("package2/templates/package2", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "fragmentReason": {
+          "name": "triple-curlies"
+        },
+        "revision": "Ember@2.4.3",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 6
+          }
+        },
+        "moduleName": "package2/templates/package2.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "package2");
+        var el2 = dom.createTextNode("\n  Package 2\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes() {
+        return [];
+      },
+      statements: [],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+/* jshint ignore:start */
+
+
+
+/* jshint ignore:end */
+
+/* jshint ignore:start */
+
+define('dummy/config/environment', ['ember'], function(Ember) {
+  var prefix = 'dummy';
+/* jshint ignore:start */
+
+try {
+  var metaName = prefix + '/config/environment';
+  var rawConfig = Ember['default'].$('meta[name="' + metaName + '"]').attr('content');
+  var config = JSON.parse(unescape(rawConfig));
+
+  return { 'default': config };
+}
+catch(err) {
+  throw new Error('Could not read config from meta tag with name "' + metaName + '".');
+}
+
+/* jshint ignore:end */
+
+});
+
+/* jshint ignore:end */
+
+/* jshint ignore:start */
+
+
+
+/* jshint ignore:end */
+//# sourceMappingURL=package2.map
