@@ -11,7 +11,6 @@ cache:
 
 env:
   - EMBER_TRY_SCENARIO=default
-  - EMBER_TRY_SCENARIO=ember-1-11
   - EMBER_TRY_SCENARIO=ember-1-13
   - EMBER_TRY_SCENARIO=ember-release
   - EMBER_TRY_SCENARIO=ember-beta
@@ -34,4 +33,5 @@ install:
   - bower install
 
 script:
+  - npm test
   - ember try $EMBER_TRY_SCENARIO test

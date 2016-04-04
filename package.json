@@ -13,7 +13,7 @@
     "jshint": "./node_modules/.bin/jshint addon/ app/ approvals/ blueprints/**/index.js config/ lib/ tests/",
     "approvals": "node_modules/mocha/bin/mocha approvals/test.js",
     "node-tests": "node_modules/mocha/bin/mocha tests/node/test.js",
-    "ember-tests": "ember try:each"
+    "ember-tests": "ember test"
   },
   "repository": "",
   "engines": {
