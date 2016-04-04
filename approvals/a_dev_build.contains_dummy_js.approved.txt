@@ -22,16 +22,6 @@ define('dummy/app', ['exports', 'ember', 'dummy/resolver', 'ember-load-initializ
 
   exports['default'] = App;
 });
-define('dummy/components/app-version', ['exports', 'ember-cli-app-version/components/app-version', 'dummy/config/environment'], function (exports, _emberCliAppVersionComponentsAppVersion, _dummyConfigEnvironment) {
-
-  var name = _dummyConfigEnvironment['default'].APP.name;
-  var version = _dummyConfigEnvironment['default'].APP.version;
-
-  exports['default'] = _emberCliAppVersionComponentsAppVersion['default'].extend({
-    version: version,
-    name: name
-  });
-});
 define('dummy/controllers/array', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Controller;
 });
@@ -43,12 +33,6 @@ define('dummy/helpers/pluralize', ['exports', 'ember-inflector/lib/helpers/plura
 });
 define('dummy/helpers/singularize', ['exports', 'ember-inflector/lib/helpers/singularize'], function (exports, _emberInflectorLibHelpersSingularize) {
   exports['default'] = _emberInflectorLibHelpersSingularize['default'];
-});
-define('dummy/initializers/app-version', ['exports', 'ember-cli-app-version/initializer-factory', 'dummy/config/environment'], function (exports, _emberCliAppVersionInitializerFactory, _dummyConfigEnvironment) {
-  exports['default'] = {
-    name: 'App Version',
-    initialize: (0, _emberCliAppVersionInitializerFactory['default'])(_dummyConfigEnvironment['default'].APP.name, _dummyConfigEnvironment['default'].APP.version)
-  };
 });
 define('dummy/initializers/container-debug-adapter', ['exports', 'ember-resolver/container-debug-adapter'], function (exports, _emberResolverContainerDebugAdapter) {
   exports['default'] = {
@@ -217,6 +201,9 @@ define('dummy/router', ['exports', 'ember', 'dummy/config/environment'], functio
 
   exports['default'] = Router;
 });
+define('dummy/routes/application', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Route.extend({});
+});
 define('dummy/routes/catch-all', ['exports', 'ember-cli-bundle-loader/routes/catch-all'], function (exports, _emberCliBundleLoaderRoutesCatchAll) {
   Object.defineProperty(exports, 'default', {
     enumerable: true,
@@ -244,30 +231,12 @@ define('dummy/services/lazy-loader', ['exports', 'ember-cli-bundle-loader/servic
 define("dummy/templates/application", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
     return {
-      meta: {
-        "fragmentReason": {
-          "name": "missing-wrapper",
-          "problems": ["multiple-nodes", "wrong-type"]
-        },
-        "revision": "Ember@2.4.3",
-        "loc": {
-          "source": null,
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 8,
-            "column": 10
-          }
-        },
-        "moduleName": "dummy/templates/application.hbs"
-      },
-      isEmpty: false,
-      arity: 0,
+      isHTMLBars: true,
+      revision: "Ember@1.11.4",
+      blockParams: 0,
       cachedFragment: null,
       hasRendered: false,
-      buildFragment: function buildFragment(dom) {
+      build: function build(dom) {
         var el0 = dom.createDocumentFragment();
         var el1 = dom.createElement("h1");
         var el2 = dom.createTextNode("Welcome to Ember - with packaging and lazy loading");
@@ -316,44 +285,44 @@ define("dummy/templates/application", ["exports"], function (exports) {
         dom.appendChild(el0, el1);
         return el0;
       },
-      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var morphs = new Array(1);
-        morphs[0] = dom.createMorphAt(fragment, 4, 4, contextualElement);
+      render: function render(context, env, contextualElement) {
+        var dom = env.dom;
+        var hooks = env.hooks,
+            content = hooks.content;
+        dom.detectNamespace(contextualElement);
+        var fragment;
+        if (env.useFragmentCache && dom.canClone) {
+          if (this.cachedFragment === null) {
+            fragment = this.build(dom);
+            if (this.hasRendered) {
+              this.cachedFragment = fragment;
+            } else {
+              this.hasRendered = true;
+            }
+          }
+          if (this.cachedFragment) {
+            fragment = dom.cloneNode(this.cachedFragment, true);
+          }
+        } else {
+          fragment = this.build(dom);
+        }
+        var morph0 = dom.createMorphAt(fragment, 4, 4, contextualElement);
         dom.insertBoundary(fragment, null);
-        return morphs;
-      },
-      statements: [["content", "outlet", ["loc", [null, [8, 0], [8, 10]]]]],
-      locals: [],
-      templates: []
+        content(env, morph0, context, "outlet");
+        return fragment;
+      }
     };
   })());
 });
 define("dummy/templates/boot", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
     return {
-      meta: {
-        "fragmentReason": {
-          "name": "triple-curlies"
-        },
-        "revision": "Ember@2.4.3",
-        "loc": {
-          "source": null,
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 3,
-            "column": 6
-          }
-        },
-        "moduleName": "dummy/templates/boot.hbs"
-      },
-      isEmpty: false,
-      arity: 0,
+      isHTMLBars: true,
+      revision: "Ember@1.11.4",
+      blockParams: 0,
       cachedFragment: null,
       hasRendered: false,
-      buildFragment: function buildFragment(dom) {
+      build: function build(dom) {
         var el0 = dom.createDocumentFragment();
         var el1 = dom.createElement("div");
         dom.setAttribute(el1, "class", "boot");
@@ -362,12 +331,27 @@ define("dummy/templates/boot", ["exports"], function (exports) {
         dom.appendChild(el0, el1);
         return el0;
       },
-      buildRenderNodes: function buildRenderNodes() {
-        return [];
-      },
-      statements: [],
-      locals: [],
-      templates: []
+      render: function render(context, env, contextualElement) {
+        var dom = env.dom;
+        dom.detectNamespace(contextualElement);
+        var fragment;
+        if (env.useFragmentCache && dom.canClone) {
+          if (this.cachedFragment === null) {
+            fragment = this.build(dom);
+            if (this.hasRendered) {
+              this.cachedFragment = fragment;
+            } else {
+              this.hasRendered = true;
+            }
+          }
+          if (this.cachedFragment) {
+            fragment = dom.cloneNode(this.cachedFragment, true);
+          }
+        } else {
+          fragment = this.build(dom);
+        }
+        return fragment;
+      }
     };
   })());
 });
@@ -417,7 +401,7 @@ define('ember-cli-bundle-loader/config/package-names', function() {
   return ["package1","package2"]
 });
 if (!runningTests) {
-  require("dummy/app")["default"].create({"name":"ember-cli-bundle-loader","version":"0.1.1+834b544d"});
+  require("dummy/app")["default"].create({});
 }
 
 /* jshint ignore:end */

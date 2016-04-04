@@ -30,29 +30,12 @@ define('package2/templates/catch-all', ['exports', 'ember-cli-bundle-loader/temp
 define("package2/templates/package2", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
     return {
-      meta: {
-        "fragmentReason": {
-          "name": "triple-curlies"
-        },
-        "revision": "Ember@2.4.3",
-        "loc": {
-          "source": null,
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 3,
-            "column": 6
-          }
-        },
-        "moduleName": "package2/templates/package2.hbs"
-      },
-      isEmpty: false,
-      arity: 0,
+      isHTMLBars: true,
+      revision: "Ember@1.11.4",
+      blockParams: 0,
       cachedFragment: null,
       hasRendered: false,
-      buildFragment: function buildFragment(dom) {
+      build: function build(dom) {
         var el0 = dom.createDocumentFragment();
         var el1 = dom.createElement("div");
         dom.setAttribute(el1, "class", "package2");
@@ -61,12 +44,27 @@ define("package2/templates/package2", ["exports"], function (exports) {
         dom.appendChild(el0, el1);
         return el0;
       },
-      buildRenderNodes: function buildRenderNodes() {
-        return [];
-      },
-      statements: [],
-      locals: [],
-      templates: []
+      render: function render(context, env, contextualElement) {
+        var dom = env.dom;
+        dom.detectNamespace(contextualElement);
+        var fragment;
+        if (env.useFragmentCache && dom.canClone) {
+          if (this.cachedFragment === null) {
+            fragment = this.build(dom);
+            if (this.hasRendered) {
+              this.cachedFragment = fragment;
+            } else {
+              this.hasRendered = true;
+            }
+          }
+          if (this.cachedFragment) {
+            fragment = dom.cloneNode(this.cachedFragment, true);
+          }
+        } else {
+          fragment = this.build(dom);
+        }
+        return fragment;
+      }
     };
   })());
 });
