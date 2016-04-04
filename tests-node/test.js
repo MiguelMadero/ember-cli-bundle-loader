@@ -1,8 +1,8 @@
 /*jshint node:true*/
 /* global describe, it */
 var assert = require('assert');
-var getBundleConfiguration = require('../../lib/utils/get-bundle-configuration');
-var bundles = require('../dummy/config/bundles');
+var getBundleConfiguration = require('../lib/utils/get-bundle-configuration');
+var bundles = require('../tests/dummy/config/bundles');
 
 if (process.env['EMBER_TRY_SCENARIO'] && process.env['EMBER_TRY_SCENARIO'] !== 'default') {
   return;
