@@ -12,7 +12,7 @@
   Instead the extension points will live in the existing loader service
 [x] Port approvals tests from ember-cli-packages-demo
 [x] Port acceptance tests.
-[ ] Fixes tests for ember-release and beta 
+[ ] Fixes tests for ember-release and beta (see 93e85db4ba)
 [ ] Test pods (Zenefits)
 [x] Setup CI
 [ ] Check if we need to update the resolver for tests and update the generators if we do
