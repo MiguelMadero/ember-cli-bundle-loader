@@ -16,11 +16,11 @@
 
 ## Minor
 [ ] Remove deprecation warnings (use getOwner API)
-[ ] Fix generators for packages (e.g. ember g component my-component --package=package1).
-  Check how in-repo addons work today.
-[ ] Decide how to run packages tests. See in-repo addons
-[ ] Make it work with other history locationType (right now it only works with hash)
 [ ] Use path.join instead of concatenating paths in ember-app-with-packages.js [Windows?]
+[ ] Fix OOB generators for packages (e.g. ember g component my-component --package=package1), test using -ir.
+[x] Decide how to run packages tests. See in-repo addons
+  This depends on the RFC for in-repo addon tests.
+[ ] Make it work with other history locationType (right now it only works with hash)
 
 ## Later
 
@@ -28,14 +28,16 @@
   [ ] Nested routes
   [ ] More than one route per bundle
   [ ] More than one package per bundle (concat)
-  [ ] Manage dependencies
+[ ] Add support for bundle dependencies
+[ ] Add support for vendor bundle dependencies
 
 
 ## Perf
 
-[ ] Remove environment/config from packages since it's already in boot.
+[ ] Make sure we don't add app-boot, environment/config and other header/footer files from packages since it's already in boot.
   Consider overriding all of  `EmberApp.prototype.javascript` or at least `this.concatFiles(appJs` to remove the `app-config.js` footerFile
 [ ] Test perf
+[ ] See what other trees we can remove for packages
 
 ## Documentation
 [ ] Add links and link-to across routes and update links RFC with the learnings
