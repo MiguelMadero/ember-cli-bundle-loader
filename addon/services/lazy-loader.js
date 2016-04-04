@@ -1,24 +1,18 @@
 /* globals require*/
 import Ember from 'ember';
 import routingConfigUtil from 'ember-cli-bundle-loader/utils/lazy-routing-configuration';
-import configBundles from 'ember-cli-bundle-loader/config/bundles';
-import packageNames from 'ember-cli-bundle-loader/config/package-names';
+import bundles from 'ember-cli-bundle-loader/config/bundles';
 
 const A = Ember.A;
 const loadedBundles = {};
-const flatten = list => list.reduce(
-  (a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []);
+bundles.forEach(bundle=>loadedBundles[bundle.name] = false);
 
 export default Ember.Service.extend({
-  init () {
-    this._super(...arguments);
-    this._getBundleConfiguration().forEach(bundle=>loadedBundles[bundle.name] = false);
-  },
   isBundleLoaded (bundleName) {
     return loadedBundles[bundleName];
   },
   getBundleForUrl (url) {
-    return A(this._getBundleConfiguration()).find(bundle=>
+    return A(bundles).find(bundle=>
       A(bundle.handledRoutesPatterns).find(pattern=>
         url.match(pattern)));
   },
@@ -84,28 +78,5 @@ export default Ember.Service.extend({
     // document.head.appendChild(style);
 
     // return style.sheet;
-  },
-
-  /***
-   * Returns the list of all the bundles. If a bundle isn't defined in config/bundles.js
-   * a default is inferred based on the package-names where there is a one to one package-bundle,
-   * the bundle has no dependencies and we load from the default URLs that Ember specified
-   */
-  _getBundleConfiguration() {
-    const configCopy = this.get('configBundles').slice();
-    const packagesInBundle = flatten(configCopy.map(bundle=>bundle.packages));
-    const packagesMissingFromBundle = this.get('packageNames').filter(name=>
-      !packagesInBundle.includes(name));
-    const configForMissingPackages = packagesMissingFromBundle.map(name=>({
-      name,
-      packages: [name],
-      urls: [`assets/${name}.js`, `assets/${name}.css`],
-      handledRoutesPatterns: [`/${name}`]
-    }));
-
-    return configCopy.concat(configForMissingPackages);
-  },
-  // defining them here to make it easier to test
-  configBundles,
-  packageNames
+  }
 });
