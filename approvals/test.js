@@ -9,6 +9,10 @@ const basePath = 'tmp/approvals/';
 approvals.configure(config);
 approvals.mocha();
 
+if (process.env['EMBER_TRY_SCENARIO'] && process.env['EMBER_TRY_SCENARIO'] !== 'default') {
+  return;
+}
+
 before(function () {
   this.verifyFileContent = function (fileName) {
     this.verify(fs.readFileSync(fileName));

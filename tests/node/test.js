@@ -4,6 +4,10 @@ var assert = require('assert');
 var getBundleConfiguration = require('../../lib/utils/get-bundle-configuration');
 var bundles = require('../dummy/config/bundles');
 
+if (process.env['EMBER_TRY_SCENARIO'] && process.env['EMBER_TRY_SCENARIO'] !== 'default') {
+  return;
+}
+
 describe('getBundleConfiguration', function () {
   it('is based on bundles', function () {
     const newBundles = getBundleConfiguration(bundles, []);
