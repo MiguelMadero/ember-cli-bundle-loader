@@ -1,5 +1,6 @@
 /* global require */
 import { moduleFor, test } from 'ember-qunit';
+import configBundles from 'ember-cli-bundle-loader/config/bundles';
 
 moduleFor('service:lazy-loader', 'Unit | Service | lazy loader');
 
@@ -30,4 +31,33 @@ test('loadBundleForUrl evaluates the loaded code for external packages', functio
       // TODO: assert there was a single request
     });
   });
+});
+
+test('_getBundleConfiguration is based on config/bundles', function(assert) {
+  const service = this.subject();
+  const config = service._getBundleConfiguration();
+  assert.equal(config[0].name, 'package1');
+  assert.deepEqual(config, configBundles);
+});
+
+test('_getBundleConfiguration creates a default bundle structure based on packageNames if configBundles aren\t present', function(assert) {
+  const service = this.subject({packageNames: ['my-package'], configBundles: []});
+  const config = service._getBundleConfiguration();
+  assert.deepEqual(config, [{
+    name: 'my-package',
+    packages: ['my-package'],
+    urls: ['assets/my-package.js', 'assets/my-package.css'],
+    handledRoutesPatterns: ['/my-package']
+  }]);
+});
+
+test('_getBundleConfiguration adds all missing packageNames to the bundle, creating defaults for the packages not currently present', function(assert) {
+  const service = this.subject({packageNames: ['my-package'], configBundles: configBundles});
+  const config = service._getBundleConfiguration();
+  assert.deepEqual(config, configBundles.concat([{
+    name: 'my-package',
+    packages: ['my-package'],
+    urls: ['assets/my-package.js', 'assets/my-package.css'],
+    handledRoutesPatterns: ['/my-package']
+  }]));
 });
