@@ -29,8 +29,12 @@ module.exports = [{
   // operations work like a service depedency.
   // [WIP]
   // dependsOn: ['package2']
-}, {
-  name: 'package2',
-  packages: ['package2'],
-  handledRoutesPatterns: ['/package2']
-}];
+
+// The defaults are inferred by the packages (one to one, default URLs and top level route)
+// }, {
+//   name: 'package2',
+//   packages: ['package2'],
+//   urls: ['assets/package2.js','assets/package2.css'],
+//   handledRoutesPatterns: ['/package2']
+}
+];
