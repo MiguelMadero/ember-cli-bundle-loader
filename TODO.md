@@ -6,7 +6,7 @@
 [x] Update README with info from packages-demo and add stuff about generators
   Document sass dependency.
 [ ] Fix support for URLs
-[ ] Consider turning bundles.js into a service or util that the app could override
+[x] Consider turning bundles.js into a service or util that the app could override
   as needed instead of keeping it in config/bundles so we can put CPs and code to resolve urls, etc.
 [ ] Port approvals tests from ember-cli-packages-demo
 [ ] Port acceptance tests.
@@ -42,6 +42,7 @@
 ## Documentation
 [ ] Add links and link-to across routes and update links RFC with the learnings
 [ ] Create RFC for addons {outputFile} similar to what we do today for vendor and bower_components.
+  see: https://github.com/ember-cli/rfcs/pull/28 and
 [ ] Write RFC for tests for in-repo addongs/engines/packages (see https://github.com/ember-cli/ember-cli/issues/4461)
 
 ## Old todos for reference (from ember-cli-package-demo)
