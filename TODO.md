@@ -5,20 +5,23 @@
 [x] Test the addon and generators on a new app
 [x] Update README with info from packages-demo and add stuff about generators
   Document sass dependency.
-[ ] Fix support for URLs
+[x] Fix support for URLs
 [x] Consider turning bundles.js into a service or util that the app could override
   as needed instead of keeping it in config/bundles so we can put CPs and code to resolve urls, etc.
   Note: it was a bad idea since we will use it later to do JS Concat to actually create the bundle.
   Instead the extension points will live in the existing loader service
 [x] Port approvals tests from ember-cli-packages-demo
 [x] Port acceptance tests.
-[ ] Fixes tests for ember-release and beta (see 93e85db4ba)
-[ ] Test pods (Zenefits)
+[ ] Fix link-to helper (add a new one or ditch catch-all in favor of route mixin)
+[x] Test pods (Zenefits)
+[ ] Add support to override the namespace for packages. 
+[ ] Fix tests for ember-release and beta (see 93e85db4ba)
 [x] Setup CI
 [ ] Check if we need to update the resolver for tests and update the generators if we do
 
 ## Minor
 [ ] Remove deprecation warnings (use getOwner API)
+[ ] Fix watch for bundle.js and package-names.js
 [ ] Use path.join instead of concatenating paths in ember-app-with-packages.js [Windows?]
 [ ] Fix OOB generators for packages (e.g. ember g component my-component --package=package1), test using -ir.
 [x] Decide how to run packages tests. See in-repo addons

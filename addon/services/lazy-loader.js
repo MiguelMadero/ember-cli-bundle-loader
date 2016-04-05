@@ -2,6 +2,7 @@
 import Ember from 'ember';
 import routingConfigUtil from 'ember-cli-bundle-loader/utils/lazy-routing-configuration';
 import bundles from 'ember-cli-bundle-loader/config/bundles';
+import config from 'ember-get-config';
 
 const A = Ember.A;
 const loadedBundles = {};
@@ -33,10 +34,16 @@ export default Ember.Service.extend({
   },
   _addRoutesForPackage (packageName) {
     const MainRouter = this.get('container').lookup('router:main');
-    const PackageRouter = require(`${packageName}/router`);
+    const PackageRouter = this._getPackageRouter(packageName);
     if (PackageRouter && PackageRouter.default) {
       routingConfigUtil.mergeRouters(MainRouter, PackageRouter.default);
     }
+  },
+
+  _getPackageRouter(packageName) {
+    return require._eak_seen[`${packageName}/router`] ?
+      require(`${packageName}/router`) :
+      require(`${config.modulePrefix}/${packageName}-router`);
   },
 
   _loadAssets (bundle) {
