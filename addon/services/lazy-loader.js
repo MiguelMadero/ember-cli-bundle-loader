@@ -43,7 +43,7 @@ export default Ember.Service.extend({
   _getPackageRouter(packageName) {
     return require._eak_seen[`${packageName}/router`] ?
       require(`${packageName}/router`) :
-      require(`${config.modulePrefix}/${packageName}-router`);
+      require(`${config.modulePrefix}/${packageName}-router`);        // For cases where the package and main-app share a namespace.
   },
 
   _loadAssets (bundle) {
