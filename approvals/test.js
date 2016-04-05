@@ -34,7 +34,9 @@ describe('a dev build', function () {
     'package1.js',
     'package2.css',
     'dummy.js',
-    'dummy.css'];
+    'dummy.css',
+    'vendor.js',
+    'vendor.css',];
   assetsToVerify.forEach(function (file) {
     it(`contains ${file}`, function () {
       this.verifyFileContent(`${outputPath}/assets/${file}`);
