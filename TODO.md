@@ -57,7 +57,7 @@
 [ ] Add links and link-to across routes and update links RFC with the learnings
 [ ] Create RFC for addons {outputFile} similar to what we do today for vendor and bower_components.
   see: https://github.com/ember-cli/rfcs/pull/28 and
-[ ] Write RFC for tests for in-repo addongs/engines/packages (see https://github.com/ember-cli/ember-cli/issues/4461)
+[ ] Write RFC for tests for in-repo addongs/engines/packages (see https://github.com/ember-cli/ember-cli/issues/4461 and https://github.com/ember-cli/rfcs/issues/44)
 
 ## Old todos for reference (from ember-cli-package-demo)
 [x] Add tests to make sure the files are split and small (node tests)
