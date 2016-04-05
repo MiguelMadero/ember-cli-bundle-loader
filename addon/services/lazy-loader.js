@@ -23,10 +23,8 @@ export default Ember.Service.extend({
     if (this.isBundleLoaded(bundle.name)) {
       return Ember.RSVP.resolve();
     }
-    let promises = [this._loadStylesheet(`/assets/${bundle.name}.css`),
-      this._loadScript(`/assets/${bundle.name}.js`)];
 
-    return Ember.RSVP.all(promises).then(()=>{
+    return this._loadAssets(bundle).then(()=>{
       loadedBundles[bundle.name] = true;
       bundle.packages.forEach(packageName=>{
         this._addRoutesForPackage(packageName);
@@ -39,6 +37,18 @@ export default Ember.Service.extend({
     if (PackageRouter && PackageRouter.default) {
       routingConfigUtil.mergeRouters(MainRouter, PackageRouter.default);
     }
+  },
+
+  _loadAssets (bundle) {
+    const urls = bundle.urls || [];
+    const promises = urls.map(url=>
+      url.match(/\.js$/) ?
+        this._loadScript(url) :
+        url.match(/\.css$/) ?
+          this._loadStylesheet(url) :
+          Ember.RSVP.reject(`The specified url (${url}) for bundle ${bundle.name} doesnt match any of the expected types`)
+    );
+    return Ember.RSVP.all(promises);
   },
 
   // TODO: extract to a util.
