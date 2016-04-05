@@ -45,7 +45,7 @@ describe('a dev build', function () {
 describe('a prd build', function () {
   const outputPath = `${basePath}/prd-build/`;
   before(function() {
-    this.timeout(30000);
+    this.timeout(60000);
     childProcess.execSync(`ember build --environment production --output-path ${outputPath}`);
   });
   it('contains an index file with fingerprinted assets', function () {
