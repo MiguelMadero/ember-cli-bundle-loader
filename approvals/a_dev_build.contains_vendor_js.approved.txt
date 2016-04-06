@@ -59724,26 +59724,25 @@ define('ember-cli-bundle-loader/resolver', ['exports', 'ember', 'ember-resolver'
   // NOTE: the order is important, since they're evaluted as we add them to the array
   // So we need the podBasedModuleName first and defaultModuleName last, just like the ember-resolver does
 
-  // NOTE: temporarily removes podBasedModuleName lookups to reduce noise when using LOG_REOSLVER
-  // function podBasedModuleName(packageName, parsedName) {
-  //     // var podPrefix = this.namespace.podModulePrefix || this.namespace.modulePrefix;
-  //     var podPrefix = packageName;
+  function podBasedModuleName(packageName, parsedName) {
+    // var podPrefix = this.namespace.podModulePrefix || this.namespace.modulePrefix;
+    var podPrefix = packageName;
+    if (_emberGetConfig['default'].podSubDirectory) {
+      podPrefix = podPrefix + '/' + _emberGetConfig['default'].podSubDirectory;
+    }
+    return this.podBasedLookupWithPrefix(podPrefix, parsedName);
+  }, function podBasedComponentsInSubdir(packageName, parsedName) {
+    // var podPrefix = this.namespace.podModulePrefix || this.namespace.modulePrefix;
+    var podPrefix = packageName;
+    if (_emberGetConfig['default'].podSubDirectory) {
+      podPrefix = podPrefix + '/' + _emberGetConfig['default'].podSubDirectory;
+    }
+    podPrefix = podPrefix + '/components';
 
-  //     return this.podBasedLookupWithPrefix(podPrefix, parsedName);
-  // },
-
-  // NOTE: temporarily removes podBasedModuleName lookups to reduce noise when using LOG_REOSLVER
-  // function podBasedComponentsInSubdir(packageName, parsedName) {
-  //     // var podPrefix = this.namespace.podModulePrefix || this.namespace.modulePrefix;
-  //     var podPrefix = packageName;
-  //     podPrefix = podPrefix + '/components';
-
-  //     if (parsedName.type === 'component' || parsedName.fullNameWithoutType.match(/^components/)) {
-  //         return this.podBasedLookupWithPrefix(podPrefix, parsedName);
-  //     }
-  // },
-
-  function mainModuleName(packageName, parsedName) {
+    if (parsedName.type === 'component' || parsedName.fullNameWithoutType.match(/^components/)) {
+      return this.podBasedLookupWithPrefix(podPrefix, parsedName);
+    }
+  }, function mainModuleName(packageName, parsedName) {
     // if router:main or adapter:main look for a module with just the type first
     var tmpModuleName = /*parsedName.prefix + '/' +*/packageName + '/' + parsedName.type;
 
@@ -59794,7 +59793,7 @@ define('ember-cli-bundle-loader/routes/catch-all', ['exports', 'ember'], functio
     }
   });
 });
-define('ember-cli-bundle-loader/services/lazy-loader', ['exports', 'ember', 'ember-cli-bundle-loader/utils/lazy-routing-configuration', 'ember-cli-bundle-loader/config/bundles'], function (exports, _ember, _emberCliBundleLoaderUtilsLazyRoutingConfiguration, _emberCliBundleLoaderConfigBundles) {
+define('ember-cli-bundle-loader/services/lazy-loader', ['exports', 'ember', 'ember-cli-bundle-loader/utils/lazy-routing-configuration', 'ember-cli-bundle-loader/config/bundles', 'ember-get-config'], function (exports, _ember, _emberCliBundleLoaderUtilsLazyRoutingConfiguration, _emberCliBundleLoaderConfigBundles, _emberGetConfig) {
   /* globals require*/
   'use strict';
 
@@ -59834,10 +59833,16 @@ define('ember-cli-bundle-loader/services/lazy-loader', ['exports', 'ember', 'emb
     },
     _addRoutesForPackage: function _addRoutesForPackage(packageName) {
       var MainRouter = this.get('container').lookup('router:main');
-      var PackageRouter = require(packageName + '/router');
+      var PackageRouter = this._getPackageRouter(packageName);
       if (PackageRouter && PackageRouter['default']) {
         _emberCliBundleLoaderUtilsLazyRoutingConfiguration['default'].mergeRouters(MainRouter, PackageRouter['default']);
       }
+    },
+
+    _getPackageRouter: function _getPackageRouter(packageName) {
+      return require._eak_seen[packageName + '/router'] ? require(packageName + '/router') :
+      // For cases where the package and main-app share a namespace.
+      require(_emberGetConfig['default'].modulePrefix + '/' + packageName + '-router');
     },
 
     _loadAssets: function _loadAssets(bundle) {
