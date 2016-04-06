@@ -8,6 +8,5 @@ function getDirectories(srcpath) {
   });
 }
 
-// TODO: make it configurable, for now it's at the same level of app in the root.
 var packagesDir = path.join(__dirname, '..', 'packages');
 module.exports = getDirectories(packagesDir);

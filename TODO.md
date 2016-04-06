@@ -19,6 +19,13 @@
 [x] Setup CI
 [ ] Check if we need to update the resolver for tests and update the generators if we do
 
+## From yp
+[ ] Fix watch issues with index.html (high)
+[ ] Better error handling for promises for catch-all route (or move away from catch-all)
+  [ ] Gracefully handle cases when a bundle can't be resolved
+[ ] Fix the "isAddon" check in loader-bundler and add back
+
+
 ## Minor
 [ ] Remove deprecation warnings (use getOwner API)
 [ ] Fix watch for bundle.js and package-names.js
