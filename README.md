@@ -4,6 +4,8 @@
 
 This project lets you build your app in different packages and load those packages lazyli. The main goal of this is faster boot times for large applications, but it can also help with independentl build and deployments for different sub-products or sections of your app. 
 
+You can see a demo live on http://miguelmadero.github.io/ember-cli-bundle-loader-consumer
+
 ## How it works
 
 We treat each package as an EmberApp, each of them will have its own JS and CSS output. For each package, it also changes certain things to avoid unnecessary processing of addons to get faster builds for packages.
