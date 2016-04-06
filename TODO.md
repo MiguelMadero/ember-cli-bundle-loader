@@ -22,6 +22,7 @@
 ## Minor
 [ ] Remove deprecation warnings (use getOwner API)
 [ ] Fix watch for bundle.js and package-names.js
+[ ] Should we make this work with SRI? 
 [ ] Use path.join instead of concatenating paths in ember-app-with-packages.js [Windows?]
 [ ] Fix OOB generators for packages (e.g. ember g component my-component --package=package1), test using -ir.
 [x] Decide how to run packages tests. See in-repo addons
