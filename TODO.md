@@ -13,25 +13,25 @@
 [x] Port approvals tests from ember-cli-packages-demo
 [x] Port acceptance tests.
 [ ] Fix link-to helper (add a new one or ditch catch-all in favor of route mixin)
+  [ ] Fix tests for ember-release and beta (see 93e85db4ba)
+  [ ] Better error handling for promises for catch-all route (or move away from catch-all)
+    [ ] Gracefully handle cases when a bundle can't be resolved
 [x] Test pods (Zenefits)
-[ ] Add support to override the namespace for packages. 
-[ ] Fix tests for ember-release and beta (see 93e85db4ba)
+?[x] Add support to override the namespace for packages. 
 [x] Setup CI
 [ ] Check if we need to update the resolver for tests and update the generators if we do
 
 ## From yp
-[ ] Fix watch issues with index.html (high)
-[ ] Better error handling for promises for catch-all route (or move away from catch-all)
-  [ ] Gracefully handle cases when a bundle can't be resolved
 [ ] Fix the "isAddon" check in loader-bundler and add back
 
 
 ## Minor
 [ ] Remove deprecation warnings (use getOwner API)
 [ ] Fix watch for bundle.js and package-names.js
+[ ] Avoid loading the bundle a second time. Right now I set the loadedBundles to true *after* the assets for that bundle are loader, that doesn't consider that someone can initiate a second request while the first one is in flight. I should return store the promise on the first request and return that on every subsequent call to `loadBundle`
 [ ] Should we make this work with SRI? 
 [ ] Use path.join instead of concatenating paths in ember-app-with-packages.js [Windows?]
-[ ] Fix OOB generators for packages (e.g. ember g component my-component --package=package1), test using -ir.
+[ ] Fix OOB generators for packages (e.g. ember g component my-component --package=package1), test using -ir. 
 [x] Decide how to run packages tests. See in-repo addons
   This depends on the RFC for in-repo addon tests.
 [ ] Make it work with other history locationType (right now it only works with hash)
@@ -43,6 +43,7 @@
   [ ] More than one route per bundle
   [ ] More than one package per bundle (concat)
 [ ] Add support for bundle dependencies
+  [ ] Make sure a bundle is marked as "loaded" (or the promise re-used) if it was loaded as a dependency for another bundle. 
 [ ] Add support for vendor bundle dependencies
 
 
