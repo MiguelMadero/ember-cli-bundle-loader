@@ -20,6 +20,12 @@
 ?[x] Add support to override the namespace for packages. 
 [x] Setup CI
 [ ] Check if we need to update the resolver for tests and update the generators if we do
+[ ] Make sure the loadScript promise works fine for crossOrigin (e.g. CDN). 
+  For same origin jquery simply does an eval and then calls `done`. Which works fine. 
+  For different origin it will add a script tag and it might call done before the script is executed, meaning that the router won't be available, see: [SO question](http://stackoverflow.com/questions/1130921/is-the-callback-on-jquerys-getscript-unreliable-or-am-i-doing-something-wrong). All the answers are horrible. 
+  Possible solution: search for Dynamically importing scripts in [this article](https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement). 
+  We should basically do the same we're doing for links elements. 
+
 
 ## From yp
 [ ] Fix the "isAddon" check in loader-bundler and add back
