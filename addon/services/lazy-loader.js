@@ -60,16 +60,13 @@ export default Ember.Service.extend({
 
   // TODO: extract to a util.
   _loadScript (url) {
-    // TODO: change to use ember-ajax instead of $.getScript
-    return new Ember.RSVP.Promise((resolve, reject)=>{
-      const get = Ember.$.ajax({
-        dataType: 'script',
-        cache: true,
-        url
-      });
-      get.done(()=> Ember.run(null, resolve));
-      get.fail((jqXHR)=>Ember.run(null, reject, jqXHR));
+    var scriptElement = Ember.$("<script>").prop({src: url, async: true});
+    let promise = new Ember.RSVP.Promise((resolve, reject)=>{
+      scriptElement.one('load', ()=> Ember.run(null, resolve));
+      scriptElement.one('error', (evt)=> Ember.run(null, reject, evt));
     });
+    document.head.appendChild(scriptElement[0]);
+    return promise;
   },
   // TODO: extract to a util.
   _loadStylesheet (url) {
@@ -78,22 +75,7 @@ export default Ember.Service.extend({
       linkElement.one('load', ()=> Ember.run(null, resolve));
       linkElement.one('error', (evt)=> Ember.run(null, reject, evt));
     });
-    Ember.$('head').append(linkElement);
+    document.head.appendChild(linkElement[0]);
     return promise;
-    // Consider dropping the dependency on jquery
-    // // Create the <style> tag
-    // var style = document.createElement("style");
-
-    // // Add a media (and/or media query) here if you'd like!
-    // // style.setAttribute("media", "screen")
-    // // style.setAttribute("media", "only screen and (max-width : 1024px)")
-
-    // // WebKit hack :(
-    // style.appendChild(document.createTextNode(""));
-
-    // // Add the <style> element to the page
-    // document.head.appendChild(style);
-
-    // return style.sheet;
   }
 });

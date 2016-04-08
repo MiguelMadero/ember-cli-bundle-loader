@@ -59855,20 +59855,17 @@ define('ember-cli-bundle-loader/services/lazy-loader', ['exports', 'ember', 'emb
 
     // TODO: extract to a util.
     _loadScript: function _loadScript(url) {
-      // TODO: change to use ember-ajax instead of $.getScript
-      return new _ember['default'].RSVP.Promise(function (resolve, reject) {
-        var get = _ember['default'].$.ajax({
-          dataType: 'script',
-          cache: true,
-          url: url
-        });
-        get.done(function () {
+      var scriptElement = _ember['default'].$("<script>").prop({ src: url, async: true });
+      var promise = new _ember['default'].RSVP.Promise(function (resolve, reject) {
+        scriptElement.one('load', function () {
           return _ember['default'].run(null, resolve);
         });
-        get.fail(function (jqXHR) {
-          return _ember['default'].run(null, reject, jqXHR);
+        scriptElement.one('error', function (evt) {
+          return _ember['default'].run(null, reject, evt);
         });
       });
+      document.head.appendChild(scriptElement[0]);
+      return promise;
     },
     // TODO: extract to a util.
     _loadStylesheet: function _loadStylesheet(url) {
@@ -59881,23 +59878,8 @@ define('ember-cli-bundle-loader/services/lazy-loader', ['exports', 'ember', 'emb
           return _ember['default'].run(null, reject, evt);
         });
       });
-      _ember['default'].$('head').append(linkElement);
+      document.head.appendChild(linkElement[0]);
       return promise;
-      // Consider dropping the dependency on jquery
-      // // Create the <style> tag
-      // var style = document.createElement("style");
-
-      // // Add a media (and/or media query) here if you'd like!
-      // // style.setAttribute("media", "screen")
-      // // style.setAttribute("media", "only screen and (max-width : 1024px)")
-
-      // // WebKit hack :(
-      // style.appendChild(document.createTextNode(""));
-
-      // // Add the <style> element to the page
-      // document.head.appendChild(style);
-
-      // return style.sheet;
     }
   });
 });
