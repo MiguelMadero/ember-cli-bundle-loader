@@ -16,7 +16,7 @@
   - [ ] Fix tests for ember-release and beta (see 93e85db4ba)
   - [ ] Better error handling for promises for catch-all route (or move away from catch-all)
     - [ ] Gracefully handle cases when a bundle can't be resolved
-- [x] Test pods (Zenefits)
+- [x] Test pods
 ?- [x] Add support to override the namespace for packages. 
 - [x] Setup CI
 - [ ] Check if we need to update the resolver for tests and update the generators if we do
