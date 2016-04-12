@@ -2,7 +2,7 @@
 
 # Ember-cli-bundle-loader
 
-This project lets you build your app in different packages and load those packages lazyli. The main goal of this is faster boot times for large applications, but it can also help with independentl build and deployments for different sub-products or sections of your app. 
+This project lets you build your app in different packages and load those packages lazily. The main goal of this is faster boot times for large applications, but it can also help with independentl build and deployments for different sub-products or sections of your app. 
 
 You can see a demo live on http://miguelmadero.github.io/ember-cli-bundle-loader-consumer
 
