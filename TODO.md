@@ -57,7 +57,7 @@
 
 ## Perf
 
-- [ ] Make sure we don't add app-boot, environment/config and other header/footer files from packages since it's already in boot.
+- [x] Make sure we don't add app-boot, environment/config and other header/footer files from packages since it's already in boot.
   Consider overriding all of  `EmberApp.prototype.javascript` or at least `this.concatFiles(appJs` to remove the `app-config.js` footerFile
 - [ ] Test perf
 - [ ] See what other trees we can remove for packages
