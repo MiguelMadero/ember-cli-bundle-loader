@@ -28,8 +28,10 @@
 
 
 ## From yp
-- [ ] Fix the "isAddon" check in loader-bundler and add back
-
+[ ] Fix the "isAddon" check in loader-bundler and add back
+[x] Add flexibily to specify a perPackageConfig
+[x] Add flexibility to specify a different path for the boot app
+[x] Add flexibility to specify a different path for each package
 
 ## Minor
 - [ ] Remove deprecation warnings (use getOwner API)
