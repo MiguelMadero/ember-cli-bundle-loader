@@ -19,14 +19,6 @@ define('package1/router', ['exports', 'ember'], function (exports, _ember) {
 define('package1/routes/package1', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Route.extend({});
 });
-define('package1/templates/catch-all', ['exports', 'ember-cli-bundle-loader/templates/catch-all'], function (exports, _emberCliBundleLoaderTemplatesCatchAll) {
-  Object.defineProperty(exports, 'default', {
-    enumerable: true,
-    get: function get() {
-      return _emberCliBundleLoaderTemplatesCatchAll['default'];
-    }
-  });
-});
 define("package1/templates/package1", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
     return {
