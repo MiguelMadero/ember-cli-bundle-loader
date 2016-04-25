@@ -14,7 +14,6 @@ test('gets the bundle for a particular URL basedon the configuration', function(
 
 test('loadBundleForUrl evaluates the loaded code for external packages', function(assert) {
   const service = this.subject();
-  window.sinon.stub(service, '_addRoutesForPackage'); // avoid merging routes. We test this from an Acceptance Test with a full app
   assert.notOk(service.isBundleLoaded('package2'));
   // Normally this would be a separate test, but we don't have an easy way to "unload" code in the browser
   assert.notOk(
