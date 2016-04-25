@@ -12,10 +12,12 @@
   Instead the extension points will live in the existing loader service
 - [x] Port approvals tests from ember-cli-packages-demo
 - [x] Port acceptance tests.
-- [ ] Fix link-to helper (add a new one or ditch catch-all in favor of route mixin)
-  - [ ] Fix tests for ember-release and beta (see 93e85db4ba)
-  - [ ] Better error handling for promises for catch-all route (or move away from catch-all)
+
+- [ ] TODO: verify: Fix link-to helper (add a new one or ditch catch-all in favor of route mixin)
+  - [ ] TODO: verify: Fix tests for ember-release and beta (see 93e85db4ba)
+  - [ ] TODO: verify: Better error handling for promises for catch-all route (or move away from catch-all)
     - [ ] Gracefully handle cases when a bundle can't be resolved
+    - [ ] Change handledRoutesPatterns to use routeName instead of urls
 - [x] Test pods
 ?- [x] Add support to override the namespace for packages. 
 - [x] Setup CI
