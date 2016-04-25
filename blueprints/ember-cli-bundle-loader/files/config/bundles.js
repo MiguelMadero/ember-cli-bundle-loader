@@ -13,11 +13,9 @@ module.exports = [
 //   // For example routeNames: [['package1', 'sub-route1'], ['package4', 'sub-route2']] will handle those names
 //   // and the URL (if using the defaults in the router), will look like package1/subRoute1 and package4/subRoute2
 //   // routeNames: [['package1']],
-
-//   // Scratch the stuff above, we can't use names from the recongnizer since the route definitions aren't loaded yet
-//   // instead we use URLs for now. We could probably funnel router.js from each route into the boot bundle so they're available
-//   // but that would mean that we can't use the catch-all route and we would have to generate a lazy-route isntead of the default
-//   // one Ember generates that lazy-loads the code and acts as a proxy once it's loaded. That might be a cleaner more transparent solution.
+//   // TODO: change it to use routeNames instead of URLs now that we move away from the catch-all route
+//   // the stuff above, we can't use names from the recongnizer since the route definitions aren't loaded yet
+//   // instead we use URLs for now.
 //   handledRoutesPatterns: ['/package1']
 
 //   // Bundles can have dependencies, which means that before loading package1 we need to load package2

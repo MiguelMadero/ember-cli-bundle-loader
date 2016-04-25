@@ -14,6 +14,7 @@ module.exports = [{
   // urls: ['http://macbook-pro.local:4200/assets/package1.js','assets/package1.css'],
   // Routes can handle more than one route segment. We have an array of array since the same bundle
   // can handle a URL like '/package1' and '/other-url'.
+
   // Each entry is an array, where each element of the nested array represents the name of the route
   // this allows for the packages to handel "nested"
   // For example routeNames: [['package1', 'sub-route1'], ['package4', 'sub-route2']] will handle those names
