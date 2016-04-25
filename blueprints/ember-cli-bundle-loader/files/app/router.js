@@ -1,12 +1,12 @@
-import Ember from 'ember';
+import LazyRouter from 'ember-cli-bundle-loader/lazy-router';
 import config from './config/environment';
 
-const Router = Ember.Router.extend({
+const Router = LazyRouter.extend({
   location: config.locationType
 });
 
 Router.map(function() {
-  this.route('catchAll', {path: '*:'});
+
 });
 
 export default Router;

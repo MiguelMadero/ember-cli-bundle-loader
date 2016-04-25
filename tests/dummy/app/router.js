@@ -6,11 +6,9 @@ const Router = LazyRouter.extend({
 });
 
 Router.map(function() {
-  // this.route('catchAll', {path: '*:'});
   this.route('boot');
   this.route('package1');
   this.route('package2');
-  this.route('package3');
 });
 
 export default Router;

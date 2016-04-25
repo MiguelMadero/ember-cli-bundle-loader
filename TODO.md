@@ -18,6 +18,7 @@
   - [ ] TODO: verify: Better error handling for promises for catch-all route (or move away from catch-all)
     - [ ] Gracefully handle cases when a bundle can't be resolved
     - [ ] Change handledRoutesPatterns to use routeName instead of urls
+    - [ ] Check if we still need locationType of hash
 - [x] Test pods
 ?- [x] Add support to override the namespace for packages. 
 - [x] Setup CI
