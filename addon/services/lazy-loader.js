@@ -27,9 +27,9 @@ export default Ember.Service.extend({
 
     return this._loadAssets(bundle).then(()=>{
       loadedBundles[bundle.name] = true;
-      bundle.packages.forEach(packageName=>{
-        this._addRoutesForPackage(packageName);
-      });
+      // bundle.packages.forEach(packageName=>{
+      //   this._addRoutesForPackage(packageName);
+      // });
     });
   },
   _addRoutesForPackage (packageName) {
