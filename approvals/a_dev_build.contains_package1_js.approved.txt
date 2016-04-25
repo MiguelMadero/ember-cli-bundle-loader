@@ -6,18 +6,13 @@
 
 /* jshint ignore:end */
 
-define('package1/router', ['exports', 'ember'], function (exports, _ember) {
-
-  var Router = _ember['default'].Router.extend();
-
-  Router.map(function () {
-    this.route('package1');
-  });
-
-  exports['default'] = Router;
-});
 define('package1/routes/package1', ['exports', 'ember'], function (exports, _ember) {
-  exports['default'] = _ember['default'].Route.extend({});
+  exports['default'] = _ember['default'].Route.extend({
+    debug: 'from-package1',
+    model: function model() {
+      return { modelProperty: 42 };
+    }
+  });
 });
 define("package1/templates/package1", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
@@ -31,13 +26,19 @@ define("package1/templates/package1", ["exports"], function (exports) {
         var el0 = dom.createDocumentFragment();
         var el1 = dom.createElement("div");
         dom.setAttribute(el1, "class", "package1");
-        var el2 = dom.createTextNode("\n  Package 1\n");
+        var el2 = dom.createTextNode("\n  Package 1\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
         dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
         return el0;
       },
       render: function render(context, env, contextualElement) {
         var dom = env.dom;
+        var hooks = env.hooks,
+            content = hooks.content;
         dom.detectNamespace(contextualElement);
         var fragment;
         if (env.useFragmentCache && dom.canClone) {
@@ -55,6 +56,8 @@ define("package1/templates/package1", ["exports"], function (exports) {
         } else {
           fragment = this.build(dom);
         }
+        var morph0 = dom.createMorphAt(dom.childAt(fragment, [0]), 1, 1);
+        content(env, morph0, context, "model.modelProperty");
         return fragment;
       }
     };

@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     
-<meta name="dummy/config/environment" content="%7B%22modulePrefix%22%3A%22dummy%22%2C%22environment%22%3A%22production%22%2C%22baseURL%22%3A%22/%22%2C%22locationType%22%3A%22hash%22%2C%22EmberENV%22%3A%7B%22FEATURES%22%3A%7B%7D%7D%2C%22APP%22%3A%7B%7D%2C%22exportApplicationGlobal%22%3Afalse%7D" />
+<meta name="dummy/config/environment" content="%7B%22modulePrefix%22%3A%22dummy%22%2C%22environment%22%3A%22production%22%2C%22baseURL%22%3A%22/%22%2C%22locationType%22%3A%22hash%22%2C%22EmberENV%22%3A%7B%22FEATURES%22%3A%7B%7D%7D%2C%22exportApplicationGlobal%22%3Atrue%2C%22APP%22%3A%7B%7D%7D" />
 
     <link rel="stylesheet" href="assets/vendor-d41d8cd98f00b204e9800998ecf8427e.css" integrity="sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU= sha512-z4PhNX7vuL3xVChQ1m2AB9Yg5AULVxXcg/SpIdNs6c5H0NE8XYXysP+DGNKHfuwvY7kxvUdBeoGlODJ6+SfaPg==" >
     <link rel="stylesheet" href="assets/dummy-c4c78eea4e6f5b094e485f4a22d59d94.css" integrity="sha256-QOkiEITKLzg7TaJJjKYQFuuNLUweo1S449Tabpv6zIM= sha512-j2F7RkbcH2g93PCDkpTDPB3utBUxMdjwKJU66oVLillmmEwu6NzKVyuR0g+Ul+1nOfbXhz+7IVtagZFUHtx/JA==" >
@@ -18,8 +18,8 @@
   <body>
     
 
-    <script src="assets/vendor-0801592fccf3186df1d76a0c2d7c8ef2.js" integrity="sha256-7/DFUj6qGNTkasiMG0TEwpBF4+mR+Q6MdWeLCpaugj8= sha512-3Puppz6YZrxXd2h8RQIofrwfPpc677CxwrO5DTM42PnhP/bsfoxqXcztCNl/pE2Yc7PsJrRz0t+hF5owi5smow==" ></script>
-    <script src="assets/dummy-6605c2fa6fd7aa29943e03fc72759804.js" integrity="sha256-9RjIlSGfcH4DYfW8+DpJOyvO8nrLtto/51K0THvaHlY= sha512-GpJDjqdSka+xCCLh7jR6G4Hqhx9SwXHJC268w6c5crlZ0U4FK93LoPdfK3I/uZ1NMtTxJHbUKEGg0ffzBtv1vw==" ></script>
+    <script src="assets/vendor-5bc49fffda80f48e65b2fd2410bce689.js" integrity="sha256-An99fsP1h53jnw6GDPqkAdqDllPIwWIsKNbFxiwIbAg= sha512-lphyu8DzpT9at/heR5qy3Jk3No4ZylGk3JfQQU1kEHUH/mtCXhVni0r7xA9q9wQyTT9ZLEMlKqPQZwRx8cXCaA==" ></script>
+    <script src="assets/dummy-c55463f6dc050a73081d4f1744ecf667.js" integrity="sha256-BGsPB5k9hesSAz7Mq09oN8m8iSRCWp2YoYGcz/uCiGA= sha512-yyBTZLXzevRaQKTrICNFFLZw+WCrvyEkyLjJaQg6QV7bklo6b7+vP2YCcTvclPpjNm9PtgsTzRHLaWvIZXI2ww==" ></script>
 
     
   </body>
