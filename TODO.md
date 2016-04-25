@@ -14,7 +14,7 @@
 - [x] Port acceptance tests.
 
 - [ ] TODO: verify: Fix link-to helper (add a new one or ditch catch-all in favor of route mixin)
-  - [ ] TODO: verify: Fix tests for ember-release and beta (see 93e85db4ba)
+  - [ ] Fix tests for other ember versions (see 93e85db4ba)
   - [ ] TODO: verify: Better error handling for promises for catch-all route (or move away from catch-all)
     - [ ] Gracefully handle cases when a bundle can't be resolved
     - [ ] Change handledRoutesPatterns to use routeName instead of urls
