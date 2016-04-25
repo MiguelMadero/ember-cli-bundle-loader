@@ -1,6 +1,7 @@
 {
   "name": "ember-cli-bundle-loader",
   "version": "0.1.9",
+  "private": true,
   "description": "The default blueprint for ember-cli addons.",
   "directories": {
     "doc": "doc",
