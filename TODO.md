@@ -13,14 +13,15 @@
 - [x] Port approvals tests from ember-cli-packages-demo
 - [x] Port acceptance tests.
 
-- [ ] TODO: verify: Fix link-to helper (add a new one or ditch catch-all in favor of route mixin)
+- [x] Fix link-to helper (add a new one or ditch catch-all in favor of route mixin)
+  - [ ] Update route/-lazy-loader to only use routeName and avoid using url so we don't have to support to patterns and handledRoutes
   - [ ] Add acceptance test for deep-link, manual transition, anchor tag, normal link-to, link-to with model and nested routes
-  - [ ] Implement `needsLazyLoading` in lazyRouter
+  - [x] Implement `needsLazyLoading`
   - [ ] Gracefully handle cases when a bundle can't be resolved
-  - [ ] TODO: verify: Better error handling for promises for catch-all route (or move away from catch-all)
-  - [ ] Fix tests for other ember versions (see 93e85db4ba)
-    - [ ] Change handledRoutesPatterns to use routeName instead of urls
-    - [ ] Check if we still need locationType of hash
+  - [ ] Better error handling for promises for catch-all route (or move away from catch-all)
+- [ ] Fix tests for other ember versions (see 93e85db4ba)
+- [x] Change handledRoutesPatterns to use routeName instead of urls
+- [ ] Check if we still need locationType of hash
 
 - [x] Test pods
 ?- [x] Add support to override the namespace for packages. 
