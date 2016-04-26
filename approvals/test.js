@@ -31,7 +31,6 @@ describe('a dev build', function () {
   var assetsToVerify = ['package1.js',
     'package1.css',
     'package2.js',
-    'package1.js',
     'package2.css',
     'dummy.js',
     'dummy.css',

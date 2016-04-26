@@ -14,6 +14,44 @@ define('package1/routes/package1', ['exports', 'ember'], function (exports, _emb
     }
   });
 });
+define("package1/templates/package1/nested", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      isHTMLBars: true,
+      revision: "Ember@1.11.4",
+      blockParams: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      build: function build(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createTextNode("From the correct nested template");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      render: function render(context, env, contextualElement) {
+        var dom = env.dom;
+        dom.detectNamespace(contextualElement);
+        var fragment;
+        if (env.useFragmentCache && dom.canClone) {
+          if (this.cachedFragment === null) {
+            fragment = this.build(dom);
+            if (this.hasRendered) {
+              this.cachedFragment = fragment;
+            } else {
+              this.hasRendered = true;
+            }
+          }
+          if (this.cachedFragment) {
+            fragment = dom.cloneNode(this.cachedFragment, true);
+          }
+        } else {
+          fragment = this.build(dom);
+        }
+        return fragment;
+      }
+    };
+  })());
+});
 define("package1/templates/package1", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
     return {
@@ -32,6 +70,10 @@ define("package1/templates/package1", ["exports"], function (exports) {
         dom.appendChild(el1, el2);
         var el2 = dom.createTextNode("\n");
         dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createComment("");
         dom.appendChild(el0, el1);
         return el0;
       },
@@ -57,7 +99,10 @@ define("package1/templates/package1", ["exports"], function (exports) {
           fragment = this.build(dom);
         }
         var morph0 = dom.createMorphAt(dom.childAt(fragment, [0]), 1, 1);
+        var morph1 = dom.createMorphAt(fragment, 2, 2, contextualElement);
+        dom.insertBoundary(fragment, null);
         content(env, morph0, context, "model.modelProperty");
+        content(env, morph1, context, "outlet");
         return fragment;
       }
     };

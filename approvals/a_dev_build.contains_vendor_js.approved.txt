@@ -59759,25 +59759,30 @@ define('ember-cli-bundle-loader/lazy-router', ['exports', 'ember'], function (ex
       var container = this.container;
       var DefaultRoute = container.lookupFactory('route:basic');
       var LazyLoaderRoute = container.lookupFactory('route:-lazy-loader');
+      var lazyLoaderService = container.lookup('service:lazy-loader');
 
-      var self = this;
+      var _this = this;
 
       return function (name) {
         var routeName = 'route:' + name;
+        var lazyRouteName = routeName + '.lazy';
         var handler = container.lookup(routeName);
-        // TODO: somehow determine if it's a route that requires lazy-loading (see bundles.js in my demo)
-        var needsLazyLoading = name === 'package1' || name === 'package2';
+        var needsLazyLoading = !!lazyLoaderService.needsLazyLoading(name);
 
         if (!handler) {
           if (needsLazyLoading) {
-            handler = LazyLoaderRoute.create();
-            handler.routeName = name;
+            handler = container.lookup(lazyRouteName);
+            if (!handler) {
+              container._registry.register(lazyRouteName, LazyLoaderRoute.extend());
+              handler = container.lookup(lazyRouteName);
+              handler.routeName = name;
+            }
             return handler;
           }
           container._registry.register(routeName, DefaultRoute.extend());
           handler = container.lookup(routeName);
 
-          if (get(self, 'namespace.LOG_ACTIVE_GENERATION')) {
+          if (get(_this, 'namespace.LOG_ACTIVE_GENERATION')) {
             _ember['default'].Logger.info("generated -> " + routeName, { fullName: routeName });
           }
         }
@@ -59858,7 +59863,8 @@ define('ember-cli-bundle-loader/routes/-lazy-loader', ['exports', 'ember'], func
       }
       retried = !retried;
       transition.abort();
-      return this.get('lazyLoader').loadBundleForUrl(transition.intent.url).then(function () {
+      var loadPromise = transition.intent.url ? this.get('lazyLoader').loadBundleForUrl(transition.intent.url) : this.get('lazyLoader').loadBundleForRouteName(transition.intent.name);
+      return loadPromise.then(function () {
         transition.retry();
         retried = false; // reset this so we can transition to another lazy loaded section
         return {};
@@ -59877,6 +59883,10 @@ define('ember-cli-bundle-loader/services/lazy-loader', ['exports', 'ember', 'emb
   });
 
   exports['default'] = _ember['default'].Service.extend({
+    needsLazyLoading: function needsLazyLoading(routeName) {
+      var bundle = this.getBundleForRouteName(routeName);
+      return bundle && !this.isBundleLoaded(bundle.name);
+    },
     isBundleLoaded: function isBundleLoaded(bundleName) {
       return loadedBundles[bundleName];
     },
@@ -59887,8 +59897,18 @@ define('ember-cli-bundle-loader/services/lazy-loader', ['exports', 'ember', 'emb
         });
       });
     },
+    getBundleForRouteName: function getBundleForRouteName(routeName) {
+      return A(_emberCliBundleLoaderConfigBundles['default']).find(function (bundle) {
+        return A(bundle.routeNames || []).find(function (pattern) {
+          return routeName.match(pattern);
+        });
+      });
+    },
     loadBundleForUrl: function loadBundleForUrl(url) {
       return this.loadBundle(this.getBundleForUrl(url));
+    },
+    loadBundleForRouteName: function loadBundleForRouteName(routeName) {
+      return this.loadBundle(this.getBundleForRouteName(routeName));
     },
     loadBundle: function loadBundle(bundle) {
       if (this.isBundleLoaded(bundle.name)) {

@@ -85,7 +85,9 @@ define('dummy/router', ['exports', 'ember-cli-bundle-loader/lazy-router', 'dummy
 
   Router.map(function () {
     this.route('boot');
-    this.route('package1');
+    this.route('package1', function () {
+      this.route('nested', { path: 'nested/:id' });
+    });
     this.route('package2');
   });
 
@@ -100,7 +102,13 @@ define('dummy/routes/-lazy-loader', ['exports', 'ember-cli-bundle-loader/routes/
   });
 });
 define('dummy/routes/application', ['exports', 'ember'], function (exports, _ember) {
-  exports['default'] = _ember['default'].Route.extend({});
+  exports['default'] = _ember['default'].Route.extend({
+    actions: {
+      manualTransition: function manualTransition() {
+        this.get('router')._doTransition('package1', [], []);
+      }
+    }
+  });
 });
 define('dummy/routes/boot', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Route.extend({});
@@ -123,6 +131,78 @@ define('dummy/services/lazy-loader', ['exports', 'ember-cli-bundle-loader/servic
 });
 define("dummy/templates/application", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
+    var child0 = (function () {
+      return {
+        isHTMLBars: true,
+        revision: "Ember@1.11.4",
+        blockParams: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        build: function build(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Package 1");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        render: function render(context, env, contextualElement) {
+          var dom = env.dom;
+          dom.detectNamespace(contextualElement);
+          var fragment;
+          if (env.useFragmentCache && dom.canClone) {
+            if (this.cachedFragment === null) {
+              fragment = this.build(dom);
+              if (this.hasRendered) {
+                this.cachedFragment = fragment;
+              } else {
+                this.hasRendered = true;
+              }
+            }
+            if (this.cachedFragment) {
+              fragment = dom.cloneNode(this.cachedFragment, true);
+            }
+          } else {
+            fragment = this.build(dom);
+          }
+          return fragment;
+        }
+      };
+    })();
+    var child1 = (function () {
+      return {
+        isHTMLBars: true,
+        revision: "Ember@1.11.4",
+        blockParams: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        build: function build(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Nested 1");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        render: function render(context, env, contextualElement) {
+          var dom = env.dom;
+          dom.detectNamespace(contextualElement);
+          var fragment;
+          if (env.useFragmentCache && dom.canClone) {
+            if (this.cachedFragment === null) {
+              fragment = this.build(dom);
+              if (this.hasRendered) {
+                this.cachedFragment = fragment;
+              } else {
+                this.hasRendered = true;
+              }
+            }
+            if (this.cachedFragment) {
+              fragment = dom.cloneNode(this.cachedFragment, true);
+            }
+          } else {
+            fragment = this.build(dom);
+          }
+          return fragment;
+        }
+      };
+    })();
     return {
       isHTMLBars: true,
       revision: "Ember@1.11.4",
@@ -154,6 +234,18 @@ define("dummy/templates/application", ["exports"], function (exports) {
         var el2 = dom.createTextNode("\n  ");
         dom.appendChild(el1, el2);
         var el2 = dom.createElement("li");
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("li");
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("li");
         var el3 = dom.createElement("a");
         dom.setAttribute(el3, "href", "#/package1");
         var el4 = dom.createTextNode("Package 1");
@@ -169,6 +261,15 @@ define("dummy/templates/application", ["exports"], function (exports) {
         dom.appendChild(el3, el4);
         dom.appendChild(el2, el3);
         dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n\n\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("li");
+        var el3 = dom.createElement("a");
+        dom.setAttribute(el3, "href", "#");
+        var el4 = dom.createTextNode("Manual transition");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
         var el2 = dom.createTextNode("\n");
         dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
@@ -181,6 +282,8 @@ define("dummy/templates/application", ["exports"], function (exports) {
       render: function render(context, env, contextualElement) {
         var dom = env.dom;
         var hooks = env.hooks,
+            block = hooks.block,
+            element = hooks.element,
             content = hooks.content;
         dom.detectNamespace(contextualElement);
         var fragment;
@@ -199,9 +302,16 @@ define("dummy/templates/application", ["exports"], function (exports) {
         } else {
           fragment = this.build(dom);
         }
-        var morph0 = dom.createMorphAt(fragment, 4, 4, contextualElement);
+        var element0 = dom.childAt(fragment, [2]);
+        var element1 = dom.childAt(element0, [13, 0]);
+        var morph0 = dom.createMorphAt(dom.childAt(element0, [5]), 0, 0);
+        var morph1 = dom.createMorphAt(dom.childAt(element0, [7]), 0, 0);
+        var morph2 = dom.createMorphAt(fragment, 4, 4, contextualElement);
         dom.insertBoundary(fragment, null);
-        content(env, morph0, context, "outlet");
+        block(env, morph0, context, "link-to", ["package1"], {}, child0, null);
+        block(env, morph1, context, "link-to", ["package1.nested", 1], {}, child1, null);
+        element(env, element1, context, "action", ["manualTransition"], {});
+        content(env, morph2, context, "outlet");
         return fragment;
       }
     };
@@ -248,7 +358,7 @@ define("dummy/templates/boot", ["exports"], function (exports) {
     };
   })());
 });
-define("dummy/templates/package1", ["exports"], function (exports) {
+define("dummy/templates/package1/nested", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
     return {
       isHTMLBars: true,
@@ -258,7 +368,7 @@ define("dummy/templates/package1", ["exports"], function (exports) {
       hasRendered: false,
       build: function build(dom) {
         var el0 = dom.createDocumentFragment();
-        var el1 = dom.createTextNode("Test 1 - this should never be used since the package1 template will take precedence");
+        var el1 = dom.createTextNode("Nested - this should never be used since the package1 template will take precedence\n");
         dom.appendChild(el0, el1);
         return el0;
       },
@@ -281,6 +391,55 @@ define("dummy/templates/package1", ["exports"], function (exports) {
         } else {
           fragment = this.build(dom);
         }
+        return fragment;
+      }
+    };
+  })());
+});
+define("dummy/templates/package1", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      isHTMLBars: true,
+      revision: "Ember@1.11.4",
+      blockParams: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      build: function build(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        var el2 = dom.createTextNode("\n  Test 1 - this should never be used since the package1 template will take precedence\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      render: function render(context, env, contextualElement) {
+        var dom = env.dom;
+        var hooks = env.hooks,
+            content = hooks.content;
+        dom.detectNamespace(contextualElement);
+        var fragment;
+        if (env.useFragmentCache && dom.canClone) {
+          if (this.cachedFragment === null) {
+            fragment = this.build(dom);
+            if (this.hasRendered) {
+              this.cachedFragment = fragment;
+            } else {
+              this.hasRendered = true;
+            }
+          }
+          if (this.cachedFragment) {
+            fragment = dom.cloneNode(this.cachedFragment, true);
+          }
+        } else {
+          fragment = this.build(dom);
+        }
+        var morph0 = dom.createMorphAt(fragment, 2, 2, contextualElement);
+        dom.insertBoundary(fragment, null);
+        content(env, morph0, context, "outlet");
         return fragment;
       }
     };
@@ -318,7 +477,7 @@ catch(err) {
 /* jshint ignore:start */
 
 define('ember-cli-bundle-loader/config/bundles', function() { 
-  return [{"name":"package1","packages":["package1"],"urls":["assets/package1.js","assets/package1.css"],"handledRoutesPatterns":["/package1"]},{"name":"package2","packages":["package2"],"urls":["assets/package2.js","assets/package2.css"],"handledRoutesPatterns":["/package2"]}]
+  return [{"name":"package1","packages":["package1"],"urls":["assets/package1.js","assets/package1.css"],"routeNames":["package1"],"handledRoutesPatterns":["/package1"]},{"name":"package2","packages":["package2"],"urls":["assets/package2.js","assets/package2.css"],"routeNames":["package2"],"handledRoutesPatterns":["/package2"]}]
 });
 define('ember-cli-bundle-loader/config/package-names', function() { 
   return ["package1","package2"]

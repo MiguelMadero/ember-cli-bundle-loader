@@ -16,10 +16,10 @@ module.exports = [{
   // can handle a URL like '/package1' and '/other-url'.
 
   // Each entry is an array, where each element of the nested array represents the name of the route
-  // this allows for the packages to handel "nested"
+  // this allows for the packages to handle "nested"
   // For example routeNames: [['package1', 'sub-route1'], ['package4', 'sub-route2']] will handle those names
   // and the URL (if using the defaults in the router), will look like package1/subRoute1 and package4/subRoute2
-  // routeNames: [['package1']],
+  routeNames: ['package1'],
 
   // Scratch the stuff above, we can't use names from the recongnizer since the route definitions aren't loaded yet
   // instead we use URLs for now. We could probably funnel router.js from each route into the boot bundle so they're available

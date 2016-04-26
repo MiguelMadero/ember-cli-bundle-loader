@@ -21,7 +21,8 @@ describe('getBundleConfiguration', function () {
       name: 'my-package',
       packages: ['my-package'],
       urls: ['assets/my-package.js', 'assets/my-package.css'],
-      handledRoutesPatterns: ['/my-package']
+      handledRoutesPatterns: ['/my-package'],
+      routeNames: ['my-package']
     }]);
   });
 
@@ -30,6 +31,7 @@ describe('getBundleConfiguration', function () {
     assert.deepEqual(newConfig, bundles.concat([{
       name: 'my-package',
       packages: ['my-package'],
+      routeNames: ['my-package'],
       urls: ['assets/my-package.js', 'assets/my-package.css'],
       handledRoutesPatterns: ['/my-package']
     }]));

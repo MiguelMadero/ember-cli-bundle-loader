@@ -7,25 +7,30 @@ export default Ember.Router.extend({
     var container = this.container;
     var DefaultRoute = container.lookupFactory('route:basic');
     var LazyLoaderRoute = container.lookupFactory('route:-lazy-loader');
+    var lazyLoaderService = container.lookup('service:lazy-loader');
 
-    var self = this;
+    var _this = this;
 
     return function(name) {
       var routeName = 'route:' + name;
+      var lazyRouteName = routeName + '.lazy';
       var handler = container.lookup(routeName);
-      // TODO: somehow determine if it's a route that requires lazy-loading (see bundles.js in my demo)
-      var needsLazyLoading = name === 'package1' || name === 'package2';
+      var needsLazyLoading = !!lazyLoaderService.needsLazyLoading(name);
 
       if (!handler) {
         if (needsLazyLoading) {
-          handler = LazyLoaderRoute.create();
-          handler.routeName = name;
+          handler = container.lookup(lazyRouteName);
+          if (!handler) {
+            container._registry.register(lazyRouteName, LazyLoaderRoute.extend());
+            handler = container.lookup(lazyRouteName);
+            handler.routeName = name;
+          }
           return handler;
         }
         container._registry.register(routeName, DefaultRoute.extend());
         handler = container.lookup(routeName);
 
-        if (get(self, 'namespace.LOG_ACTIVE_GENERATION')) {
+        if (get(_this, 'namespace.LOG_ACTIVE_GENERATION')) {
           Ember.Logger.info("generated -> " + routeName, { fullName: routeName });
         }
       }

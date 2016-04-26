@@ -7,7 +7,9 @@ const Router = LazyRouter.extend({
 
 Router.map(function() {
   this.route('boot');
-  this.route('package1');
+  this.route('package1', function () {
+    this.route('nested', {path: 'nested/:id'});
+  });
   this.route('package2');
 });
 

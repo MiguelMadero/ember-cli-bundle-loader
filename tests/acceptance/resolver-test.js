@@ -4,13 +4,12 @@ import moduleForAcceptance from 'dummy/tests/helpers/module-for-acceptance';
 
 moduleForAcceptance('Acceptance | resolver');
 
-test('Can resolve routes from the boot app and pakcages', function(assert) {
+test('Can resolve routes from the boot app and packages', function(assert) {
   assert.ok(this.application.__container__.lookup('route:application') instanceof
     require('dummy/routes/application').default);
 
   assert.notOk(
     this.application.__container__.lookup('route:package1'));
-  // This will be async once we add lazy loading, so we need to visit another route first
   visit('package1');
   andThen(()=>
     assert.ok(this.application.__container__.lookup('route:package1') instanceof

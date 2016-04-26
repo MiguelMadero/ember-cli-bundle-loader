@@ -11,7 +11,10 @@ export default Ember.Route.extend({
     }
     retried = !retried;
     transition.abort();
-    return this.get('lazyLoader').loadBundleForUrl(transition.intent.url).then(()=>{
+    var loadPromise = transition.intent.url ?
+      this.get('lazyLoader').loadBundleForUrl(transition.intent.url) :
+      this.get('lazyLoader').loadBundleForRouteName(transition.intent.name);
+    return loadPromise.then(()=>{
       transition.retry();
       retried = false;  // reset this so we can transition to another lazy loaded section
       return {};

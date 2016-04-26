@@ -8,6 +8,10 @@ const loadedBundles = {};
 bundles.forEach(bundle=>loadedBundles[bundle.name] = false);
 
 export default Ember.Service.extend({
+  needsLazyLoading (routeName) {
+    var bundle = this.getBundleForRouteName(routeName);
+    return bundle && !this.isBundleLoaded(bundle.name);
+  },
   isBundleLoaded (bundleName) {
     return loadedBundles[bundleName];
   },
@@ -16,8 +20,16 @@ export default Ember.Service.extend({
       A(bundle.handledRoutesPatterns).find(pattern=>
         url.match(pattern)));
   },
+  getBundleForRouteName (routeName) {
+    return A(bundles).find(bundle=>
+      A(bundle.routeNames||[]).find(pattern=>
+        routeName.match(pattern)));
+  },
   loadBundleForUrl (url) {
     return this.loadBundle(this.getBundleForUrl(url));
+  },
+  loadBundleForRouteName (routeName) {
+    return this.loadBundle(this.getBundleForRouteName(routeName));
   },
   loadBundle (bundle) {
     if (this.isBundleLoaded(bundle.name)) {
