@@ -32,6 +32,9 @@ export default Ember.Service.extend({
     return this.loadBundle(this.getBundleForRouteName(routeName));
   },
   loadBundle (bundle) {
+    if (!bundle) {
+      return Ember.RSVP.resolve();
+    }
     if (this.isBundleLoaded(bundle.name)) {
       return Ember.RSVP.resolve();
     }
