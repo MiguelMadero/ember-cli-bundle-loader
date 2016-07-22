@@ -15,6 +15,9 @@ export default Ember.Service.extend({
   isBundleLoaded (bundleName) {
     return loadedBundles[bundleName];
   },
+  markBundleAsLoaded (bundleName) {
+    loadedBundles[bundleName] = true;
+  },
   getBundleForUrl (url) {
     return A(bundles).find(bundle=>
       A(bundle.handledRoutesPatterns).find(pattern=>
@@ -39,9 +42,7 @@ export default Ember.Service.extend({
       return Ember.RSVP.resolve();
     }
 
-    return this._loadAssets(bundle).then(()=>{
-      loadedBundles[bundle.name] = true;
-    });
+    return this._loadAssets(bundle).then(()=>markBundleAsLoaded(bundle.name));
   },
 
   _getPackageRouter(packageName) {
