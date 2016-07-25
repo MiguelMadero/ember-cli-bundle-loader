@@ -38,5 +38,17 @@ export default Ember.Router.extend({
       handler.routeName = name;
       return handler;
     };
+  },
+  _queryParamsFor: function(leafRouteName) {
+    var superQueryParams = this._super(...arguments);
+    var container = this.container;
+    var lazyLoaderService = container.lookup('service:lazy-loader');
+    var needsLazyLoading = !!lazyLoaderService.needsLazyLoading(leafRouteName);
+    //If the bundle is not yet loaded, the qps for the routes in the bundle will be stored as empty in `_qpCache`.
+    //Hence remove the qps of routes that are not yet loaded from `qpCache`
+    if (needsLazyLoading) {
+      delete this._qpCache[leafRouteName];
+    }
+    return superQueryParams;
   }
 });
