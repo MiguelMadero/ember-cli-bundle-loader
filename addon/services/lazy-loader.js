@@ -42,7 +42,7 @@ export default Ember.Service.extend({
       return Ember.RSVP.resolve();
     }
 
-    return this._loadAssets(bundle).then(()=>markBundleAsLoaded(bundle.name));
+    return this._loadAssets(bundle).then(()=>this.markBundleAsLoaded(bundle.name));
   },
 
   _getPackageRouter(packageName) {
