@@ -11,6 +11,8 @@ Router.map(function() {
     this.route('nested', {path: 'nested/:id'});
   });
   this.route('package2');
+  this.route('link-source');
+  this.route('link-target');
 });
 
 export default Router;

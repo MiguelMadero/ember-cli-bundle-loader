@@ -26,6 +26,8 @@ define("package2/templates/package2", ["exports"], function (exports) {
         var el2 = dom.createTextNode("\n  Package 2\n");
         dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
         return el0;
       },
       render: function render(context, env, contextualElement) {

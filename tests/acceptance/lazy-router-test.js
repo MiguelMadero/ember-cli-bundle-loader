@@ -5,16 +5,12 @@ moduleForAcceptance('Acceptance | lazy-router');
 
 test('Query params are not stored in cache for bundles that are not yet loaded', function(assert) {
   visit('/');
-  andThen(()=>
-    visit('package1'));
-  andThen(()=>
-    visit('package1'));
-  andThen(()=>
-    visit('package2'));
-  andThen(()=>
-    visit('package1'));
-  andThen(()=>
-    visit('package2'));
+  visit('link-target');
+  visit('link-target');
+  visit('link-source');
+  visit('link-target');
+  visit('link-source');
   andThen(() =>
-    assert.equal(find('.package2 a').attr('href'), '/package1?page=2&sort=DESC'));
+    assert.equal(find('.link-source a').attr('href'), '/link-target?page=2&sort=DESC'));
+  visit('/'); // reset this so refreshing the browser starts at the root
 });

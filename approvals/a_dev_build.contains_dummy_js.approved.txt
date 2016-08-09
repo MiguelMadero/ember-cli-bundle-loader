@@ -94,6 +94,8 @@ define('dummy/router', ['exports', 'ember-cli-bundle-loader/lazy-router', 'dummy
       this.route('nested', { path: 'nested/:id' });
     });
     this.route('package2');
+    this.route('link-source');
+    this.route('link-target');
   });
 
   exports['default'] = Router;
@@ -527,10 +529,10 @@ catch(err) {
 /* jshint ignore:start */
 
 define('ember-cli-bundle-loader/config/bundles', function() { 
-  return [{"name":"package1","packages":["package1"],"urls":["assets/package1.js","assets/package1.css"],"routeNames":["package1"],"handledRoutesPatterns":["/package1"]},{"name":"package2","packages":["package2"],"urls":["assets/package2.js","assets/package2.css"],"routeNames":["package2"],"handledRoutesPatterns":["/package2"]}]
+  return [{"name":"package1","packages":["package1"],"urls":["assets/package1.js","assets/package1.css"],"routeNames":["package1"],"handledRoutesPatterns":["/package1"]},{"name":"link-source","packages":["link-source"],"urls":["assets/link-source.js","assets/link-source.css"],"routeNames":["link-source"],"handledRoutesPatterns":["/link-source"]},{"name":"link-target","packages":["link-target"],"urls":["assets/link-target.js","assets/link-target.css"],"routeNames":["link-target"],"handledRoutesPatterns":["/link-target"]},{"name":"package2","packages":["package2"],"urls":["assets/package2.js","assets/package2.css"],"routeNames":["package2"],"handledRoutesPatterns":["/package2"]}]
 });
 define('ember-cli-bundle-loader/config/package-names', function() { 
-  return ["package1","package2"]
+  return ["link-source","link-target","package1","package2"]
 });
 if (!runningTests) {
   require("dummy/app")["default"].create({});
