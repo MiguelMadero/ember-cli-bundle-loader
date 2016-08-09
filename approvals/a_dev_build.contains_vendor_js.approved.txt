@@ -21,6 +21,36 @@ var runningTests = false;
     requirejs: requirejs
   };
 
+  requirejs = require = requireModule = function(name) {
+    stats.require++;
+    var pending = [];
+    var mod = findModule(name, '(require)', pending);
+
+    for (var i = pending.length - 1; i >= 0; i--) {
+      pending[i].exports();
+    }
+
+    return mod.module.exports;
+  };
+
+  function resetStats() {
+    stats = {
+      define: 0,
+      require: 0,
+      reify: 0,
+      findDeps: 0,
+      modules: 0,
+      exports: 0,
+      resolve: 0,
+      resolveRelative: 0,
+      findModule: 0,
+    };
+    requirejs._stats = stats;
+  }
+
+  var stats;
+  resetStats();
+
   loader = {
     noConflict: function(aliases) {
       var oldName, newName;
@@ -49,8 +79,6 @@ var runningTests = false;
 
   var registry = {};
   var seen = {};
-  var FAILED = false;
-  var LOADED = true;
 
   var uuid = 0;
 
@@ -62,16 +90,17 @@ var runningTests = false;
   var defaultDeps = ['require', 'exports', 'module'];
 
   function Module(name, deps, callback, alias) {
+    stats.modules ++;
     this.id        = uuid++;
     this.name      = name;
     this.deps      = !deps.length && callback.length ? defaultDeps : deps;
     this.module    = { exports: {} };
     this.callback  = callback;
-    this.state     = undefined;
     this.finalized = false;
     this.hasExportsAsDep = false;
     this.isAlias = alias;
     this.reified = new Array(deps.length);
+    this._foundDeps = false;
   }
 
   Module.prototype.makeDefaultExport = function() {
@@ -84,44 +113,63 @@ var runningTests = false;
   };
 
   Module.prototype.exports = function() {
-    if (this.finalized) {
-      return this.module.exports;
-    } else {
-      if (loader.wrapModules) {
-        this.callback = loader.wrapModules(this.name, this.callback);
-      }
-      var result = this.callback.apply(this, this.reified);
-      if (!(this.hasExportsAsDep && result === undefined)) {
-        this.module.exports = result;
-      }
-      this.makeDefaultExport();
-      this.finalized = true;
-      return this.module.exports;
+    if (this.finalized) { return this.module.exports; }
+    stats.exports++;
+
+    this.finalized = true;
+
+    if (loader.wrapModules) {
+      this.callback = loader.wrapModules(this.name, this.callback);
     }
+
+    this.reify();
+
+    var result = this.callback.apply(this, this.reified);
+
+    if (!(this.hasExportsAsDep && result === undefined)) {
+      this.module.exports = result;
+    }
+    this.makeDefaultExport();
+    return this.module.exports;
   };
 
   Module.prototype.unsee = function() {
     this.finalized = false;
-    this.state = undefined;
+    this._foundDeps = false;
     this.module = { exports: {}};
   };
 
   Module.prototype.reify = function() {
-    var deps = this.deps;
-    var dep;
+    stats.reify++;
     var reified = this.reified;
+    for (var i = 0; i < reified.length; i++) {
+      var mod = reified[i];
+      reified[i] = mod.exports ? mod.exports : mod.module.exports();
+    }
+  };
+
+  Module.prototype.findDeps = function(pending) {
+    if (this._foundDeps) {
+      return;
+    }
+
+    stats.findDeps++;
+    this._foundDeps = true;
+
+    var deps = this.deps;
 
     for (var i = 0; i < deps.length; i++) {
-      dep = deps[i];
+      var dep = deps[i];
+      var entry = this.reified[i] = { exports: undefined, module: undefined };
       if (dep === 'exports') {
         this.hasExportsAsDep = true;
-        reified[i] = this.module.exports;
+        entry.exports = this.module.exports;
       } else if (dep === 'require') {
-        reified[i] = this.makeRequire();
+        entry.exports = this.makeRequire();
       } else if (dep === 'module') {
-        reified[i] = this.module;
+        entry.exports = this.module;
       } else {
-        reified[i] = findModule(resolve(dep, this.name), this.name).module.exports;
+        entry.module = findModule(resolve(dep, this.name), this.name, pending);
       }
     }
   };
@@ -138,15 +186,8 @@ var runningTests = false;
     return r;
   };
 
-  Module.prototype.build = function() {
-    if (this.state === FAILED || this.state === LOADED) { return; }
-    this.state = FAILED;
-    this.reify()
-    this.exports();
-    this.state = LOADED;
-  };
-
   define = function(name, deps, callback) {
+    stats.define++;
     if (arguments.length < 2) {
       unsupportedModule(arguments.length);
     }
@@ -180,11 +221,8 @@ var runningTests = false;
     throw new Error('Could not find module `' + name + '` imported from `' + referrer + '`');
   }
 
-  requirejs = require = requireModule = function(name) {
-    return findModule(name, '(require)').module.exports;
-  };
-
-  function findModule(name, referrer) {
+  function findModule(name, referrer, pending) {
+    stats.findModule++;
     var mod = registry[name] || registry[name + '/index'];
 
     while (mod && mod.isAlias) {
@@ -193,12 +231,17 @@ var runningTests = false;
 
     if (!mod) { missingModule(name, referrer); }
 
-    mod.build();
+    if (pending) {
+      mod.findDeps(pending);
+      pending.push(mod);
+    }
     return mod;
   }
 
   function resolve(child, name) {
+    stats.resolve++;
     if (child.charAt(0) !== '.') { return child; }
+    stats.resolveRelative++;
 
     var parts = child.split('/');
     var nameParts = name.split('/');
@@ -227,10 +270,11 @@ var runningTests = false;
   requirejs.entries = requirejs._eak_seen = registry;
   requirejs.has = has;
   requirejs.unsee = function(moduleName) {
-    findModule(moduleName, '(unsee)').unsee();
+    findModule(moduleName, '(unsee)', false).unsee();
   };
 
   requirejs.clear = function() {
+    resetStats();
     requirejs.entries = requirejs._eak_seen = registry = {};
     seen = {};
   };
@@ -253,7 +297,7 @@ var runningTests = false;
 
   requirejs.clear();
 
-  if (typeof module !== 'undefined') {
+  if (typeof exports === 'object' && typeof module === 'object' && module.exports) {
     module.exports = { require: require, define: define };
   }
 })(this);
@@ -59890,6 +59934,9 @@ define('ember-cli-bundle-loader/services/lazy-loader', ['exports', 'ember', 'emb
     isBundleLoaded: function isBundleLoaded(bundleName) {
       return loadedBundles[bundleName];
     },
+    markBundleAsLoaded: function markBundleAsLoaded(bundleName) {
+      loadedBundles[bundleName] = true;
+    },
     getBundleForUrl: function getBundleForUrl(url) {
       return A(_emberCliBundleLoaderConfigBundles['default']).find(function (bundle) {
         return A(bundle.handledRoutesPatterns).find(function (pattern) {
@@ -59911,12 +59958,17 @@ define('ember-cli-bundle-loader/services/lazy-loader', ['exports', 'ember', 'emb
       return this.loadBundle(this.getBundleForRouteName(routeName));
     },
     loadBundle: function loadBundle(bundle) {
+      var _this = this;
+
+      if (!bundle) {
+        return _ember['default'].RSVP.resolve();
+      }
       if (this.isBundleLoaded(bundle.name)) {
         return _ember['default'].RSVP.resolve();
       }
 
       return this._loadAssets(bundle).then(function () {
-        loadedBundles[bundle.name] = true;
+        return _this.markBundleAsLoaded(bundle.name);
       });
     },
 
@@ -59925,11 +59977,11 @@ define('ember-cli-bundle-loader/services/lazy-loader', ['exports', 'ember', 'emb
     },
 
     _loadAssets: function _loadAssets(bundle) {
-      var _this = this;
+      var _this2 = this;
 
       var urls = bundle.urls || [];
       var promises = urls.map(function (url) {
-        return url.match(/\.js$/) ? _this._loadScript(url) : url.match(/\.css$/) ? _this._loadStylesheet(url) : _ember['default'].RSVP.reject('The specified url (' + url + ') for bundle ' + bundle.name + ' doesnt match any of the expected types');
+        return url.match(/\.js$/) ? _this2._loadScript(url) : url.match(/\.css$/) ? _this2._loadStylesheet(url) : _ember['default'].RSVP.reject('The specified url (' + url + ') for bundle ' + bundle.name + ' doesnt match any of the expected types');
       });
       return _ember['default'].RSVP.all(promises);
     },
