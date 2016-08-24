@@ -1,7 +1,7 @@
 import { test } from 'qunit';
 import moduleForAcceptance from 'dummy/tests/helpers/module-for-acceptance';
 
-moduleForAcceptance('Acceptance | lazy-router');
+moduleForAcceptance('Acceptance | query-params');
 
 test('Query params are not stored in cache for bundles that are not yet loaded', function(assert) {
   visit('/');
