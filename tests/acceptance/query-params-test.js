@@ -1,4 +1,4 @@
-import { test, skip } from 'qunit';
+import { skip } from 'qunit';
 import moduleForAcceptance from 'dummy/tests/helpers/module-for-acceptance';
 
 moduleForAcceptance('Acceptance | query-params');
