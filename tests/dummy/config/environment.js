@@ -1,9 +1,10 @@
 /* jshint node: true */
+
 module.exports = function(environment) {
   var ENV = {
     modulePrefix: 'dummy',
     environment: environment,
-    baseURL: '/',
+    rootURL: '/',
     // NOTE: locationType hash is required for links between addons to work correctly
     locationType: 'hash',
     EmberENV: {
@@ -29,7 +30,6 @@ module.exports = function(environment) {
 
   if (environment === 'test') {
     // Testem prefers this...
-    ENV.baseURL = '/';
     ENV.locationType = 'none';
 
     // keep test console output quieter

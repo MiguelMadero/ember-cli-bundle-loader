@@ -22,6 +22,16 @@ define('dummy/app', ['exports', 'ember', 'dummy/resolver', 'ember-load-initializ
 
   exports['default'] = App;
 });
+define('dummy/components/app-version', ['exports', 'ember-cli-app-version/components/app-version', 'dummy/config/environment'], function (exports, _emberCliAppVersionComponentsAppVersion, _dummyConfigEnvironment) {
+
+  var name = _dummyConfigEnvironment['default'].APP.name;
+  var version = _dummyConfigEnvironment['default'].APP.version;
+
+  exports['default'] = _emberCliAppVersionComponentsAppVersion['default'].extend({
+    version: version,
+    name: name
+  });
+});
 define('dummy/components/my-component', ['exports', 'ember', 'dummy/templates/components/my-component'], function (exports, _ember, _dummyTemplatesComponentsMyComponent) {
   exports['default'] = _ember['default'].Component.extend({
     layout: _dummyTemplatesComponentsMyComponent['default']
@@ -32,6 +42,12 @@ define('dummy/controllers/array', ['exports', 'ember'], function (exports, _embe
 });
 define('dummy/controllers/object', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Controller;
+});
+define('dummy/initializers/app-version', ['exports', 'ember-cli-app-version/initializer-factory', 'dummy/config/environment'], function (exports, _emberCliAppVersionInitializerFactory, _dummyConfigEnvironment) {
+  exports['default'] = {
+    name: 'App Version',
+    initialize: (0, _emberCliAppVersionInitializerFactory['default'])(_dummyConfigEnvironment['default'].APP.name, _dummyConfigEnvironment['default'].APP.version)
+  };
 });
 define('dummy/initializers/container-debug-adapter', ['exports', 'ember-resolver/container-debug-adapter'], function (exports, _emberResolverContainerDebugAdapter) {
   exports['default'] = {
@@ -511,7 +527,7 @@ define('ember-cli-bundle-loader/config/package-names', function() {
   return ["link-source","link-target","package1","package2"]
 });
 if (!runningTests) {
-  require("dummy/app")["default"].create({});
+  require("dummy/app")["default"].create({"name":"ember-cli-bundle-loader","version":"v0.2.4"});
 }
 
 /* jshint ignore:end */
