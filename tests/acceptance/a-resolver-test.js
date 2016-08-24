@@ -1,3 +1,6 @@
+// NOTE: this file was renamed to a-resolver-test to make sure it’s loaded before other acceptance test.
+// This is unfortunate an unnecessary likely it’s the symptom of a larger issue
+
 /* global require */
 import { test } from 'qunit';
 import moduleForAcceptance from 'dummy/tests/helpers/module-for-acceptance';
