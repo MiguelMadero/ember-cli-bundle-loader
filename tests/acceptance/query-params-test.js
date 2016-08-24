@@ -1,9 +1,9 @@
-import { skip } from 'qunit';
+import skipIfPhantom from 'dummy/tests/helpers/skip-if-phantom';
 import moduleForAcceptance from 'dummy/tests/helpers/module-for-acceptance';
 
 moduleForAcceptance('Acceptance | query-params');
 
-skip('Query params are not stored in cache for bundles that are not yet loaded', function(assert) {
+skipIfPhantom('Query params are not stored in cache for bundles that are not yet loaded', function(assert) {
   visit('/');
   visit('link-target');
   visit('link-target');

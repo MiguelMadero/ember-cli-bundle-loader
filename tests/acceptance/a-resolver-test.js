@@ -2,12 +2,12 @@
 // This is unfortunate an unnecessary likely it’s the symptom of a larger issue
 
 /* global require */
-import { skip } from 'qunit';
+import skipIfPhantom from 'dummy/tests/helpers/skip-if-phantom';
 import moduleForAcceptance from 'dummy/tests/helpers/module-for-acceptance';
 
 moduleForAcceptance('Acceptance | resolver');
 
-skip('Can resolve routes from the boot app and packages', function(assert) {
+skipIfPhantom('Can resolve routes from the boot app and packages', function(assert) {
   assert.ok(this.application.__container__.lookup('route:application') instanceof
     require('dummy/routes/application').default);
 
