@@ -23,7 +23,7 @@ export default Ember.Router.extend({
           if (!handler) {
             container._registry.register(lazyRouteName, LazyLoaderRoute.extend());
             handler = container.lookup(lazyRouteName);
-            handler.routeName = name;
+            handler.routeName = name + '-lazy';
           }
           return handler;
         }
