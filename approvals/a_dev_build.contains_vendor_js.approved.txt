@@ -69880,12 +69880,13 @@ define('ember-cli-bundle-loader/lazy-router', ['exports', 'ember'], function (ex
   'use strict';
 
   var get = _ember['default'].get;
+  var getOwner = _ember['default'].getOwner;
 
   exports['default'] = _ember['default'].Router.extend({
     _getHandlerFunction: function _getHandlerFunction() {
-      var container = this.container;
-      var DefaultRoute = container.lookupFactory('route:basic');
-      var LazyLoaderRoute = container.lookupFactory('route:-lazy-loader');
+      var container = this._getContainer();
+      var DefaultRoute = this._getFactory('route:basic');
+      var LazyLoaderRoute = this._getFactory('route:-lazy-loader');
       var lazyLoaderService = container.lookup('service:lazy-loader');
 
       var _this = this;
@@ -69900,13 +69901,13 @@ define('ember-cli-bundle-loader/lazy-router', ['exports', 'ember'], function (ex
           if (needsLazyLoading) {
             handler = container.lookup(lazyRouteName);
             if (!handler) {
-              container._registry.register(lazyRouteName, LazyLoaderRoute.extend());
+              _this._registerFactory(lazyRouteName, LazyLoaderRoute.extend());
               handler = container.lookup(lazyRouteName);
               handler.routeName = name + '-lazy';
             }
             return handler;
           }
-          container._registry.register(routeName, DefaultRoute.extend());
+          _this._registerFactory(routeName, DefaultRoute.extend());
           handler = container.lookup(routeName);
 
           if (get(_this, 'namespace.LOG_ACTIVE_GENERATION')) {
@@ -69918,9 +69919,29 @@ define('ember-cli-bundle-loader/lazy-router', ['exports', 'ember'], function (ex
         return handler;
       };
     },
+    _getContainer: function _getContainer() {
+      var hasGetOwner = typeof getOwner === "function";
+      var container = hasGetOwner ? getOwner(this) : this.container;
+      return container;
+    },
+    _getFactory: function _getFactory(factoryName) {
+      var container = this._getContainer();
+      var factory = typeof container.lookupFactory === "function" ? container.lookupFactory(factoryName) : container._lookupFactory(factoryName);
+      return factory;
+    },
+    _registerFactory: function _registerFactory(fullName, factory) {
+      var container = this._getContainer();
+      var hasGetOwner = typeof getOwner === "function";
+      if (hasGetOwner) {
+        container.base.register(fullName, factory);
+        return;
+      }
+      var registry = container._registry || container.registry;
+      registry.register(fullName, factory);
+    },
     _queryParamsFor: function _queryParamsFor(leafRouteName) {
       var superQueryParams = this._super.apply(this, arguments);
-      var container = this.container;
+      var container = this._getContainer();
       var lazyLoaderService = container.lookup('service:lazy-loader');
       var needsLazyLoading = !!lazyLoaderService.needsLazyLoading(leafRouteName);
       //If the bundle is not yet loaded, the qps for the routes in the bundle will be stored as empty in `_qpCache`.
