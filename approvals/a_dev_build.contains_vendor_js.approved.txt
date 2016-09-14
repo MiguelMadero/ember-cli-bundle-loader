@@ -69876,17 +69876,15 @@ define('ember-ajax/utils/parse-response-headers', ['exports'], function (exports
     return headers;
   }
 });
-define('ember-cli-bundle-loader/lazy-router', ['exports', 'ember'], function (exports, _ember) {
+define('ember-cli-bundle-loader/lazy-router', ['exports', 'ember', 'ember-cli-bundle-loader/utils/get-owner'], function (exports, _ember, _emberCliBundleLoaderUtilsGetOwner) {
   'use strict';
 
   var get = _ember['default'].get;
-  var getOwner = _ember['default'].getOwner;
-
   exports['default'] = _ember['default'].Router.extend({
     _getHandlerFunction: function _getHandlerFunction() {
-      var container = this._getContainer();
-      var DefaultRoute = this._getFactory('route:basic');
-      var LazyLoaderRoute = this._getFactory('route:-lazy-loader');
+      var container = (0, _emberCliBundleLoaderUtilsGetOwner.getContainer)(this);
+      var DefaultRoute = (0, _emberCliBundleLoaderUtilsGetOwner.getFactory)(this, 'route:basic');
+      var LazyLoaderRoute = (0, _emberCliBundleLoaderUtilsGetOwner.getFactory)(this, 'route:-lazy-loader');
       var lazyLoaderService = container.lookup('service:lazy-loader');
 
       var _this = this;
@@ -69901,13 +69899,13 @@ define('ember-cli-bundle-loader/lazy-router', ['exports', 'ember'], function (ex
           if (needsLazyLoading) {
             handler = container.lookup(lazyRouteName);
             if (!handler) {
-              _this._registerFactory(lazyRouteName, LazyLoaderRoute.extend());
+              (0, _emberCliBundleLoaderUtilsGetOwner.registerFactory)(_this, lazyRouteName, LazyLoaderRoute.extend());
               handler = container.lookup(lazyRouteName);
               handler.routeName = name + '-lazy';
             }
             return handler;
           }
-          _this._registerFactory(routeName, DefaultRoute.extend());
+          (0, _emberCliBundleLoaderUtilsGetOwner.registerFactory)(_this, routeName, DefaultRoute.extend());
           handler = container.lookup(routeName);
 
           if (get(_this, 'namespace.LOG_ACTIVE_GENERATION')) {
@@ -69919,29 +69917,10 @@ define('ember-cli-bundle-loader/lazy-router', ['exports', 'ember'], function (ex
         return handler;
       };
     },
-    _getContainer: function _getContainer() {
-      var hasGetOwner = typeof getOwner === "function";
-      var container = hasGetOwner ? getOwner(this) : this.container;
-      return container;
-    },
-    _getFactory: function _getFactory(factoryName) {
-      var container = this._getContainer();
-      var factory = typeof container.lookupFactory === "function" ? container.lookupFactory(factoryName) : container._lookupFactory(factoryName);
-      return factory;
-    },
-    _registerFactory: function _registerFactory(fullName, factory) {
-      var container = this._getContainer();
-      var hasGetOwner = typeof getOwner === "function";
-      if (hasGetOwner) {
-        container.base.register(fullName, factory);
-        return;
-      }
-      var registry = container._registry || container.registry;
-      registry.register(fullName, factory);
-    },
+
     _queryParamsFor: function _queryParamsFor(leafRouteName) {
       var superQueryParams = this._super.apply(this, arguments);
-      var container = this._getContainer();
+      var container = (0, _emberCliBundleLoaderUtilsGetOwner.getContainer)(this);
       var lazyLoaderService = container.lookup('service:lazy-loader');
       var needsLazyLoading = !!lazyLoaderService.needsLazyLoading(leafRouteName);
       //If the bundle is not yet loaded, the qps for the routes in the bundle will be stored as empty in `_qpCache`.
@@ -70131,6 +70110,38 @@ define('ember-cli-bundle-loader/services/lazy-loader', ['exports', 'ember', 'emb
       return promise;
     }
   });
+});
+define("ember-cli-bundle-loader/utils/get-owner", ["exports", "ember"], function (exports, _ember) {
+  "use strict";
+
+  exports.getContainer = getContainer;
+  exports.getFactory = getFactory;
+  exports.registerFactory = registerFactory;
+
+  var getOwner = _ember["default"].getOwner;
+
+  function getContainer(context) {
+    var hasGetOwner = typeof getOwner === "function";
+    var container = hasGetOwner ? getOwner(context) : context.container;
+    return container;
+  }
+
+  function getFactory(context, factoryName) {
+    var container = getContainer(context);
+    var factory = typeof container.lookupFactory === "function" ? container.lookupFactory(factoryName) : container._lookupFactory(factoryName);
+    return factory;
+  }
+
+  function registerFactory(context, fullName, factory) {
+    var container = getContainer(context);
+    var hasGetOwner = typeof getOwner === "function";
+    if (hasGetOwner) {
+      container.base.register(fullName, factory);
+      return;
+    }
+    var registry = container._registry || container.registry;
+    registry.register(fullName, factory);
+  }
 });
 define("ember-get-config/index", ["exports"], function (exports) {
   "use strict";

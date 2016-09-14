@@ -9,7 +9,7 @@ module.exports = [
 //   // Routes can handle more than one route segment. We have an array of array since the same bundle
 //   // can handle a URL like '/package1' and '/other-url'.
 //   // Each entry is an array, where each element of the nested array represents the name of the route
-//   // this allows for the packages to handel "nested"
+//   // this allows for the packages to handle "nested"
 //   // For example routeNames: [['package1', 'sub-route1'], ['package4', 'sub-route2']] will handle those names
 //   // and the URL (if using the defaults in the router), will look like package1/subRoute1 and package4/subRoute2
 //   // routeNames: [['package1']],

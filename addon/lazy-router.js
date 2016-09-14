@@ -1,12 +1,12 @@
 import Ember from 'ember';
-
-const { get, getOwner } = Ember;
+const { get } = Ember;
+import { getContainer, getFactory, registerFactory } from 'ember-cli-bundle-loader/utils/get-owner';
 
 export default Ember.Router.extend({
   _getHandlerFunction: function() {
-    var container = this._getContainer();
-    var DefaultRoute = this._getFactory('route:basic');
-    var LazyLoaderRoute =this._getFactory('route:-lazy-loader');
+    var container = getContainer(this);
+    var DefaultRoute = getFactory(this, 'route:basic');
+    var LazyLoaderRoute =getFactory(this, 'route:-lazy-loader');
     var lazyLoaderService = container.lookup('service:lazy-loader');
 
     var _this = this;
@@ -21,13 +21,13 @@ export default Ember.Router.extend({
         if (needsLazyLoading) {
           handler = container.lookup(lazyRouteName);
           if (!handler) {
-            _this._registerFactory(lazyRouteName, LazyLoaderRoute.extend());
+            registerFactory(_this, lazyRouteName, LazyLoaderRoute.extend());
             handler = container.lookup(lazyRouteName);
             handler.routeName = name + '-lazy';
           }
           return handler;
         }
-        _this._registerFactory(routeName, DefaultRoute.extend());
+        registerFactory(_this, routeName, DefaultRoute.extend());
         handler = container.lookup(routeName);
 
         if (get(_this, 'namespace.LOG_ACTIVE_GENERATION')) {
@@ -39,29 +39,10 @@ export default Ember.Router.extend({
       return handler;
     };
   },
-  _getContainer: function() {
-    var hasGetOwner = typeof getOwner === "function";
-    var container = hasGetOwner? getOwner(this) : this.container;
-    return container;
-  },
-  _getFactory: function(factoryName){
-    var container = this._getContainer();
-    var factory = typeof container.lookupFactory === "function" ? container.lookupFactory(factoryName) : container._lookupFactory(factoryName);
-    return factory;
-  },
-  _registerFactory: function(fullName, factory) {
-    var container = this._getContainer();
-    var hasGetOwner = typeof getOwner === "function";
-    if (hasGetOwner) {
-      container.base.register(fullName, factory);
-      return;
-    }
-    var registry = container._registry || container.registry;
-    registry.register(fullName, factory);
-  },
+
   _queryParamsFor: function(leafRouteName) {
     var superQueryParams = this._super(...arguments);
-    var container = this._getContainer();
+    var container = getContainer(this);
     var lazyLoaderService = container.lookup('service:lazy-loader');
     var needsLazyLoading = !!lazyLoaderService.needsLazyLoading(leafRouteName);
     //If the bundle is not yet loaded, the qps for the routes in the bundle will be stored as empty in `_qpCache`.
