@@ -22,6 +22,19 @@ define('dummy/app', ['exports', 'ember', 'dummy/resolver', 'ember-load-initializ
 
   exports['default'] = App;
 });
+define('dummy/components/loading-for-test', ['exports', 'ember', 'dummy/templates/components/loading-for-test'], function (exports, _ember, _dummyTemplatesComponentsLoadingForTest) {
+  var StateForTest = { hasRendered: false };
+  exports.StateForTest = StateForTest;
+  exports['default'] = _ember['default'].Component.extend({
+    layout: _dummyTemplatesComponentsLoadingForTest['default'],
+    didInsertElement: function didInsertElement() {
+      // Not an easy way to prove that something render
+      // since checking for a class on run.later
+      // actually delays the render :(
+      StateForTest.hasRendered = true;
+    }
+  });
+});
 define('dummy/components/my-component', ['exports', 'ember', 'dummy/templates/components/my-component'], function (exports, _ember, _dummyTemplatesComponentsMyComponent) {
   exports['default'] = _ember['default'].Component.extend({
     layout: _dummyTemplatesComponentsMyComponent['default']
@@ -96,6 +109,7 @@ define('dummy/router', ['exports', 'ember-cli-bundle-loader/lazy-router', 'dummy
     this.route('package2');
     this.route('link-source');
     this.route('link-target');
+    this.route('slow');
   });
 
   exports['default'] = Router;
@@ -206,6 +220,40 @@ define("dummy/templates/application", ["exports"], function (exports) {
         templates: []
       };
     })();
+    var child2 = (function () {
+      return {
+        meta: {
+          "revision": "Ember@1.13.13",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 10,
+              "column": 6
+            },
+            "end": {
+              "line": 10,
+              "column": 29
+            }
+          },
+          "moduleName": "dummy/templates/application.hbs"
+        },
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Slow");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
     return {
       meta: {
         "revision": "Ember@1.13.13",
@@ -216,7 +264,7 @@ define("dummy/templates/application", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 13,
+            "line": 14,
             "column": 10
           }
         },
@@ -277,7 +325,15 @@ define("dummy/templates/application", ["exports"], function (exports) {
         dom.appendChild(el3, el4);
         dom.appendChild(el2, el3);
         dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n\n\n  ");
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("li");
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n\n  ");
         dom.appendChild(el1, el2);
         var el2 = dom.createElement("li");
         var el3 = dom.createElement("a");
@@ -297,18 +353,19 @@ define("dummy/templates/application", ["exports"], function (exports) {
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
         var element0 = dom.childAt(fragment, [2]);
-        var element1 = dom.childAt(element0, [13, 0]);
-        var morphs = new Array(4);
+        var element1 = dom.childAt(element0, [16, 0]);
+        var morphs = new Array(5);
         morphs[0] = dom.createMorphAt(dom.childAt(element0, [5]), 0, 0);
         morphs[1] = dom.createMorphAt(dom.childAt(element0, [7]), 0, 0);
-        morphs[2] = dom.createElementMorph(element1);
-        morphs[3] = dom.createMorphAt(fragment, 4, 4, contextualElement);
+        morphs[2] = dom.createMorphAt(dom.childAt(element0, [14]), 0, 0);
+        morphs[3] = dom.createElementMorph(element1);
+        morphs[4] = dom.createMorphAt(fragment, 4, 4, contextualElement);
         dom.insertBoundary(fragment, null);
         return morphs;
       },
-      statements: [["block", "link-to", ["package1"], [], 0, null, ["loc", [null, [5, 6], [5, 50]]]], ["block", "link-to", ["package1.nested", 1], [], 1, null, ["loc", [null, [6, 6], [6, 58]]]], ["element", "action", ["manualTransition"], [], ["loc", [null, [11, 18], [11, 47]]]], ["content", "outlet", ["loc", [null, [13, 0], [13, 10]]]]],
+      statements: [["block", "link-to", ["package1"], [], 0, null, ["loc", [null, [5, 6], [5, 50]]]], ["block", "link-to", ["package1.nested", 1], [], 1, null, ["loc", [null, [6, 6], [6, 58]]]], ["block", "link-to", ["slow"], [], 2, null, ["loc", [null, [10, 6], [10, 41]]]], ["element", "action", ["manualTransition"], [], ["loc", [null, [12, 18], [12, 47]]]], ["content", "outlet", ["loc", [null, [14, 0], [14, 10]]]]],
       locals: [],
-      templates: [child0, child1]
+      templates: [child0, child1, child2]
     };
   })());
 });
@@ -338,6 +395,45 @@ define("dummy/templates/boot", ["exports"], function (exports) {
         var el1 = dom.createElement("div");
         dom.setAttribute(el1, "class", "boot");
         var el2 = dom.createTextNode("\n  Boot\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes() {
+        return [];
+      },
+      statements: [],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define("dummy/templates/components/loading-for-test", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "revision": "Ember@1.13.13",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 38
+          }
+        },
+        "moduleName": "dummy/templates/components/loading-for-test.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "loading");
+        var el2 = dom.createTextNode("LOADING....");
         dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
         return el0;
@@ -387,6 +483,46 @@ define("dummy/templates/components/my-component", ["exports"], function (exports
         return morphs;
       },
       statements: [["content", "yield", ["loc", [null, [1, 0], [1, 9]]]]],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define("dummy/templates/loading", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "revision": "Ember@1.13.13",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 20
+          }
+        },
+        "moduleName": "dummy/templates/loading.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+        dom.insertBoundary(fragment, 0);
+        dom.insertBoundary(fragment, null);
+        return morphs;
+      },
+      statements: [["content", "loading-for-test", ["loc", [null, [1, 0], [1, 20]]]]],
       locals: [],
       templates: []
     };
@@ -505,10 +641,10 @@ catch(err) {
 /* jshint ignore:start */
 
 define('ember-cli-bundle-loader/config/bundles', function() { 
-  return [{"name":"package1","packages":["package1"],"urls":["assets/package1.js","assets/package1.css"],"routeNames":["package1"],"handledRoutesPatterns":["/package1"]},{"name":"link-source","packages":["link-source"],"urls":["assets/link-source.js","assets/link-source.css"],"routeNames":["link-source"],"handledRoutesPatterns":["/link-source"]},{"name":"link-target","packages":["link-target"],"urls":["assets/link-target.js","assets/link-target.css"],"routeNames":["link-target"],"handledRoutesPatterns":["/link-target"]},{"name":"package2","packages":["package2"],"urls":["assets/package2.js","assets/package2.css"],"routeNames":["package2"],"handledRoutesPatterns":["/package2"]}]
+  return [{"name":"package1","packages":["package1"],"urls":["assets/package1.js","assets/package1.css"],"routeNames":["package1"],"handledRoutesPatterns":["/package1"]},{"name":"link-source","packages":["link-source"],"urls":["assets/link-source.js","assets/link-source.css"],"routeNames":["link-source"],"handledRoutesPatterns":["/link-source"]},{"name":"link-target","packages":["link-target"],"urls":["assets/link-target.js","assets/link-target.css"],"routeNames":["link-target"],"handledRoutesPatterns":["/link-target"]},{"name":"package2","packages":["package2"],"urls":["assets/package2.js","assets/package2.css"],"routeNames":["package2"],"handledRoutesPatterns":["/package2"]},{"name":"slow","packages":["slow"],"urls":["assets/slow.js","assets/slow.css"],"routeNames":["slow"],"handledRoutesPatterns":["/slow"]}]
 });
 define('ember-cli-bundle-loader/config/package-names', function() { 
-  return ["link-source","link-target","package1","package2"]
+  return ["link-source","link-target","package1","package2","slow"]
 });
 if (!runningTests) {
   require("dummy/app")["default"].create({});
