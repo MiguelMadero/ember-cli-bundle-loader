@@ -4,7 +4,7 @@
 
 This project lets you build your app in different packages and load those packages lazily. The main goal of this is faster boot times for large applications, but it can also help with independentl build and deployments for different sub-products or sections of your app. 
 
-You can see a demo live on http://miguelmadero.github.io/ember-cli-bundle-loader-consumer
+You can see a demo live on http://miguelmadero.com/ember-cli-bundle-loader/
 
 ## How it works
 
@@ -117,6 +117,10 @@ The config/environment lives under `[modulePrefix]/config/environment`, which me
 ### CSS
 
 This demo uses ember-cli-sass, but the same technique would work with vanilla CSS (but please use a pre-processor) or Less. Is not tested with postCSS, but it isn't tested.
+
+## Deploy
+
+To deploy the dummy app, with examples for lazy-loading, you can use `ember deploy development`, this will publish it to http://miguelmadero.com/ember-cli-bundle-loader/
 
 
 ## Disclaimer
