@@ -13,6 +13,7 @@ Router.map(function() {
   this.route('package2');
   this.route('link-source');
   this.route('link-target');
+  this.route('slow');
 });
 
 export default Router;
