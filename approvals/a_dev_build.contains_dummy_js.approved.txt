@@ -276,7 +276,7 @@ define("dummy/templates/application", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 14,
+            "line": 13,
             "column": 10
           }
         },
@@ -324,7 +324,7 @@ define("dummy/templates/application", ["exports"], function (exports) {
         var el2 = dom.createElement("li");
         var el3 = dom.createElement("a");
         dom.setAttribute(el3, "href", "#/package1");
-        var el4 = dom.createTextNode("Package 1");
+        var el4 = dom.createTextNode("Package 1 (by url)");
         dom.appendChild(el3, el4);
         dom.appendChild(el2, el3);
         dom.appendChild(el1, el2);
@@ -333,7 +333,7 @@ define("dummy/templates/application", ["exports"], function (exports) {
         var el2 = dom.createElement("li");
         var el3 = dom.createElement("a");
         dom.setAttribute(el3, "href", "#/package2");
-        var el4 = dom.createTextNode("Package 2");
+        var el4 = dom.createTextNode("Package 2 (by url)");
         dom.appendChild(el3, el4);
         dom.appendChild(el2, el3);
         dom.appendChild(el1, el2);
@@ -345,7 +345,7 @@ define("dummy/templates/application", ["exports"], function (exports) {
         var el3 = dom.createComment("");
         dom.appendChild(el2, el3);
         dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n\n  ");
+        var el2 = dom.createTextNode("\n  ");
         dom.appendChild(el1, el2);
         var el2 = dom.createElement("li");
         var el3 = dom.createElement("a");
@@ -375,7 +375,7 @@ define("dummy/templates/application", ["exports"], function (exports) {
         dom.insertBoundary(fragment, null);
         return morphs;
       },
-      statements: [["block", "link-to", ["package1"], [], 0, null, ["loc", [null, [5, 6], [5, 50]]]], ["block", "link-to", ["package1.nested", 1], [], 1, null, ["loc", [null, [6, 6], [6, 58]]]], ["block", "link-to", ["slow"], [], 2, null, ["loc", [null, [10, 6], [10, 41]]]], ["element", "action", ["manualTransition"], [], ["loc", [null, [12, 18], [12, 47]]]], ["content", "outlet", ["loc", [null, [14, 0], [14, 10]]]]],
+      statements: [["block", "link-to", ["package1"], [], 0, null, ["loc", [null, [5, 6], [5, 50]]]], ["block", "link-to", ["package1.nested", 1], [], 1, null, ["loc", [null, [6, 6], [6, 58]]]], ["block", "link-to", ["slow"], [], 2, null, ["loc", [null, [10, 6], [10, 41]]]], ["element", "action", ["manualTransition"], [], ["loc", [null, [11, 18], [11, 47]]]], ["content", "outlet", ["loc", [null, [13, 0], [13, 10]]]]],
       locals: [],
       templates: [child0, child1, child2]
     };
