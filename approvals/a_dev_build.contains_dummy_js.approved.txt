@@ -134,6 +134,18 @@ define('dummy/routes/application', ['exports', 'ember'], function (exports, _emb
 define('dummy/routes/boot', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Route.extend({});
 });
+define('dummy/routes/package1/nested', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Route.extend({
+    debug: 'from-package1',
+    model: function model() {
+      return new _ember['default'].RSVP.Promise(function (resolve) {
+        _ember['default'].run.later(function () {
+          return resolve({ modelProperty: 42 });
+        }, 1000);
+      });
+    }
+  });
+});
 define('dummy/services/ajax', ['exports', 'ember-ajax/services/ajax'], function (exports, _emberAjaxServicesAjax) {
   Object.defineProperty(exports, 'default', {
     enumerable: true,
