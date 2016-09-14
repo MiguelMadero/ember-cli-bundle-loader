@@ -1,0 +1,14 @@
+<h1>Welcome to Ember - with packaging and lazy loading</h1>
+<ul>
+  <!-- TODO: change it to test link-to -->
+  <li><a href="#/boot">Boot</a></li>
+  <li>{{#link-to "package1"}}Package 1{{/link-to}}</li>
+  <li>{{#link-to "package1.nested" 1}}Nested 1{{/link-to}}</li>
+  <li><a href="#/package1">Package 1</a></li>
+  <li><a href="#/package2">Package 2</a></li>
+  {{!-- To test loading sub state --}}
+  <li>{{#link-to "slow"}}Slow{{/link-to}}</li>
+
+  <li><a href="#" {{action "manualTransition"}}>Manual transition</a></li>
+</ul>
+{{outlet}}
