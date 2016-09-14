@@ -1,0 +1,12 @@
+{
+	"version": 3,
+	"file": "dummy.css",
+	"sources": [
+		"../../sass_compiler-input_base_path-jrEW1GBJ.tmp/0/app/styles/app.scss"
+	],
+	"sourcesContent": [
+		".boot {\n  background: red;\n}\n"
+	],
+	"mappings": "AAAA,AAAA,KAAK,CAAC;EACJ,UAAU,EAAE,GAAI,GACjB",
+	"names": []
+}

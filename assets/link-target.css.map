@@ -1,0 +1,12 @@
+{
+	"version": 3,
+	"file": "link-target.css",
+	"sources": [
+		"../../sass_compiler-input_base_path-1AgY5vnc.tmp/0/app/styles/app.scss"
+	],
+	"sourcesContent": [
+		"// This styles are loaded only with this package\n"
+	],
+	"mappings": "",
+	"names": []
+}

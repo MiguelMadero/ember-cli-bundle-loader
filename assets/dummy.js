@@ -1,0 +1,666 @@
+"use strict";
+
+/* jshint ignore:start */
+
+
+
+/* jshint ignore:end */
+
+define('dummy/app', ['exports', 'ember', 'dummy/resolver', 'ember-load-initializers', 'dummy/config/environment'], function (exports, _ember, _dummyResolver, _emberLoadInitializers, _dummyConfigEnvironment) {
+
+  var App = undefined;
+
+  _ember['default'].MODEL_FACTORY_INJECTIONS = true;
+
+  App = _ember['default'].Application.extend({
+    modulePrefix: _dummyConfigEnvironment['default'].modulePrefix,
+    podModulePrefix: _dummyConfigEnvironment['default'].podModulePrefix,
+    Resolver: _dummyResolver['default']
+  });
+
+  (0, _emberLoadInitializers['default'])(App, _dummyConfigEnvironment['default'].modulePrefix);
+
+  exports['default'] = App;
+});
+define('dummy/components/loading-for-test', ['exports', 'ember', 'dummy/templates/components/loading-for-test'], function (exports, _ember, _dummyTemplatesComponentsLoadingForTest) {
+  var StateForTest = { hasRendered: false };
+  exports.StateForTest = StateForTest;
+  exports['default'] = _ember['default'].Component.extend({
+    layout: _dummyTemplatesComponentsLoadingForTest['default'],
+    didInsertElement: function didInsertElement() {
+      // Not an easy way to prove that something render
+      // since checking for a class on run.later
+      // actually delays the render :(
+      StateForTest.hasRendered = true;
+    }
+  });
+});
+define('dummy/components/my-component', ['exports', 'ember', 'dummy/templates/components/my-component'], function (exports, _ember, _dummyTemplatesComponentsMyComponent) {
+  exports['default'] = _ember['default'].Component.extend({
+    layout: _dummyTemplatesComponentsMyComponent['default']
+  });
+});
+define('dummy/controllers/array', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Controller;
+});
+define('dummy/controllers/object', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Controller;
+});
+define('dummy/initializers/container-debug-adapter', ['exports', 'ember-resolver/container-debug-adapter'], function (exports, _emberResolverContainerDebugAdapter) {
+  exports['default'] = {
+    name: 'container-debug-adapter',
+
+    initialize: function initialize() {
+      var app = arguments[1] || arguments[0];
+
+      app.register('container-debug-adapter:main', _emberResolverContainerDebugAdapter['default']);
+      app.inject('container-debug-adapter:main', 'namespace', 'application:main');
+    }
+  };
+});
+define('dummy/initializers/export-application-global', ['exports', 'ember', 'dummy/config/environment'], function (exports, _ember, _dummyConfigEnvironment) {
+  exports.initialize = initialize;
+
+  function initialize() {
+    var application = arguments[1] || arguments[0];
+    if (_dummyConfigEnvironment['default'].exportApplicationGlobal !== false) {
+      var value = _dummyConfigEnvironment['default'].exportApplicationGlobal;
+      var globalName;
+
+      if (typeof value === 'string') {
+        globalName = value;
+      } else {
+        globalName = _ember['default'].String.classify(_dummyConfigEnvironment['default'].modulePrefix);
+      }
+
+      if (!window[globalName]) {
+        window[globalName] = application;
+
+        application.reopen({
+          willDestroy: function willDestroy() {
+            this._super.apply(this, arguments);
+            delete window[globalName];
+          }
+        });
+      }
+    }
+  }
+
+  exports['default'] = {
+    name: 'export-application-global',
+
+    initialize: initialize
+  };
+});
+define('dummy/resolver', ['exports', 'ember-cli-bundle-loader/resolver'], function (exports, _emberCliBundleLoaderResolver) {
+  exports['default'] = _emberCliBundleLoaderResolver['default'];
+});
+define('dummy/router', ['exports', 'ember-cli-bundle-loader/lazy-router', 'dummy/config/environment'], function (exports, _emberCliBundleLoaderLazyRouter, _dummyConfigEnvironment) {
+
+  var Router = _emberCliBundleLoaderLazyRouter['default'].extend({
+    location: _dummyConfigEnvironment['default'].locationType
+  });
+
+  Router.map(function () {
+    this.route('boot');
+    this.route('package1', function () {
+      this.route('nested', { path: 'nested/:id' });
+    });
+    this.route('package2');
+    this.route('link-source');
+    this.route('link-target');
+    this.route('slow');
+  });
+
+  exports['default'] = Router;
+});
+define('dummy/routes/-lazy-loader', ['exports', 'ember-cli-bundle-loader/routes/-lazy-loader'], function (exports, _emberCliBundleLoaderRoutesLazyLoader) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberCliBundleLoaderRoutesLazyLoader['default'];
+    }
+  });
+});
+define('dummy/routes/application', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Route.extend({
+    actions: {
+      manualTransition: function manualTransition() {
+        this.get('router')._doTransition('package1', [], []);
+      }
+    }
+  });
+});
+define('dummy/routes/boot', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Route.extend({});
+});
+define('dummy/routes/package1/nested', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Route.extend({
+    debug: 'from-package1',
+    model: function model() {
+      return new _ember['default'].RSVP.Promise(function (resolve) {
+        _ember['default'].run.later(function () {
+          return resolve({ modelProperty: 42 });
+        }, 1000);
+      });
+    }
+  });
+});
+define('dummy/services/ajax', ['exports', 'ember-ajax/services/ajax'], function (exports, _emberAjaxServicesAjax) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberAjaxServicesAjax['default'];
+    }
+  });
+});
+define('dummy/services/lazy-loader', ['exports', 'ember-cli-bundle-loader/services/lazy-loader'], function (exports, _emberCliBundleLoaderServicesLazyLoader) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberCliBundleLoaderServicesLazyLoader['default'];
+    }
+  });
+});
+define("dummy/templates/application", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    var child0 = (function () {
+      return {
+        meta: {
+          "revision": "Ember@1.13.13",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 5,
+              "column": 6
+            },
+            "end": {
+              "line": 5,
+              "column": 38
+            }
+          },
+          "moduleName": "dummy/templates/application.hbs"
+        },
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Package 1");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child1 = (function () {
+      return {
+        meta: {
+          "revision": "Ember@1.13.13",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 6,
+              "column": 6
+            },
+            "end": {
+              "line": 6,
+              "column": 46
+            }
+          },
+          "moduleName": "dummy/templates/application.hbs"
+        },
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Nested 1");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child2 = (function () {
+      return {
+        meta: {
+          "revision": "Ember@1.13.13",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 10,
+              "column": 6
+            },
+            "end": {
+              "line": 10,
+              "column": 29
+            }
+          },
+          "moduleName": "dummy/templates/application.hbs"
+        },
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Slow");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    return {
+      meta: {
+        "revision": "Ember@1.13.13",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 14,
+            "column": 10
+          }
+        },
+        "moduleName": "dummy/templates/application.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("h1");
+        var el2 = dom.createTextNode("Welcome to Ember - with packaging and lazy loading");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("ul");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment(" TODO: change it to test link-to ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("li");
+        var el3 = dom.createElement("a");
+        dom.setAttribute(el3, "href", "#/boot");
+        var el4 = dom.createTextNode("Boot");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("li");
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("li");
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("li");
+        var el3 = dom.createElement("a");
+        dom.setAttribute(el3, "href", "#/package1");
+        var el4 = dom.createTextNode("Package 1");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("li");
+        var el3 = dom.createElement("a");
+        dom.setAttribute(el3, "href", "#/package2");
+        var el4 = dom.createTextNode("Package 2");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("li");
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("li");
+        var el3 = dom.createElement("a");
+        dom.setAttribute(el3, "href", "#");
+        var el4 = dom.createTextNode("Manual transition");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [2]);
+        var element1 = dom.childAt(element0, [16, 0]);
+        var morphs = new Array(5);
+        morphs[0] = dom.createMorphAt(dom.childAt(element0, [5]), 0, 0);
+        morphs[1] = dom.createMorphAt(dom.childAt(element0, [7]), 0, 0);
+        morphs[2] = dom.createMorphAt(dom.childAt(element0, [14]), 0, 0);
+        morphs[3] = dom.createElementMorph(element1);
+        morphs[4] = dom.createMorphAt(fragment, 4, 4, contextualElement);
+        dom.insertBoundary(fragment, null);
+        return morphs;
+      },
+      statements: [["block", "link-to", ["package1"], [], 0, null, ["loc", [null, [5, 6], [5, 50]]]], ["block", "link-to", ["package1.nested", 1], [], 1, null, ["loc", [null, [6, 6], [6, 58]]]], ["block", "link-to", ["slow"], [], 2, null, ["loc", [null, [10, 6], [10, 41]]]], ["element", "action", ["manualTransition"], [], ["loc", [null, [12, 18], [12, 47]]]], ["content", "outlet", ["loc", [null, [14, 0], [14, 10]]]]],
+      locals: [],
+      templates: [child0, child1, child2]
+    };
+  })());
+});
+define("dummy/templates/boot", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "revision": "Ember@1.13.13",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 6
+          }
+        },
+        "moduleName": "dummy/templates/boot.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "boot");
+        var el2 = dom.createTextNode("\n  Boot\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes() {
+        return [];
+      },
+      statements: [],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define("dummy/templates/components/loading-for-test", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "revision": "Ember@1.13.13",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 38
+          }
+        },
+        "moduleName": "dummy/templates/components/loading-for-test.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "loading");
+        var el2 = dom.createTextNode("LOADING....");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes() {
+        return [];
+      },
+      statements: [],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define("dummy/templates/components/my-component", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "revision": "Ember@1.13.13",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 0
+          }
+        },
+        "moduleName": "dummy/templates/components/my-component.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+        dom.insertBoundary(fragment, 0);
+        return morphs;
+      },
+      statements: [["content", "yield", ["loc", [null, [1, 0], [1, 9]]]]],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define("dummy/templates/loading", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "revision": "Ember@1.13.13",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 20
+          }
+        },
+        "moduleName": "dummy/templates/loading.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+        dom.insertBoundary(fragment, 0);
+        dom.insertBoundary(fragment, null);
+        return morphs;
+      },
+      statements: [["content", "loading-for-test", ["loc", [null, [1, 0], [1, 20]]]]],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define("dummy/templates/package1", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "revision": "Ember@1.13.13",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 4,
+            "column": 10
+          }
+        },
+        "moduleName": "dummy/templates/package1.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        var el2 = dom.createTextNode("\n  Test 1 - this should never be used since the package1 template will take precedence\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(fragment, 2, 2, contextualElement);
+        dom.insertBoundary(fragment, null);
+        return morphs;
+      },
+      statements: [["content", "outlet", ["loc", [null, [4, 0], [4, 10]]]]],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define("dummy/templates/package1/nested", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "revision": "Ember@1.13.13",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 0
+          }
+        },
+        "moduleName": "dummy/templates/package1/nested.hbs"
+      },
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createTextNode("Nested - this should never be used since the package1 template will take precedence\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes() {
+        return [];
+      },
+      statements: [],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+/* jshint ignore:start */
+
+
+
+/* jshint ignore:end */
+
+/* jshint ignore:start */
+
+define('dummy/config/environment', ['ember'], function(Ember) {
+  var prefix = 'dummy';
+/* jshint ignore:start */
+
+try {
+  var metaName = prefix + '/config/environment';
+  var rawConfig = Ember['default'].$('meta[name="' + metaName + '"]').attr('content');
+  var config = JSON.parse(unescape(rawConfig));
+
+  return { 'default': config };
+}
+catch(err) {
+  throw new Error('Could not read config from meta tag with name "' + metaName + '".');
+}
+
+/* jshint ignore:end */
+
+});
+
+/* jshint ignore:end */
+
+/* jshint ignore:start */
+
+define('ember-cli-bundle-loader/config/bundles', function() { 
+  return [{"name":"package1","packages":["package1"],"urls":["assets/package1.js","assets/package1.css"],"routeNames":["package1"],"handledRoutesPatterns":["/package1"]},{"name":"link-source","packages":["link-source"],"urls":["assets/link-source.js","assets/link-source.css"],"routeNames":["link-source"],"handledRoutesPatterns":["/link-source"]},{"name":"link-target","packages":["link-target"],"urls":["assets/link-target.js","assets/link-target.css"],"routeNames":["link-target"],"handledRoutesPatterns":["/link-target"]},{"name":"package2","packages":["package2"],"urls":["assets/package2.js","assets/package2.css"],"routeNames":["package2"],"handledRoutesPatterns":["/package2"]},{"name":"slow","packages":["slow"],"urls":["assets/slow.js","assets/slow.css"],"routeNames":["slow"],"handledRoutesPatterns":["/slow"]}]
+});
+define('ember-cli-bundle-loader/config/package-names', function() { 
+  return ["link-source","link-target","package1","package2","slow"]
+});
+if (!runningTests) {
+  require("dummy/app")["default"].create({});
+}
+
+/* jshint ignore:end */
+//# sourceMappingURL=dummy.map

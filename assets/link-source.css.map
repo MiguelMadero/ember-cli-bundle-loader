@@ -1,0 +1,12 @@
+{
+	"version": 3,
+	"file": "link-source.css",
+	"sources": [
+		"../../sass_compiler-input_base_path-nzg3oz17.tmp/0/app/styles/app.scss"
+	],
+	"sourcesContent": [
+		"// This styles are loaded only with this package\n"
+	],
+	"mappings": "",
+	"names": []
+}

@@ -1,0 +1,12 @@
+{
+	"version": 3,
+	"file": "slow.css",
+	"sources": [
+		"../../sass_compiler-input_base_path-bLocJlkN.tmp/0/app/styles/app.scss"
+	],
+	"sourcesContent": [
+		"// This styles are loaded only with this package\n"
+	],
+	"mappings": "",
+	"names": []
+}

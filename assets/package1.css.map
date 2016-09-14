@@ -1,0 +1,12 @@
+{
+	"version": 3,
+	"file": "package1.css",
+	"sources": [
+		"../../sass_compiler-input_base_path-Cg48Xwqt.tmp/0/app/styles/app.scss"
+	],
+	"sourcesContent": [
+		".package1 {\n  background: green;\n}\n"
+	],
+	"mappings": "AAAA,AAAA,SAAS,CAAC;EACR,UAAU,EAAE,KAAM,GACnB",
+	"names": []
+}
