@@ -19,7 +19,7 @@
   - [x] Implement `needsLazyLoading`
   - [ ] Gracefully handle cases when a bundle can't be resolved
   - [ ] Better error handling for promises for catch-all route (or move away from catch-all)
-- [ ] Fix tests for other ember versions (see 93e85db4ba)
+- [x] Fix tests for other ember versions (see 93e85db4ba)
 - [x] Change handledRoutesPatterns to use routeName instead of urls
 - [ ] Check if we still need locationType of hash
 
