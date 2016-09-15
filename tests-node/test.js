@@ -21,7 +21,7 @@ describe('getBundleConfiguration', function () {
       name: 'my-package',
       packages: ['my-package'],
       urls: ['assets/my-package.js', 'assets/my-package.css'],
-      routeNames: ['my-package']
+      routeNames: ['^my-package']
     }]);
   });
 
@@ -30,7 +30,7 @@ describe('getBundleConfiguration', function () {
     assert.deepEqual(newConfig, bundles.concat([{
       name: 'my-package',
       packages: ['my-package'],
-      routeNames: ['my-package'],
+      routeNames: ['^my-package'],
       urls: ['assets/my-package.js', 'assets/my-package.css'],
     }]));
   });

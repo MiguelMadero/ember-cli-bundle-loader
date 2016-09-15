@@ -99,11 +99,11 @@ module.exports = function (defaults) {
 // /config/bundles.js
 module.exports = [{
     name: 'package1',
-    routeNames: ['package1']
+    routeNames: ['^package1']
     dependsOn: ['assets/vendor3.js']
   }, {
     name: 'package2',
-    routeNames: ['package2']
+    routeNames: ['^package2']
     dependsOn: ['assets/vendor2.js', 'package1']
 }];
 ```
