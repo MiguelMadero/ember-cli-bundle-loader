@@ -1,7 +1,5 @@
-/* globals require*/
 import Ember from 'ember';
 import bundles from 'ember-cli-bundle-loader/config/bundles';
-import config from 'ember-get-config';
 
 const A = Ember.A;
 const loadedBundles = {};
@@ -45,10 +43,6 @@ export default Ember.Service.extend({
     return this._loadAssets(bundle).then(()=>this.markBundleAsLoaded(bundle.name));
   },
 
-  _getPackageRouter(packageName) {
-    return require._eak_seen[`${packageName}/router`] ?
-      require(`${packageName}/router`) :
-      require(`${config.modulePrefix}/${packageName}-router`);        // For cases where the package and main-app share a namespace.
   },
 
   _loadAssets (bundle) {
