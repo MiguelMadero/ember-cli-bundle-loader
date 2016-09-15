@@ -25,7 +25,6 @@ module.exports = [{
   // instead we use URLs for now. We could probably funnel router.js from each route into the boot bundle so they're available
   // but that would mean that we can't use the catch-all route and we would have to generate a lazy-route isntead of the default
   // one Ember generates that lazy-loads the code and acts as a proxy once it's loaded. That might be a cleaner more transparent solution.
-  handledRoutesPatterns: ['/package1']
 
   // Bundles can have dependencies, which means that before loading package1 we need to load package2
   // dependencies can be static and explicit (e.g. an import statement evaluated as part of initial code execution) or dynamic

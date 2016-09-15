@@ -21,7 +21,6 @@ describe('getBundleConfiguration', function () {
       name: 'my-package',
       packages: ['my-package'],
       urls: ['assets/my-package.js', 'assets/my-package.css'],
-      handledRoutesPatterns: ['/my-package'],
       routeNames: ['my-package']
     }]);
   });
@@ -33,7 +32,6 @@ describe('getBundleConfiguration', function () {
       packages: ['my-package'],
       routeNames: ['my-package'],
       urls: ['assets/my-package.js', 'assets/my-package.css'],
-      handledRoutesPatterns: ['/my-package']
     }]));
   });
 
@@ -42,14 +40,12 @@ describe('getBundleConfiguration', function () {
       name: 'my-package',
       packages: ['my-package'],
       // urls: ['assets/my-package.js', 'assets/my-package.css'],
-      handledRoutesPatterns: ['/my-package']
     }];
     const newConfig = getBundleConfiguration(bundleConfig, []);
     assert.deepEqual(newConfig, [{
       name: 'my-package',
       packages: ['my-package'],
       urls: ['assets/my-package.js', 'assets/my-package.css'],
-      handledRoutesPatterns: ['/my-package']
     }]);
   });
 });

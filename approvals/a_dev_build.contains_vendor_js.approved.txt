@@ -70011,8 +70011,7 @@ define('ember-cli-bundle-loader/routes/-lazy-loader', ['exports', 'ember'], func
     }
   });
 });
-define('ember-cli-bundle-loader/services/lazy-loader', ['exports', 'ember', 'ember-cli-bundle-loader/config/bundles', 'ember-get-config'], function (exports, _ember, _emberCliBundleLoaderConfigBundles, _emberGetConfig) {
-  /* globals require*/
+define('ember-cli-bundle-loader/services/lazy-loader', ['exports', 'ember', 'ember-cli-bundle-loader/config/bundles', 'ember-cli-bundle-loader/utils/get-owner'], function (exports, _ember, _emberCliBundleLoaderConfigBundles, _emberCliBundleLoaderUtilsGetOwner) {
   'use strict';
 
   var A = _ember['default'].A;
@@ -70032,13 +70031,6 @@ define('ember-cli-bundle-loader/services/lazy-loader', ['exports', 'ember', 'emb
     markBundleAsLoaded: function markBundleAsLoaded(bundleName) {
       loadedBundles[bundleName] = true;
     },
-    getBundleForUrl: function getBundleForUrl(url) {
-      return A(_emberCliBundleLoaderConfigBundles['default']).find(function (bundle) {
-        return A(bundle.handledRoutesPatterns).find(function (pattern) {
-          return url.match(pattern);
-        });
-      });
-    },
     getBundleForRouteName: function getBundleForRouteName(routeName) {
       return A(_emberCliBundleLoaderConfigBundles['default']).find(function (bundle) {
         return A(bundle.routeNames || []).find(function (pattern) {
@@ -70047,7 +70039,7 @@ define('ember-cli-bundle-loader/services/lazy-loader', ['exports', 'ember', 'emb
       });
     },
     loadBundleForUrl: function loadBundleForUrl(url) {
-      return this.loadBundle(this.getBundleForUrl(url));
+      return this.loadBundleForRouteName(this._getRouteNameFromUrl(url));
     },
     loadBundleForRouteName: function loadBundleForRouteName(routeName) {
       return this.loadBundle(this.getBundleForRouteName(routeName));
@@ -70067,8 +70059,12 @@ define('ember-cli-bundle-loader/services/lazy-loader', ['exports', 'ember', 'emb
       });
     },
 
-    _getPackageRouter: function _getPackageRouter(packageName) {
-      return require._eak_seen[packageName + '/router'] ? require(packageName + '/router') : require(_emberGetConfig['default'].modulePrefix + '/' + packageName + '-router'); // For cases where the package and main-app share a namespace.
+    _getRouteNameFromUrl: function _getRouteNameFromUrl(url) {
+      var router = (0, _emberCliBundleLoaderUtilsGetOwner.getContainer)(this).lookup('router:main');
+      var routes = router.router.recognizer.recognize(url);
+      if (routes && routes.length) {
+        return routes[routes.length - 1].handler;
+      }
     },
 
     _loadAssets: function _loadAssets(bundle) {
