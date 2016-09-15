@@ -653,7 +653,7 @@ catch(err) {
 /* jshint ignore:start */
 
 define('ember-cli-bundle-loader/config/bundles', function() { 
-  return [{"name":"package1","packages":["package1"],"urls":["assets/package1.js","assets/package1.css"],"routeNames":["package1"],"handledRoutesPatterns":["/package1"]},{"name":"link-source","packages":["link-source"],"urls":["assets/link-source.js","assets/link-source.css"],"routeNames":["link-source"],"handledRoutesPatterns":["/link-source"]},{"name":"link-target","packages":["link-target"],"urls":["assets/link-target.js","assets/link-target.css"],"routeNames":["link-target"],"handledRoutesPatterns":["/link-target"]},{"name":"package2","packages":["package2"],"urls":["assets/package2.js","assets/package2.css"],"routeNames":["package2"],"handledRoutesPatterns":["/package2"]},{"name":"slow","packages":["slow"],"urls":["assets/slow.js","assets/slow.css"],"routeNames":["slow"],"handledRoutesPatterns":["/slow"]}]
+  return [{"name":"package1","packages":["package1"],"urls":["assets/package1.js","assets/package1.css"],"routeNames":["package1"]},{"name":"link-source","packages":["link-source"],"urls":["assets/link-source.js","assets/link-source.css"],"routeNames":["link-source"]},{"name":"link-target","packages":["link-target"],"urls":["assets/link-target.js","assets/link-target.css"],"routeNames":["link-target"]},{"name":"package2","packages":["package2"],"urls":["assets/package2.js","assets/package2.css"],"routeNames":["package2"]},{"name":"slow","packages":["slow"],"urls":["assets/slow.js","assets/slow.css"],"routeNames":["slow"]}]
 });
 define('ember-cli-bundle-loader/config/package-names', function() { 
   return ["link-source","link-target","package1","package2","slow"]

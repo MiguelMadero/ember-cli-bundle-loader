@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import bundles from 'ember-cli-bundle-loader/config/bundles';
+import { getContainer } from 'ember-cli-bundle-loader/utils/get-owner';
 
 const A = Ember.A;
 const loadedBundles = {};
@@ -16,18 +17,13 @@ export default Ember.Service.extend({
   markBundleAsLoaded (bundleName) {
     loadedBundles[bundleName] = true;
   },
-  getBundleForUrl (url) {
-    return A(bundles).find(bundle=>
-      A(bundle.handledRoutesPatterns).find(pattern=>
-        url.match(pattern)));
-  },
   getBundleForRouteName (routeName) {
     return A(bundles).find(bundle=>
       A(bundle.routeNames||[]).find(pattern=>
         routeName.match(pattern)));
   },
   loadBundleForUrl (url) {
-    return this.loadBundle(this.getBundleForUrl(url));
+    return this.loadBundleForRouteName(this._getRouteNameFromUrl(url));
   },
   loadBundleForRouteName (routeName) {
     return this.loadBundle(this.getBundleForRouteName(routeName));
@@ -43,6 +39,12 @@ export default Ember.Service.extend({
     return this._loadAssets(bundle).then(()=>this.markBundleAsLoaded(bundle.name));
   },
 
+  _getRouteNameFromUrl (url) {
+    const router = getContainer(this).lookup('router:main');
+    const routes = router.router.recognizer.recognize(url);
+    if (routes && routes.length) {
+      return routes[routes.length-1].handler;
+    }
   },
 
   _loadAssets (bundle) {
