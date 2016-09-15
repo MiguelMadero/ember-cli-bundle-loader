@@ -12,7 +12,12 @@ module.exports = [
 //   // we use a regular expression to match, if a package handles all the nested routes
 //   // you can use ['topLevelRoute'], if you need to handle only nesting, then be more specific ['topLevelRoute.nested']
 //   // Keep in mind that we use a RegEx, so you normally want to do a starts with (^) to avoid matchin otherRoute.package1
-//   routeNames: ['^package1']
+//   routeNames: ['^package1'],
+//   // Sometimes a bundle can have exceptions, it matches the routeNames above, but does NOT match
+//   // any of the blackalistedRouteNames. For example, you may have a bundle that handles anything that is not
+//   // already handled by other bundles. Maybe your admin bundle handles routeNames: ['^admin'], then your second
+//   // bundle handles any route exception ^admin (routeNames: ['.'] and blacklistedRouteNames: ['^admin'])
+//   blacklistedRouteNames: ['']
 //   // Bundles can have dependencies, which means that before loading package1 we need to load package2
 //   // dependencies can be static and explicit (e.g. an import statement evaluated as part of initial code execution) or dynamic
 //   // required by ember or your code, but we need to make them sync to avoid blocking a second time or make sure that Ember sync

@@ -70016,11 +70016,19 @@ define('ember-cli-bundle-loader/services/lazy-loader', ['exports', 'ember', 'emb
 
   var A = _ember['default'].A;
   var loadedBundles = {};
-  _emberCliBundleLoaderConfigBundles['default'].forEach(function (bundle) {
-    return loadedBundles[bundle.name] = false;
-  });
 
   exports['default'] = _ember['default'].Service.extend({
+    init: function init() {
+      this._super.apply(this, arguments);
+      this.setBundles(_emberCliBundleLoaderConfigBundles['default']);
+    },
+    setBundles: function setBundles(bundles) {
+      loadedBundles = {};
+      bundles.forEach(function (bundle) {
+        return loadedBundles[bundle.name] = false;
+      });
+      this.set('bundles', bundles);
+    },
     needsLazyLoading: function needsLazyLoading(routeName) {
       var bundle = this.getBundleForRouteName(routeName);
       return bundle && !this.isBundleLoaded(bundle.name);
@@ -70032,9 +70040,11 @@ define('ember-cli-bundle-loader/services/lazy-loader', ['exports', 'ember', 'emb
       loadedBundles[bundleName] = true;
     },
     getBundleForRouteName: function getBundleForRouteName(routeName) {
-      return A(_emberCliBundleLoaderConfigBundles['default']).find(function (bundle) {
+      return A(this.get('bundles')).find(function (bundle) {
         return A(bundle.routeNames || []).find(function (pattern) {
-          return routeName.match(pattern);
+          return routeName.match(pattern) && !A(bundle.blacklistedRouteNames || []).find(function (blacklist) {
+            return routeName.match(blacklist);
+          });
         });
       });
     },

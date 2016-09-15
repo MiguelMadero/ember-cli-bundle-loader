@@ -8,13 +8,31 @@ function getSubject () {
   return Dummy.__container__.lookup('service:lazy-loader');
 }
 
-test('gets the bundle for a particular URL based on the configuration', function(assert) {
+test('getBundleForRouteName based on the configuration', function(assert) {
   const service = getSubject();
   const actualBundle = service.getBundleForRouteName('package2');
 
   assert.ok(actualBundle);
   assert.equal(actualBundle.name, 'package2');
   assert.deepEqual(actualBundle.packages, ['package2']);
+});
+
+test('getBundleForRouteName based on the configuration blacklist', function(assert) {
+  const service = getSubject();
+  service.setBundles([{
+    name: 'blacklist-test',
+    // This bundle handles everything except the route starting with dashboard
+    routeNames: ['.'],
+    blacklistedRouteNames: ['^dashboard', '^index', '^loading']
+  }]);
+  const actualBundle = service.getBundleForRouteName('some-route');
+
+  assert.ok(actualBundle);
+  assert.equal(actualBundle.name, 'blacklist-test');
+
+  assert.notOk(service.getBundleForRouteName('dashboard'));
+  assert.notOk(service.getBundleForRouteName('index'));
+  assert.notOk(service.getBundleForRouteName('loading'));
 });
 
 test('loadBundleForUrl evaluates the loaded code for external packages', function(assert) {

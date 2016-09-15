@@ -3,10 +3,18 @@ import bundles from 'ember-cli-bundle-loader/config/bundles';
 import { getContainer } from 'ember-cli-bundle-loader/utils/get-owner';
 
 const A = Ember.A;
-const loadedBundles = {};
-bundles.forEach(bundle=>loadedBundles[bundle.name] = false);
+let loadedBundles = {};
 
 export default Ember.Service.extend({
+  init () {
+    this._super(...arguments);
+    this.setBundles(bundles);
+  },
+  setBundles (bundles) {
+    loadedBundles = {};
+    bundles.forEach(bundle=>loadedBundles[bundle.name] = false);
+    this.set('bundles', bundles);
+  },
   needsLazyLoading (routeName) {
     var bundle = this.getBundleForRouteName(routeName);
     return bundle && !this.isBundleLoaded(bundle.name);
@@ -18,9 +26,10 @@ export default Ember.Service.extend({
     loadedBundles[bundleName] = true;
   },
   getBundleForRouteName (routeName) {
-    return A(bundles).find(bundle=>
+    return A(this.get('bundles')).find(bundle=>
       A(bundle.routeNames||[]).find(pattern=>
-        routeName.match(pattern)));
+        routeName.match(pattern) && !A(bundle.blacklistedRouteNames||[]).find(blacklist=>
+          routeName.match(blacklist))));
   },
   loadBundleForUrl (url) {
     return this.loadBundleForRouteName(this._getRouteNameFromUrl(url));
