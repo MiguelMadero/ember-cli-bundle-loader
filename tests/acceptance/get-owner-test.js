@@ -26,13 +26,13 @@ test('can getContainer', function(assert) {
 
 test('can getFactory', function(assert) {
   const someOwner = getSomeOwner();
-  let routeBasic = getFactory(someOwner, 'route:basic');
+  let routeBasic = getFactory(someOwner, 'router:main');
   assert.ok(routeBasic);
 });
 
 test('can registerFactory', function(assert) {
   const someOwner = getSomeOwner();
-  const factoryKey = 'route:basic-randome12345';
+  const factoryKey = 'router:basic-randome12345';
 
   assert.notOk(getFactory(someOwner, factoryKey));
 
