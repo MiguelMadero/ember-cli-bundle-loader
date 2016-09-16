@@ -70018,6 +70018,7 @@ define('ember-cli-bundle-loader/services/lazy-loader', ['exports', 'ember', 'emb
   var loadedBundles = {};
 
   exports['default'] = _ember['default'].Service.extend({
+    bundles: null,
     init: function init() {
       this._super.apply(this, arguments);
       this.setBundles(_emberCliBundleLoaderConfigBundles['default']);

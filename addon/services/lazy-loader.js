@@ -6,6 +6,7 @@ const A = Ember.A;
 let loadedBundles = {};
 
 export default Ember.Service.extend({
+  bundles: null,
   init () {
     this._super(...arguments);
     this.setBundles(bundles);
