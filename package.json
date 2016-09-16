@@ -16,7 +16,7 @@
     "node-tests": "node_modules/mocha/bin/mocha tests-node/test.js",
     "ember-tests": "ember test"
   },
-  "repository": "",
+  "repository": "MiguelMadero/ember-cli-bundle-loader",
   "engines": {
     "node": ">= 4.4.0"
   },
