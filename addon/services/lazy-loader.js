@@ -1,13 +1,21 @@
-/* globals require*/
 import Ember from 'ember';
 import bundles from 'ember-cli-bundle-loader/config/bundles';
-import config from 'ember-get-config';
+import { getContainer } from 'ember-cli-bundle-loader/utils/get-owner';
 
 const A = Ember.A;
-const loadedBundles = {};
-bundles.forEach(bundle=>loadedBundles[bundle.name] = false);
+let loadedBundles = {};
 
 export default Ember.Service.extend({
+  bundles: null,
+  init () {
+    this._super(...arguments);
+    this.setBundles(bundles);
+  },
+  setBundles (bundles) {
+    loadedBundles = {};
+    bundles.forEach(bundle=>loadedBundles[bundle.name] = false);
+    this.set('bundles', bundles);
+  },
   needsLazyLoading (routeName) {
     var bundle = this.getBundleForRouteName(routeName);
     return bundle && !this.isBundleLoaded(bundle.name);
@@ -18,18 +26,14 @@ export default Ember.Service.extend({
   markBundleAsLoaded (bundleName) {
     loadedBundles[bundleName] = true;
   },
-  getBundleForUrl (url) {
-    return A(bundles).find(bundle=>
-      A(bundle.handledRoutesPatterns).find(pattern=>
-        url.match(pattern)));
-  },
   getBundleForRouteName (routeName) {
-    return A(bundles).find(bundle=>
+    return A(this.get('bundles')).find(bundle=>
       A(bundle.routeNames||[]).find(pattern=>
-        routeName.match(pattern)));
+        routeName.match(pattern) && !A(bundle.blacklistedRouteNames||[]).find(blacklist=>
+          routeName.match(blacklist))));
   },
   loadBundleForUrl (url) {
-    return this.loadBundle(this.getBundleForUrl(url));
+    return this.loadBundleForRouteName(this._getRouteNameFromUrl(url));
   },
   loadBundleForRouteName (routeName) {
     return this.loadBundle(this.getBundleForRouteName(routeName));
@@ -45,10 +49,12 @@ export default Ember.Service.extend({
     return this._loadAssets(bundle).then(()=>this.markBundleAsLoaded(bundle.name));
   },
 
-  _getPackageRouter(packageName) {
-    return require._eak_seen[`${packageName}/router`] ?
-      require(`${packageName}/router`) :
-      require(`${config.modulePrefix}/${packageName}-router`);        // For cases where the package and main-app share a namespace.
+  _getRouteNameFromUrl (url) {
+    const router = getContainer(this).lookup('router:main');
+    const routes = router.router.recognizer.recognize(url);
+    if (routes && routes.length) {
+      return routes[routes.length-1].handler;
+    }
   },
 
   _loadAssets (bundle) {
