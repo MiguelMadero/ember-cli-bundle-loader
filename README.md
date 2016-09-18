@@ -1,6 +1,5 @@
-[![Build Status](https://travis-ci.org/MiguelMadero/ember-cli-bundle-loader.svg?branch=master)](https://travis-ci.org/MiguelMadero/ember-cli-bundle-loader)
 
-# Ember-cli-bundle-loader
+# Ember-cli-bundle-loader [![Build Status](https://travis-ci.org/MiguelMadero/ember-cli-bundle-loader.svg?branch=master)](https://travis-ci.org/MiguelMadero/ember-cli-bundle-loader) ![Download count all time](https://img.shields.io/npm/dt/ember-cli-bundle-loader.svg) [![npm version](https://badge.fury.io/js/ember-cli-bundle-loader.svg)](https://badge.fury.io/js/ember-cli-bundle-loader) [![Ember Observer Score](http://emberobserver.com/badges/ember-cli-bundle-loader.svg)](http://emberobserver.com/addons/ember-cli-bundle-loader)
 
 This project lets you build your app in different packages and load those packages lazily. The main goal of this is faster boot times for large applications, but it can also help with independentl build and deployments for different sub-products or sections of your app. 
 
