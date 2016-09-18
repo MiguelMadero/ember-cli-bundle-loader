@@ -1,5 +1,11 @@
 
-# Ember-cli-bundle-loader [![Build Status](https://travis-ci.org/MiguelMadero/ember-cli-bundle-loader.svg?branch=master)](https://travis-ci.org/MiguelMadero/ember-cli-bundle-loader) ![Download count all time](https://img.shields.io/npm/dt/ember-cli-bundle-loader.svg) [![npm version](https://badge.fury.io/js/ember-cli-bundle-loader.svg)](https://badge.fury.io/js/ember-cli-bundle-loader) [![Ember Observer Score](http://emberobserver.com/badges/ember-cli-bundle-loader.svg)](http://emberobserver.com/addons/ember-cli-bundle-loader)
+# Ember-cli-bundle-loader [![Build Status](https://travis-ci.org/MiguelMadero/ember-cli-bundle-loader.svg?branch=master)](https://travis-ci.org/MiguelMadero/ember-cli-bundle-loader) [![Download count all time](https://img.shields.io/npm/dt/ember-cli-bundle-loader.svg)](https://www.npmjs.com/package/ember-cli-bundle-loader) [![Ember Observer Score](http://emberobserver.com/badges/ember-cli-bundle-loader.svg)](http://emberobserver.com/addons/ember-cli-bundle-loader)
+
+[![Code Climate](https://codeclimate.com/github/MiguelMadero/ember-cli-bundle-loader/badges/gpa.svg)](https://codeclimate.com/github/MiguelMadero/ember-cli-bundle-loader)
+[![Test Coverage](https://codeclimate.com/github/MiguelMadero/ember-cli-bundle-loader/badges/coverage.svg)](https://codeclimate.com/github/MiguelMadero/ember-cli-bundle-loader/coverage)
+[![Dependency Status](https://www.versioneye.com/user/projects/57df010fbf3e4c0034e22b35/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57df010fbf3e4c0034e22b35)
+[![Dependency Status](https://www.versioneye.com/user/projects/57df010b037c2000475cd3e9/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57df010b037c2000475cd3e9)
+[![npm version](https://badge.fury.io/js/ember-cli-bundle-loader.svg)](https://badge.fury.io/js/ember-cli-bundle-loader)
 
 This project lets you build your app in different packages and load those packages lazily. The main goal of this is faster boot times for large applications, but it can also help with independentl build and deployments for different sub-products or sections of your app. 
 
