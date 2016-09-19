@@ -32,14 +32,18 @@ export default Ember.Service.extend({
         routeName.match(pattern) && !A(bundle.blacklistedRouteNames||[]).find(blacklist=>
           routeName.match(blacklist))));
   },
+  getBundleByName (bundleName) {
+    return A(this.get('bundles')).find(bundle=> bundle.name === bundleName);
+  },
   loadBundleForUrl (url) {
     return this.loadBundleForRouteName(this._getRouteNameFromUrl(url));
   },
   loadBundleForRouteName (routeName) {
     return this.loadBundle(this.getBundleForRouteName(routeName));
   },
-  loadBundle (bundle) {
-    if (!bundle) {
+  loadBundle (bundleOrBundleName) {
+    const bundle = typeof bundleOrBundleName === 'string' ? this.getBundleByName(bundleOrBundleName) : bundleOrBundleName;
+    if (!bundleOrBundleName) {
       return Ember.RSVP.resolve();
     }
     if (this.isBundleLoaded(bundle.name)) {
