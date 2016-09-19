@@ -3,11 +3,15 @@ import bundles from 'ember-cli-bundle-loader/config/bundles';
 import { getContainer } from 'ember-cli-bundle-loader/utils/get-owner';
 import loadAssets from 'ember-cli-bundle-loader/utils/load-assets';
 
-const A = Ember.A;
+const {A, computed} = Ember;
 let loadedBundles = {};
 
 export default Ember.Service.extend({
   bundles: null,
+  loadedBundles: computed(function () {
+    return loadedBundles;
+  }),
+
   init () {
     this._super(...arguments);
     this.setBundles(bundles);

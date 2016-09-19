@@ -110,6 +110,69 @@ module.exports = [{
 
 Based on the example above, when we go to `/package2`, we will load `vendor2.js`, `package1.js` and `vendor3.js`, only if they have not been loaded before. While the lbiraries are loaded in parallel, they will be executed in the order they were definied. 
 
+#### Vendor assets from components
+
+Sometimes we can't depend on routes to load the packages, but instead, 
+components are the ones that depend on a vendor lib. In this case
+they're responsible of initiating the load and providing a "loading" state. 
+The following is an example using handsontable as a reference, assumine
+we have a handsontable wrapper:
+
+```
+// components/handson-table.js
+export default Ember.Component.extend({
+  lazyLoader: Ember.inject.service(),
+  init () {
+    this._super.apply(this, arguments);
+    this.get('lazyLoader').loadBundle('handsontable').then(() =>  
+      this.initHandsOnTableInstance());
+  },
+  didInsertElement () {
+    this.get('isInDom', true);
+    this.initHandsOnTableInstance();
+  },
+  initHandsOnTableInstance () {
+    if (this.get('lazyLoader').isBundleLoaded('handsontable') && this.get('isInDom')) {
+      // actual initialization of the wrapper
+      // Often components need to wait for didInsert, in this case we need both, didInsert/
+      // and loading the assets.
+    }
+  }
+})
+```
+
+On the HBS for the wrapper: 
+
+```
+{{#if lazyLoader.loadedBundles.handsontable}}
+  {{!-- markup for handsontable --}}
+{{else}}
+  <div class="loading">Loading<div>
+{{/if}}
+```
+
+In config/bundles.js
+
+```
+module.exports = [
+  {
+    // Other bundles here...
+  // Vendor bundles
+  }, {
+    name: 'handsontable',
+    urls: ['/assets/handsontable.js', '/assets/handsontable.css']
+  }
+];
+
+```
+
+In ember-cli-build.js
+
+```
+app.import('/bower_components/handsontable/handsontable.full.min.js', {outputFile: 'handsontable.js')
+app.import('/bower_components/handsontable/handsontable.full.min.css', {outputFile: 'handsontable.css')
+```
+
 #### Potential issues
 
 The config/environment lives under `[modulePrefix]/config/environment`, which means it has the same path for every package. This is fine in most cases except if you're planning to share your packages across applications.
