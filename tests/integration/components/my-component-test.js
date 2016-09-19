@@ -5,6 +5,8 @@ moduleForComponent('my-component', 'Integration | Component | my component', {
   integration: true
 });
 
+// This default test makes sure that the inline-precompile plugin for HBS
+// works with bundle-loader see issues#3
 test('it renders', function(assert) {
   // Set any properties with this.set('myProperty', 'value');
   // Handle any actions with this.on('myAction', function(val) { ... });

@@ -2,5 +2,8 @@
 'use strict';
 
 module.exports = {
-  name: 'ember-cli-bundle-loader'
+  name: 'ember-cli-bundle-loader',
+  // isDevelopingAddon: function () {
+  //   return true;
+  // }
 };

@@ -59,11 +59,3 @@ test('_getRouteNamesFromUrl', function(assert) {
     assert.notOk(service._getRouteNameFromUrl('/doesntmatch'));
   });
 });
-
-test('_loadAssets throws if the bundle.urls dont have any of the valid extensions', function(assert) {
-  return getSubject()._loadAssets({name: 'my-bundle', urls: ['invalidextensions.exe']}).then(function() {
-    assert.ok(false, 'promise should not be fulfilled');
-  }).catch(function (error) {
-    assert.ok(error.match(/for bundle my-bundle/));
-  });
-});
