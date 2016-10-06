@@ -1,5 +1,6 @@
 import Ember from 'ember';
-const {$, RSVP: {all}} = Ember;
+import config from 'ember-get-config';
+const {get, $, RSVP: {all}} = Ember;
 
 const inFlightPromises = {};
 export function singleInflightPromise(key, promiseGenerator) {
@@ -18,8 +19,13 @@ export function singleInflightPromise(key, promiseGenerator) {
 }
 
 export function loadScript (url) {
+  let async = get(config, 'ember-cli-bundle-loader.asyncScriptExecution');
+  if (async === undefined) {
+    // For backwards compatibility we use async true
+    async = true;
+  }
   return singleInflightPromise(url, ()=> {
-    var scriptElement = $("<script>").prop({src: url, async: true});
+    var scriptElement = $("<script>").prop({src: url, async });
     let promise = new Ember.RSVP.Promise((resolve, reject)=>{
       scriptElement.one('load', ()=> Ember.run(null, resolve));
       scriptElement.one('error', (evt)=> Ember.run(null, reject, evt));

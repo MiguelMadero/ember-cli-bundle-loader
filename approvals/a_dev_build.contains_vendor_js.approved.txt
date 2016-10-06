@@ -70123,7 +70123,7 @@ define("ember-cli-bundle-loader/utils/get-owner", ["exports", "ember"], function
     registry.register(fullName, factory);
   }
 });
-define('ember-cli-bundle-loader/utils/load-assets', ['exports', 'ember'], function (exports, _ember) {
+define('ember-cli-bundle-loader/utils/load-assets', ['exports', 'ember', 'ember-get-config'], function (exports, _ember, _emberGetConfig) {
   'use strict';
 
   exports.singleInflightPromise = singleInflightPromise;
@@ -70131,6 +70131,7 @@ define('ember-cli-bundle-loader/utils/load-assets', ['exports', 'ember'], functi
   exports.loadStylesheet = loadStylesheet;
   exports['default'] = loadAssets;
 
+  var get = _ember['default'].get;
   var $ = _ember['default'].$;
   var all = _ember['default'].RSVP.all;
 
@@ -70154,8 +70155,13 @@ define('ember-cli-bundle-loader/utils/load-assets', ['exports', 'ember'], functi
   }
 
   function loadScript(url) {
+    var async = get(_emberGetConfig['default'], 'ember-cli-bundle-loader.asyncScriptExecution');
+    if (async === undefined) {
+      // For backwards compatibility we use async true
+      async = true;
+    }
     return singleInflightPromise(url, function () {
-      var scriptElement = $("<script>").prop({ src: url, async: true });
+      var scriptElement = $("<script>").prop({ src: url, async: async });
       var promise = new _ember['default'].RSVP.Promise(function (resolve, reject) {
         scriptElement.one('load', function () {
           return _ember['default'].run(null, resolve);
