@@ -6,6 +6,7 @@ node_js:
 sudo: false
 
 cache:
+  yarn: true
   directories:
     - node_modules
 
@@ -24,12 +25,14 @@ matrix:
 before_install:
   - export PATH=/usr/local/phantomjs-2.0.0/bin:$PATH
   - "npm config set spin false"
+  - npm install yarn --global
+  - yarn --version
+  - npm install -g bower
   - "npm install -g npm@^2"
   - "npm install -g phantomjs-prebuilt"
 
 install:
-  - npm install -g bower
-  - npm install
+  - yarn
   - bower install
 
 script:
