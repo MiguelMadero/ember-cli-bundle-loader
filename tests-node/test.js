@@ -48,6 +48,20 @@ describe('getBundleConfiguration', function () {
       urls: ['assets/my-package.js', 'assets/my-package.css'],
     }]);
   });
+
+  it('default URLs include the rootURL based on the config', function () {
+    const bundleConfig = [{
+      name: 'my-package',
+      packages: ['my-package'],
+      // urls: ['assets/my-package.js', 'assets/my-package.css'],
+    }];
+    const newConfig = getBundleConfiguration(bundleConfig, [], {rootURL: '/static/client-app/'});
+    assert.deepEqual(newConfig, [{
+      name: 'my-package',
+      packages: ['my-package'],
+      urls: ['/static/client-app/assets/my-package.js', '/static/client-app/assets/my-package.css'],
+    }]);
+  });
 });
 
 
