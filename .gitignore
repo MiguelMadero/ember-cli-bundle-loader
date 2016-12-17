@@ -16,3 +16,4 @@
 npm-debug.log
 testem.log
 approvals/**/*.received.*
+yarn-error.log
