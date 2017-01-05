@@ -69880,6 +69880,7 @@ define('ember-cli-bundle-loader/lazy-router', ['exports', 'ember', 'ember-cli-bu
   'use strict';
 
   var get = _ember['default'].get;
+  var isArray = _ember['default'].isArray;
   exports['default'] = _ember['default'].Router.extend({
     _getHandlerFunction: function _getHandlerFunction() {
       var container = (0, _emberCliBundleLoaderUtilsGetOwner.getContainer)(this);
@@ -69913,12 +69914,18 @@ define('ember-cli-bundle-loader/lazy-router', ['exports', 'ember', 'ember-cli-bu
           }
         }
 
-        handler.routeName = name;
+        if (typeof handler._setRouteName === 'function') {
+          handler._setRouteName(name);
+          handler._populateQPMeta();
+        } else {
+          handler.routeName = name;
+        }
         return handler;
       };
     },
 
-    _queryParamsFor: function _queryParamsFor(leafRouteName) {
+    _queryParamsFor: function _queryParamsFor(handlerInfosOrLeafRouteName) {
+      var leafRouteName = isArray(handlerInfosOrLeafRouteName) ? handlerInfosOrLeafRouteName[handlerInfosOrLeafRouteName.length - 1].name : handlerInfosOrLeafRouteName;
       var superQueryParams = this._super.apply(this, arguments);
       var container = (0, _emberCliBundleLoaderUtilsGetOwner.getContainer)(this);
       var lazyLoaderService = container.lookup('service:lazy-loader');

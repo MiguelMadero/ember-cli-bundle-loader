@@ -1,5 +1,5 @@
 import Ember from 'ember';
-const { get } = Ember;
+const { get, isArray } = Ember;
 import { getContainer, getFactory, registerFactory } from 'ember-cli-bundle-loader/utils/get-owner';
 
 export default Ember.Router.extend({
@@ -35,12 +35,18 @@ export default Ember.Router.extend({
         }
       }
 
-      handler.routeName = name;
+      if (typeof handler._setRouteName === 'function') {
+        handler._setRouteName(name);
+        handler._populateQPMeta();
+      } else {
+        handler.routeName = name;
+      }
       return handler;
     };
   },
 
-  _queryParamsFor: function(leafRouteName) {
+  _queryParamsFor: function(handlerInfosOrLeafRouteName) {
+    var leafRouteName = isArray(handlerInfosOrLeafRouteName) ? handlerInfosOrLeafRouteName[handlerInfosOrLeafRouteName.length - 1].name : handlerInfosOrLeafRouteName;
     var superQueryParams = this._super(...arguments);
     var container = getContainer(this);
     var lazyLoaderService = container.lookup('service:lazy-loader');
