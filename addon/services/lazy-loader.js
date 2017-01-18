@@ -55,7 +55,39 @@ export default Ember.Service.extend({
       return Ember.RSVP.resolve();
     }
 
-    return loadAssets(bundle.urls).then(()=>this.markBundleAsLoaded(bundle.name));
+    return Ember.RSVP.all(this.getDependentBundlesForBundle(bundle).map((bundle) => {
+      return loadAssets(bundle.urls).then(()=>this.markBundleAsLoaded(bundle.name));
+    }));
+  },
+
+  /*
+
+    bundlesHandled: map of bundle name -> bundle -- need O(1) collection management.
+      ^^ also used for cycle avoidance and returning the set of bundles.
+
+  */
+  getDependentBundlesForBundle(bundle) {
+    var self = this;
+
+    var bundlesHandled = {};
+    bundlesHandled[bundle.name] = bundle;
+
+    function _getAssetUrlsForBundle(bundle, bundlesHandled) {
+      var dependencies = bundle.dependsOn || [];
+
+      dependencies.forEach(function(dependencyName) {
+        if (bundlesHandled[dependencyName]) {
+          return;
+        }
+        var dependencyBundle = self.getBundleByName(dependencyName);
+        bundlesHandled[dependencyName] = dependencyBundle;
+
+        _getAssetUrlsForBundle(dependencyBundle, bundlesHandled);
+      });
+    }
+    _getAssetUrlsForBundle(bundle, bundlesHandled);
+
+    return Ember.keys(bundlesHandled).map(function(k) { return bundlesHandled[k]; });
   },
 
   _getRouteNameFromUrl (url) {
