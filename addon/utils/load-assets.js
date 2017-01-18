@@ -1,6 +1,7 @@
 import Ember from 'ember';
-import config from 'ember-get-config';
-const {get, $, RSVP: {all}} = Ember;
+const {RSVP: {all, resolve}} = Ember;
+
+import ResourceHelper from './resource-helper';
 
 const inFlightPromises = {};
 export function singleInflightPromise(key, promiseGenerator) {
@@ -19,31 +20,20 @@ export function singleInflightPromise(key, promiseGenerator) {
 }
 
 export function loadScript (url) {
-  let async = get(config, 'ember-cli-bundle-loader.asyncScriptExecution');
-  if (async === undefined) {
-    // For backwards compatibility we use async true
-    async = true;
-  }
   return singleInflightPromise(url, ()=> {
-    var scriptElement = $("<script>").prop({src: url, async });
-    let promise = new Ember.RSVP.Promise((resolve, reject)=>{
-      scriptElement.one('load', ()=> Ember.run(null, resolve));
-      scriptElement.one('error', (evt)=> Ember.run(null, reject, evt));
-    });
-    document.head.appendChild(scriptElement[0]);
-    return promise;
+    if (ResourceHelper.isJavascriptLoaded(url)) {
+      return resolve();
+    }
+    return ResourceHelper.loadJavascript(url);
   });
 }
 
 export function loadStylesheet (url) {
   return singleInflightPromise(url, ()=>{
-    let linkElement = $(`<link rel="stylesheet" href="${url}" type="text/css"/>`);
-    let promise = new Ember.RSVP.Promise((resolve, reject)=>{
-      linkElement.one('load', ()=> Ember.run(null, resolve));
-      linkElement.one('error', (evt)=> Ember.run(null, reject, evt));
-    });
-    document.head.appendChild(linkElement[0]);
-    return promise;
+    if (ResourceHelper.isStylesheetLoaded(url)) {
+      return resolve();
+    }
+    return ResourceHelper.loadStylesheet(url);
   });
 }
 

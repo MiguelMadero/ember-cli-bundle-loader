@@ -7,7 +7,7 @@
 [![Dependency Status](https://www.versioneye.com/user/projects/57df010b037c2000475cd3e9/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57df010b037c2000475cd3e9)
 [![npm version](https://badge.fury.io/js/ember-cli-bundle-loader.svg)](https://badge.fury.io/js/ember-cli-bundle-loader)
 
-This project lets you build your app in different packages and load those packages lazily. The main goal of this is faster boot times for large applications, but it can also help with independentl build and deployments for different sub-products or sections of your app. 
+This project lets you build your app in different packages and load those packages lazily. The main goal of this is faster boot times for large applications, but it can also help with independentl build and deployments for different sub-products or sections of your app.
 
 You can see a demo live on http://miguelmadero.com/ember-cli-bundle-loader/
 
@@ -22,9 +22,9 @@ ember install MiguelMadero/ember-cli-bundle-loader # follow the prompts and diff
 ember generate package package-name
 ```
 
-On a new app, simply override all the files when prompted during the `ember install` step. For existing apps, you can do a diff of each file. Most of the changes are simple and you can see an [example diff](https://github.com/MiguelMadero/ember-cli-bundle-loader-consumer/commit/d5791080ef915d84b7095e261701134267a73fd8). 
+On a new app, simply override all the files when prompted during the `ember install` step. For existing apps, you can do a diff of each file. Most of the changes are simple and you can see an [example diff](https://github.com/MiguelMadero/ember-cli-bundle-loader-consumer/commit/d5791080ef915d84b7095e261701134267a73fd8).
 
-Now you can add routes to the main app (`app/router.js`) and to each package `(package-name/router.js`). Additionally, you will need to edit `config/bundles.js` with information about your package and the routes it handles. 
+Now you can add routes to the main app (`app/router.js`) and to each package `(package-name/router.js`). Additionally, you will need to edit `config/bundles.js` with information about your package and the routes it handles.
 
 ## File Structure
 
@@ -54,27 +54,27 @@ The typical output of an Ember App looks something like:
     vedor.js*
     vendor.csss
 
-\* We could also break vendor into smaller assets and define them as a dependency. More on this later. 
+\* We could also break vendor into smaller assets and define them as a dependency. More on this later.
 
 ### Source File Structure
 
 - app/
   - index.html, *router.js*, resolver.js, app.js
   - routes/, controllers/, helpers/, models/, styles/, templates/, etc/
-  - pods/ 
+  - pods/
 - config
-  - environment.js 
+  - environment.js
   - bundles.js (new)
   - package-names.js (new)
 - packages (new)
   - package-name/
     - index.html, *router.js*, resolver.js, app.js
     - routes/, controllers/, helpers/, models/, styles/, templates/, etc/
-    - pods/ 
+    - pods/
   - another-package/
       - index.html, router.js, resolver.js, app.js
       - routes/, controllers/, helpers/, models/, styles/, templates/, etc/
-      - pods/ 
+      - pods/
 
 The app folder is identical to a normal EmberApp, it is, in fact just a normal EmberApp. This app is responsible for the booting everything. Only put here anything that is strictly required to get to the first page(s) or whatever is more important for a first time load. For example, your login page, the navbar, the default landing page. Each app will have different requirements, but the guidance is to keep it small. Initializers also have to be here since packages won't be available when we create the app. We could, in theory, lazy load initializers, but that doesn't make a lot of sense, so I have not tested it.
 
@@ -105,21 +105,20 @@ module.exports = function (defaults) {
 module.exports = [{
     name: 'package1',
     routeNames: ['^package1']
-    dependsOn: ['assets/vendor3.js']
   }, {
     name: 'package2',
     routeNames: ['^package2']
-    dependsOn: ['assets/vendor2.js', 'package1']
+    dependsOn: ['package1']
 }];
 ```
 
-Based on the example above, when we go to `/package2`, we will load `vendor2.js`, `package1.js` and `vendor3.js`, only if they have not been loaded before. While the lbiraries are loaded in parallel, they will be executed in the order they were definied. 
+Based on the example above, when we go to `/package2`, we will load `vendor2.js`, `package1.js` and `vendor3.js`, only if they have not been loaded before. While the lbiraries are loaded in parallel, they will be executed in the order they were definied.
 
 #### Vendor assets from components
 
-Sometimes we can't depend on routes to load the packages, but instead, 
+Sometimes we can't depend on routes to load the packages, but instead,
 components are the ones that depend on a vendor lib. In this case
-they're responsible of initiating the load and providing a "loading" state. 
+they're responsible of initiating the load and providing a "loading" state.
 The following is an example using handsontable as a reference, assumine
 we have a handsontable wrapper:
 
@@ -129,7 +128,7 @@ export default Ember.Component.extend({
   lazyLoader: Ember.inject.service(),
   init () {
     this._super.apply(this, arguments);
-    this.get('lazyLoader').loadBundle('handsontable').then(() =>  
+    this.get('lazyLoader').loadBundle('handsontable').then(() =>
       this.initHandsOnTableInstance());
   },
   didInsertElement () {
@@ -146,7 +145,7 @@ export default Ember.Component.extend({
 })
 ```
 
-On the HBS for the wrapper: 
+On the HBS for the wrapper:
 
 ```
 {{#if lazyLoader.loadedBundles.handsontable}}
@@ -204,4 +203,4 @@ To deploy the dummy app, with examples for lazy-loading, you can use `ember depl
 ## References
 
 * [Ember-engines](https://github.com/dgeb/ember-engines). The "official" path going forward
-* [Ember-cli-lazy-load](https://github.com/duizendnegen/ember-cli-lazy-load). Another approach to lazy loading. Bundle-loader and lazy-load might merge in the future and both eventually deprecated in favor of engines. 
+* [Ember-cli-lazy-load](https://github.com/duizendnegen/ember-cli-lazy-load). Another approach to lazy loading. Bundle-loader and lazy-load might merge in the future and both eventually deprecated in favor of engines.

@@ -1,4 +1,5 @@
 /* global Dummy, require */
+import Ember from 'ember';
 import { test } from 'ember-qunit';
 import moduleForAcceptance from 'dummy/tests/helpers/module-for-acceptance';
 
@@ -58,4 +59,95 @@ test('_getRouteNamesFromUrl', function(assert) {
     // If the URL doesn't match any route, simply null
     assert.notOk(service._getRouteNameFromUrl('/doesntmatch'));
   });
+});
+
+test('dependsOn doesnt break if nothing is specified', function(assert) {
+  const service = getSubject();
+  service.setBundles([{
+    name: 'bundleA',
+    urls: ['stuff.js'],
+    // dependsOn: [],
+  }]);
+
+  var assets = namesForBundles(service.getDependentBundlesForBundle(service.getBundleByName('bundleA')));
+  assert.equal(assets.length, 1);
+  assert.notEqual(assets.indexOf('bundleA'), -1);
+});
+
+test('dependsOn can handle a simple dependency', function(assert) {
+  const service = getSubject();
+  service.setBundles([{
+    name: 'bundleA',
+    urls: ['stuffA.js'],
+    dependsOn: ['bundleB'],
+  },{
+    name: 'bundleB',
+    urls: ['stuffB.js'],
+  }]);
+
+  var assets = namesForBundles(service.getDependentBundlesForBundle(service.getBundleByName('bundleA')));
+  assert.equal(assets.length, 2);
+  assert.notEqual(assets.indexOf('bundleA'), -1);
+  assert.notEqual(assets.indexOf('bundleB'), -1);
+});
+
+function namesForBundles(bundles) {
+    return Ember.A(bundles).mapBy('name');
+}
+
+test('dependsOn can handle more complex dependency graphs', function(assert) {
+  const service = getSubject();
+  service.setBundles([{
+    name: 'bundleA',
+    urls: ['stuffA.js'],
+    dependsOn: ['bundleB', 'bundleC'],
+  },{
+    name: 'bundleB',
+    urls: ['stuffB.js'],
+    dependsOn: ['bundleD'],
+  },{
+    name: 'bundleC',
+    urls: ['stuffC.js'],
+    dependsOn: ['bundleD'],
+  },{
+    name: 'bundleD',
+    urls: ['stuffD.js'],
+    dependsOn: ['bundleE'],
+  },{
+    name: 'bundleE',
+    urls: ['stuffE.js'],
+  }]);
+
+  var assets = namesForBundles(service.getDependentBundlesForBundle(service.getBundleByName('bundleA')));
+  assert.equal(assets.length, 5);
+  assert.notEqual(assets.indexOf('bundleA'), -1);
+  assert.notEqual(assets.indexOf('bundleB'), -1);
+  assert.notEqual(assets.indexOf('bundleC'), -1);
+  assert.notEqual(assets.indexOf('bundleD'), -1);
+  assert.notEqual(assets.indexOf('bundleE'), -1);
+});
+
+test('dependsOn doesnt break for circular dependencies', function(assert) {
+  const service = getSubject();
+  service.setBundles([{
+    name: 'bundleA',
+    urls: ['stuffA.js'],
+    dependsOn: ['bundleB'],
+  },{
+    name: 'bundleB',
+    urls: ['stuffB.js'],
+    dependsOn: ['bundleA'],
+  }]);
+
+  // from A..
+  var assets = namesForBundles(service.getDependentBundlesForBundle(service.getBundleByName('bundleA')));
+  assert.equal(assets.length, 2);
+  assert.notEqual(assets.indexOf('bundleA'), -1);
+  assert.notEqual(assets.indexOf('bundleB'), -1);
+
+  // from B..
+  var assets2 = namesForBundles(service.getDependentBundlesForBundle(service.getBundleByName('bundleB')));
+  assert.equal(assets2.length, 2);
+  assert.notEqual(assets2.indexOf('bundleA'), -1);
+  assert.notEqual(assets2.indexOf('bundleB'), -1);
 });

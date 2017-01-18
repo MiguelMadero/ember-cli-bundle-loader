@@ -1,11 +1,13 @@
 import loadAssets, { singleInflightPromise } from 'ember-cli-bundle-loader/utils/load-assets';
-import { module, test } from 'qunit';
+
+import { module } from 'qunit';
 import wait from 'ember-test-helpers/wait';
 import Ember from 'ember';
+import sinonTest from 'ember-sinon-qunit/test-support/test';
 
 module('Unit | Utility | load assets');
 
-test('singleInflightPromise returns the same promise on subsequent calls until the first one is settled', function(assert) {
+sinonTest('singleInflightPromise returns the same promise on subsequent calls until the first one is settled', function(assert) {
   assert.expect(3);
 
   let resolve;
@@ -23,7 +25,7 @@ test('singleInflightPromise returns the same promise on subsequent calls until t
   });
 });
 
-test('loadAssets doesn\'t add more than one script tag for inflight promises', function (assert) {
+sinonTest('load assets only requests one asset load for in-flight promises', function (assert) {
   assert.equal(0, $('script[src="assets/load-assets-test.js"]').length);
   assert.equal(0, $('link[href="assets/load-assets-test.css"]').length);
   loadAssets(['assets/load-assets-test.js', 'assets/load-assets-test.css']);
@@ -36,7 +38,7 @@ test('loadAssets doesn\'t add more than one script tag for inflight promises', f
   return wait();
 });
 
-test('loadAssets throws if the urls dont have any of the valid extensions', function(assert) {
+sinonTest('loadAssets throws if the urls dont have any of the valid extensions', function(assert) {
   return loadAssets(['invalidextensions.exe']).then(function() {
     assert.ok(false, 'promise should not be fulfilled');
   }).catch(function (error) {
