@@ -11,7 +11,7 @@ const basePath = 'tmp/approvals/';
 approvals.configure(config);
 approvals.mocha();
 
-if (process.env['EMBER_TRY_SCENARIO'] && process.env['EMBER_TRY_SCENARIO'] !== 'default') {
+if (process.env['EMBER_TRY_SCENARIO'] && process.env['EMBER_TRY_SCENARIO'] !== 'ember-1-13') {
   return;
 }
 

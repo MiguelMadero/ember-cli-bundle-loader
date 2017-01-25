@@ -4,7 +4,7 @@ var assert = require('assert');
 var getBundleConfiguration = require('../lib/utils/get-bundle-configuration');
 var bundles = require('../tests/dummy/config/bundles');
 
-if (process.env['EMBER_TRY_SCENARIO'] && process.env['EMBER_TRY_SCENARIO'] !== 'default') {
+if (process.env['EMBER_TRY_SCENARIO'] && process.env['EMBER_TRY_SCENARIO'] !== 'ember-1-13') {
   return;
 }
 
