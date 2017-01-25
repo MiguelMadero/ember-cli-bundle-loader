@@ -60,34 +60,28 @@ export default Ember.Service.extend({
     }));
   },
 
-  /*
-
-    bundlesHandled: map of bundle name -> bundle -- need O(1) collection management.
-      ^^ also used for cycle avoidance and returning the set of bundles.
-
-  */
   getDependentBundlesForBundle(bundle) {
     var self = this;
 
-    var bundlesHandled = {};
-    bundlesHandled[bundle.name] = bundle;
+    // dependentBundles: is a map of bundle name -> bundle -- need O(1) collection management.
+    //   ^^ also used for cycle avoidance and returning the set of bundles.
+    var dependentBundles = {};
+    dependentBundles[bundle.name] = bundle;
 
-    function _getAssetUrlsForBundle(bundle, bundlesHandled) {
-      var dependencies = bundle.dependsOn || [];
-
-      dependencies.forEach(function(dependencyName) {
-        if (bundlesHandled[dependencyName]) {
+    function _addDependents(dependentBundleNames) {
+      dependentBundleNames.forEach(function(dependencyName) {
+        if (dependentBundles[dependencyName]) {
           return;
         }
         var dependencyBundle = self.getBundleByName(dependencyName);
-        bundlesHandled[dependencyName] = dependencyBundle;
+        dependentBundles[dependencyName] = dependencyBundle;
 
-        _getAssetUrlsForBundle(dependencyBundle, bundlesHandled);
+        _addDependents(dependencyBundle.dependsOn || []);
       });
     }
-    _getAssetUrlsForBundle(bundle, bundlesHandled);
+    _addDependents(bundle.dependsOn || [], dependentBundles);
 
-    return Ember.keys(bundlesHandled).map(function(k) { return bundlesHandled[k]; });
+    return Ember.keys(dependentBundles).map(k=> dependentBundles[k]);
   },
 
   _getRouteNameFromUrl (url) {

@@ -70084,8 +70084,36 @@ define('ember-cli-bundle-loader/services/lazy-loader', ['exports', 'ember', 'emb
         return _ember['default'].RSVP.resolve();
       }
 
-      return (0, _emberCliBundleLoaderUtilsLoadAssets['default'])(bundle.urls).then(function () {
-        return _this.markBundleAsLoaded(bundle.name);
+      return _ember['default'].RSVP.all(this.getDependentBundlesForBundle(bundle).map(function (bundle) {
+        return (0, _emberCliBundleLoaderUtilsLoadAssets['default'])(bundle.urls).then(function () {
+          return _this.markBundleAsLoaded(bundle.name);
+        });
+      }));
+    },
+
+    getDependentBundlesForBundle: function getDependentBundlesForBundle(bundle) {
+      var self = this;
+
+      // dependentBundles: is a map of bundle name -> bundle -- need O(1) collection management.
+      //   ^^ also used for cycle avoidance and returning the set of bundles.
+      var dependentBundles = {};
+      dependentBundles[bundle.name] = bundle;
+
+      function _addDependents(dependentBundleNames) {
+        dependentBundleNames.forEach(function (dependencyName) {
+          if (dependentBundles[dependencyName]) {
+            return;
+          }
+          var dependencyBundle = self.getBundleByName(dependencyName);
+          dependentBundles[dependencyName] = dependencyBundle;
+
+          _addDependents(dependencyBundle.dependsOn || []);
+        });
+      }
+      _addDependents(bundle.dependsOn || [], dependentBundles);
+
+      return _ember['default'].keys(dependentBundles).map(function (k) {
+        return dependentBundles[k];
       });
     },
 
@@ -70097,6 +70125,59 @@ define('ember-cli-bundle-loader/services/lazy-loader', ['exports', 'ember', 'emb
       }
     }
   });
+});
+define('ember-cli-bundle-loader/utils/-resource-helper', ['exports', 'ember', 'ember-get-config'], function (exports, _ember, _emberGetConfig) {
+  'use strict';
+
+  var get = _ember['default'].get;
+  var $ = _ember['default'].$;
+
+  exports['default'] = {
+    loadJavascript: function loadJavascript(url) {
+      var async = get(_emberGetConfig['default'], 'ember-cli-bundle-loader.asyncScriptExecution');
+      if (async === undefined) {
+        // For backwards compatibility we use async true
+        async = true;
+      }
+
+      var scriptElement = $("<script>").prop({ src: url, async: async });
+      var promise = new _ember['default'].RSVP.Promise(function (resolve, reject) {
+        scriptElement.one('load', function () {
+          return _ember['default'].run(null, resolve);
+        });
+        scriptElement.one('error', function (evt) {
+          return _ember['default'].run(null, reject, evt);
+        });
+      })['catch'](function () {
+        return document.head.removeChild(scriptElement[0]);
+      });
+      document.head.appendChild(scriptElement[0]);
+
+      return promise;
+    },
+    isJavascriptLoaded: function isJavascriptLoaded(url) {
+      return !!document.querySelector('script[src="' + url + '"]');
+    },
+    loadStylesheet: function loadStylesheet(url) {
+      var linkElement = $('<link rel="stylesheet" href="' + url + '" type="text/css"/>');
+      var promise = new _ember['default'].RSVP.Promise(function (resolve, reject) {
+        linkElement.one('load', function () {
+          return _ember['default'].run(null, resolve);
+        });
+        linkElement.one('error', function (evt) {
+          return _ember['default'].run(null, reject, evt);
+        });
+      })['catch'](function () {
+        return document.head.removeChild(linkElement[0]);
+      });
+      document.head.appendChild(linkElement[0]);
+
+      return promise;
+    },
+    isStylesheetLoaded: function isStylesheetLoaded(url) {
+      return !!document.querySelector('link[href="' + url + '"]');
+    }
+  };
 });
 define("ember-cli-bundle-loader/utils/get-owner", ["exports", "ember"], function (exports, _ember) {
   "use strict";
@@ -70130,7 +70211,7 @@ define("ember-cli-bundle-loader/utils/get-owner", ["exports", "ember"], function
     registry.register(fullName, factory);
   }
 });
-define('ember-cli-bundle-loader/utils/load-assets', ['exports', 'ember', 'ember-get-config'], function (exports, _ember, _emberGetConfig) {
+define('ember-cli-bundle-loader/utils/load-assets', ['exports', 'ember', 'ember-cli-bundle-loader/utils/-resource-helper'], function (exports, _ember, _emberCliBundleLoaderUtilsResourceHelper) {
   'use strict';
 
   exports.singleInflightPromise = singleInflightPromise;
@@ -70138,10 +70219,9 @@ define('ember-cli-bundle-loader/utils/load-assets', ['exports', 'ember', 'ember-
   exports.loadStylesheet = loadStylesheet;
   exports['default'] = loadAssets;
 
-  var get = _ember['default'].get;
-  var $ = _ember['default'].$;
-  var all = _ember['default'].RSVP.all;
-
+  var _Ember$RSVP = _ember['default'].RSVP;
+  var all = _Ember$RSVP.all;
+  var resolve = _Ember$RSVP.resolve;
   var inFlightPromises = {};
 
   function singleInflightPromise(key, promiseGenerator) {
@@ -70162,39 +70242,20 @@ define('ember-cli-bundle-loader/utils/load-assets', ['exports', 'ember', 'ember-
   }
 
   function loadScript(url) {
-    var async = get(_emberGetConfig['default'], 'ember-cli-bundle-loader.asyncScriptExecution');
-    if (async === undefined) {
-      // For backwards compatibility we use async true
-      async = true;
-    }
     return singleInflightPromise(url, function () {
-      var scriptElement = $("<script>").prop({ src: url, async: async });
-      var promise = new _ember['default'].RSVP.Promise(function (resolve, reject) {
-        scriptElement.one('load', function () {
-          return _ember['default'].run(null, resolve);
-        });
-        scriptElement.one('error', function (evt) {
-          return _ember['default'].run(null, reject, evt);
-        });
-      });
-      document.head.appendChild(scriptElement[0]);
-      return promise;
+      if (_emberCliBundleLoaderUtilsResourceHelper['default'].isJavascriptLoaded(url)) {
+        return resolve();
+      }
+      return _emberCliBundleLoaderUtilsResourceHelper['default'].loadJavascript(url);
     });
   }
 
   function loadStylesheet(url) {
     return singleInflightPromise(url, function () {
-      var linkElement = $('<link rel="stylesheet" href="' + url + '" type="text/css"/>');
-      var promise = new _ember['default'].RSVP.Promise(function (resolve, reject) {
-        linkElement.one('load', function () {
-          return _ember['default'].run(null, resolve);
-        });
-        linkElement.one('error', function (evt) {
-          return _ember['default'].run(null, reject, evt);
-        });
-      });
-      document.head.appendChild(linkElement[0]);
-      return promise;
+      if (_emberCliBundleLoaderUtilsResourceHelper['default'].isStylesheetLoaded(url)) {
+        return resolve();
+      }
+      return _emberCliBundleLoaderUtilsResourceHelper['default'].loadStylesheet(url);
     });
   }
 

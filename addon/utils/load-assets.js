@@ -1,7 +1,7 @@
 import Ember from 'ember';
 const {RSVP: {all, resolve}} = Ember;
 
-import ResourceHelper from './resource-helper';
+import ResourceHelper from 'ember-cli-bundle-loader/utils/-resource-helper';
 
 const inFlightPromises = {};
 export function singleInflightPromise(key, promiseGenerator) {
