@@ -39,3 +39,7 @@ install:
 script:
   - npm test
   - ember try $EMBER_TRY_SCENARIO test
+
+branches:
+  only:
+    master
