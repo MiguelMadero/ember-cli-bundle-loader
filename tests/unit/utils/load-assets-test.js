@@ -31,11 +31,10 @@ test('load assets only requests one asset load for in-flight promises', function
   loadAssets(['assets/load-assets-test.js', 'assets/load-assets-test.css']);
   loadAssets(['assets/load-assets-test.js', 'assets/load-assets-test.css']);
   loadAssets(['assets/load-assets-test.js', 'assets/load-assets-test.css']);
-  loadAssets(['assets/load-assets-test.js', 'assets/load-assets-test.css']).finally(function() {
+  return loadAssets(['assets/load-assets-test.js', 'assets/load-assets-test.css']).finally(function() {
     assert.equal(1, $('script[src="assets/load-assets-test.js"]').length);
     assert.equal(1, $('link[href="assets/load-assets-test.css"]').length);
   });
-  return wait();
 });
 
 test('loadAssets throws if the urls dont have any of the valid extensions', function(assert) {
