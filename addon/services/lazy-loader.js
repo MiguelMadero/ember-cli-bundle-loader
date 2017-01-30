@@ -60,28 +60,31 @@ export default Ember.Service.extend({
     }));
   },
 
-  getDependentBundlesForBundle(bundle) {
+  getDependentBundlesForBundle(rootBundle) {
     var self = this;
 
-    // dependentBundles: is a map of bundle name -> bundle -- need O(1) collection management.
-    //   ^^ also used for cycle avoidance and returning the set of bundles.
-    var dependentBundles = {};
-    dependentBundles[bundle.name] = bundle;
+    var dependentBundles = [];
+    //  seenBundleNames is a map of bundle name -> bundle -- need O(1) collection management.
+    var seenBundleNames = {};
+    seenBundleNames[rootBundle.name] = true;
 
     function _addDependents(dependentBundleNames) {
       dependentBundleNames.forEach(function(dependencyName) {
-        if (dependentBundles[dependencyName]) {
+        if (seenBundleNames[dependencyName]) {
           return;
         }
         var dependencyBundle = self.getBundleByName(dependencyName);
-        dependentBundles[dependencyName] = dependencyBundle;
-
+        seenBundleNames[dependencyBundle.name] = true;
+        // Adds its dependents before we add this module
         _addDependents(dependencyBundle.dependsOn || []);
+        dependentBundles.push(dependencyBundle);
       });
     }
-    _addDependents(bundle.dependsOn || [], dependentBundles);
+    _addDependents(rootBundle.dependsOn || []);
+    // Added at the end, since this is the last bundle we should load
+    dependentBundles.push(rootBundle);
 
-    return Ember.keys(dependentBundles).map(k=> dependentBundles[k]);
+    return dependentBundles;
   },
 
   _getRouteNameFromUrl (url) {

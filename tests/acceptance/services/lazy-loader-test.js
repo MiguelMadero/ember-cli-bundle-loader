@@ -151,3 +151,40 @@ test('dependsOn doesnt break for circular dependencies', function(assert) {
   assert.notEqual(assets2.indexOf('bundleA'), -1);
   assert.notEqual(assets2.indexOf('bundleB'), -1);
 });
+
+test('namesForBundles returns the bundes based on the load order specified by the dependencies', function(assert) {
+  const service = getSubject();
+  service.setBundles([{
+    name: '1',
+    dependsOn: ['2'],
+  }, {
+    name: '2',
+    dependsOn: ['4', '3'],
+  }, {
+    name: '3',
+    dependsOn: ['4'],
+  }, {
+    name: '4'
+  }]);
+
+  var assets = namesForBundles(service.getDependentBundlesForBundle(service.getBundleByName('1')));
+  assert.equal(assets.length, 4);
+  assert.deepEqual(assets, ['4', '3', '2', '1']);
+
+  service.setBundles([{
+    name: '1',
+    dependsOn: ['2'],
+  }, {
+    name: '2',
+    dependsOn: ['3', '4'],
+  }, {
+    name: '3',
+    dependsOn: ['4'],
+  }, {
+    name: '4'
+  }]);
+  assets = namesForBundles(service.getDependentBundlesForBundle(service.getBundleByName('1')));
+  assert.equal(assets.length, 4);
+  // 3 depends on 4, so even if 2 lists 3,4, the order is 4,3
+  assert.deepEqual(assets, ['4', '3', '2', '1']);
+});
