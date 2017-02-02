@@ -38,12 +38,14 @@ describe('getBundleConfiguration', function () {
   it('adds default URLs for packages without URLs', function () {
     const bundleConfig = [{
       name: 'my-package',
+      routeNames: ['^irrelevant'],
       packages: ['my-package'],
       // urls: ['assets/my-package.js', 'assets/my-package.css'],
     }];
     const newConfig = getBundleConfiguration(bundleConfig, []);
     assert.deepEqual(newConfig, [{
       name: 'my-package',
+      routeNames: ['^irrelevant'],
       packages: ['my-package'],
       urls: ['assets/my-package.js', 'assets/my-package.css'],
     }]);
@@ -53,13 +55,47 @@ describe('getBundleConfiguration', function () {
     const bundleConfig = [{
       name: 'my-package',
       packages: ['my-package'],
+      routeNames: ['^irrelevant'],
       // urls: ['assets/my-package.js', 'assets/my-package.css'],
     }];
     const newConfig = getBundleConfiguration(bundleConfig, [], {rootURL: '/static/client-app/'});
     assert.deepEqual(newConfig, [{
       name: 'my-package',
       packages: ['my-package'],
+      routeNames: ['^irrelevant'],
       urls: ['/static/client-app/assets/my-package.js', '/static/client-app/assets/my-package.css'],
+    }]);
+  });
+
+  it('it uses the default routeNames if none is specified', function () {
+    const bundleConfig = [{
+      name: 'my-package',
+      packages: ['my-package'],
+      urls: ['irrelevant.js'],
+      // routeNames: [....]
+    }];
+    const newConfig = getBundleConfiguration(bundleConfig, []);
+    assert.deepEqual(newConfig, [{
+      name: 'my-package',
+      packages: ['my-package'],
+      routeNames: ['^my-package'],
+      urls: ['irrelevant.js'],
+    }]);
+  });
+
+  it('it sets the packages to [bundle.name] if none specified', function () {
+    const bundleConfig = [{
+      name: 'my-package',
+      // packages: ['my-package'],
+      routeNames: ['^x'],
+      urls: ['irrelevant.js'],
+    }];
+    const newConfig = getBundleConfiguration(bundleConfig, []);
+    assert.deepEqual(newConfig, [{
+      name: 'my-package',
+      packages: ['my-package'],
+      urls: ['irrelevant.js'],
+      routeNames: ['^x']
     }]);
   });
 });
