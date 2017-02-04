@@ -2,7 +2,13 @@
 /* global describe, it */
 var assert = require('assert');
 var getBundleConfiguration = require('../lib/utils/get-bundle-configuration');
-var bundles = require('../tests/dummy/config/bundles');
+var bundles = [{
+  name: 'package1',
+  packages: ['package1'],
+  urls: ['assets/package1.js','assets/package1.css'],
+  routeNames: ['^package1'],
+  dependsOn: ['package2']
+}];
 
 if (process.env['EMBER_TRY_SCENARIO'] && process.env['EMBER_TRY_SCENARIO'] !== 'ember-1-13') {
   return;
@@ -21,7 +27,8 @@ describe('getBundleConfiguration', function () {
       name: 'my-package',
       packages: ['my-package'],
       urls: ['assets/my-package.js', 'assets/my-package.css'],
-      routeNames: ['^my-package']
+      routeNames: ['^my-package'],
+      dependsOn: [],
     }]);
   });
 
@@ -32,6 +39,7 @@ describe('getBundleConfiguration', function () {
       packages: ['my-package'],
       routeNames: ['^my-package'],
       urls: ['assets/my-package.js', 'assets/my-package.css'],
+      dependsOn: [],
     }]));
   });
 
@@ -48,6 +56,7 @@ describe('getBundleConfiguration', function () {
       routeNames: ['^irrelevant'],
       packages: ['my-package'],
       urls: ['assets/my-package.js', 'assets/my-package.css'],
+      dependsOn: [],
     }]);
   });
 
@@ -64,6 +73,7 @@ describe('getBundleConfiguration', function () {
       packages: ['my-package'],
       routeNames: ['^irrelevant'],
       urls: ['/static/client-app/assets/my-package.js', '/static/client-app/assets/my-package.css'],
+      dependsOn: [],
     }]);
   });
 
@@ -80,6 +90,7 @@ describe('getBundleConfiguration', function () {
       packages: ['my-package'],
       routeNames: ['^my-package'],
       urls: ['irrelevant.js'],
+      dependsOn: [],
     }]);
   });
 
@@ -95,7 +106,25 @@ describe('getBundleConfiguration', function () {
       name: 'my-package',
       packages: ['my-package'],
       urls: ['irrelevant.js'],
-      routeNames: ['^x']
+      routeNames: ['^x'],
+      dependsOn: []
+    }]);
+  });
+
+  it('it doesnt drop dependsOn', function () {
+    const bundleConfig = [{
+      name: 'my-package',
+      // packages: ['my-package'],
+      dependsOn: ['another-package'],
+      urls: []
+    }];
+    const newConfig = getBundleConfiguration(bundleConfig, []);
+    assert.deepEqual(newConfig, [{
+      name: 'my-package',
+      packages: ['my-package'],
+      dependsOn: ['another-package'],
+      routeNames: ['^my-package'],
+      urls: []
     }]);
   });
 });

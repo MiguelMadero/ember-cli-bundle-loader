@@ -122,6 +122,7 @@ define('dummy/router', ['exports', 'ember-cli-bundle-loader/lazy-router', 'dummy
     this.route('link-source');
     this.route('link-target');
     this.route('slow');
+    this.route('with-dependency');
   });
 
   exports['default'] = Router;
@@ -665,10 +666,10 @@ catch(err) {
 /* jshint ignore:start */
 
 define('ember-cli-bundle-loader/config/bundles', function() { 
-  return [{"name":"package1","packages":["package1"],"urls":["assets/package1.js","assets/package1.css"],"routeNames":["^package1"]},{"name":"link-source","packages":["link-source"],"urls":["assets/link-source.js","assets/link-source.css"],"routeNames":["^link-source"]},{"name":"link-target","packages":["link-target"],"urls":["assets/link-target.js","assets/link-target.css"],"routeNames":["^link-target"]},{"name":"load-assets-test","packages":["load-assets-test"],"urls":["assets/load-assets-test.js","assets/load-assets-test.css"],"routeNames":["^load-assets-test"]},{"name":"package2","packages":["package2"],"urls":["assets/package2.js","assets/package2.css"],"routeNames":["^package2"]},{"name":"slow","packages":["slow"],"urls":["assets/slow.js","assets/slow.css"],"routeNames":["^slow"]}]
+  return [{"name":"package1","packages":["package1"],"urls":["assets/package1.js","assets/package1.css"],"routeNames":["^package1"],"dependsOn":[]},{"name":["with-dependency"],"packages":[["with-dependency"]],"urls":["assets/with-dependency.js","assets/with-dependency.css"],"routeNames":["^with-dependency"],"dependsOn":["dependent"]},{"name":"dependent","packages":["dependent"],"urls":["assets/dependent.js","assets/dependent.css"],"routeNames":["^dependent"],"dependsOn":[]},{"name":"link-source","packages":["link-source"],"urls":["assets/link-source.js","assets/link-source.css"],"routeNames":["^link-source"],"dependsOn":[]},{"name":"link-target","packages":["link-target"],"urls":["assets/link-target.js","assets/link-target.css"],"routeNames":["^link-target"],"dependsOn":[]},{"name":"load-assets-test","packages":["load-assets-test"],"urls":["assets/load-assets-test.js","assets/load-assets-test.css"],"routeNames":["^load-assets-test"],"dependsOn":[]},{"name":"package2","packages":["package2"],"urls":["assets/package2.js","assets/package2.css"],"routeNames":["^package2"],"dependsOn":[]},{"name":"slow","packages":["slow"],"urls":["assets/slow.js","assets/slow.css"],"routeNames":["^slow"],"dependsOn":[]}]
 });
 define('ember-cli-bundle-loader/config/package-names', function() { 
-  return ["link-source","link-target","load-assets-test","package1","package2","slow"]
+  return ["dependent","link-source","link-target","load-assets-test","package1","package2","slow","with-dependency"]
 });
 if (!runningTests) {
   require("dummy/app")["default"].create({});

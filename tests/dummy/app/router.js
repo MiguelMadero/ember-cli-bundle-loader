@@ -14,6 +14,7 @@ Router.map(function() {
   this.route('link-source');
   this.route('link-target');
   this.route('slow');
+  this.route('with-dependency');
 });
 
 export default Router;
