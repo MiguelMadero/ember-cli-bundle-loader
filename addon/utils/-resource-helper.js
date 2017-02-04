@@ -14,7 +14,10 @@ export default {
     let promise = new Ember.RSVP.Promise((resolve, reject)=>{
       scriptElement.one('load', ()=> Ember.run(null, resolve));
       scriptElement.one('error', (evt)=> Ember.run(null, reject, evt));
-    }).catch(()=>document.head.removeChild(scriptElement[0]));
+    }).catch(()=> {
+      document.head.removeChild(scriptElement[0]);
+      return Ember.RSVP.reject();
+    });
     document.head.appendChild(scriptElement[0]);
 
     return promise;
@@ -27,7 +30,10 @@ export default {
     let promise = new Ember.RSVP.Promise((resolve, reject)=>{
       linkElement.one('load', ()=> Ember.run(null, resolve));
       linkElement.one('error', (evt)=> Ember.run(null, reject, evt));
-    }).catch(()=>document.head.removeChild(linkElement[0]));
+    }).catch(()=> {
+      document.head.removeChild(linkElement[0]);
+      return Ember.RSVP.reject();
+    });
     document.head.appendChild(linkElement[0]);
 
     return promise;

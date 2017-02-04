@@ -9,11 +9,13 @@ module.exports = [{
   // this names will be used for fingerprinting, so for prod builds, if AssetRev finds it,
   // it will be fingerprinted and the URL field updated
   urls: ['assets/package1.js','assets/package1.css'],
-
   routeNames: ['^package1'],
 }, {
   name: ['with-dependency'],
   dependsOn: ['dependent']
+}, {
+  name: 'package-with-wrong-urls',
+  urls: ['dosntexist.js']
 }
   // The defaults are inferred by the packages (one to one, default URLs and top level route)
   // , {
