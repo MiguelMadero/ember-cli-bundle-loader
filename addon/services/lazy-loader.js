@@ -48,14 +48,15 @@ export default Ember.Service.extend({
   },
   loadBundle (bundleOrBundleName) {
     const bundle = typeof bundleOrBundleName === 'string' ? this.getBundleByName(bundleOrBundleName) : bundleOrBundleName;
-    if (!bundleOrBundleName) {
+    if (!bundle) {
+      Ember.assert('A bundle was expected, but we couldn\'t find it', bundle);
       return Ember.RSVP.resolve();
     }
     if (this.isBundleLoaded(bundle.name)) {
       return Ember.RSVP.resolve();
     }
 
-    return Ember.RSVP.all(this.getDependentBundlesForBundle(bundle).map((bundle) => {
+    return Ember.RSVP.all(this.getDependentBundlesForBundle(bundle).map(bundle => {
       return loadAssets(bundle.urls).then(()=>this.markBundleAsLoaded(bundle.name));
     }));
   },
