@@ -11,8 +11,9 @@ module.exports = [{
   urls: ['assets/package1.js','assets/package1.css'],
 
   routeNames: ['^package1'],
-  // [WIP]
-  // dependsOn: ['package2']
+}, {
+  name: ['with-dependency'],
+  dependsOn: ['dependent']
 }
   // The defaults are inferred by the packages (one to one, default URLs and top level route)
   // , {
