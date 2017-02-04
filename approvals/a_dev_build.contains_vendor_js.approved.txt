@@ -70077,7 +70077,8 @@ define('ember-cli-bundle-loader/services/lazy-loader', ['exports', 'ember', 'emb
       var _this = this;
 
       var bundle = typeof bundleOrBundleName === 'string' ? this.getBundleByName(bundleOrBundleName) : bundleOrBundleName;
-      if (!bundleOrBundleName) {
+      if (!bundle) {
+        _ember['default'].assert('A bundle was expected, but we couldn\'t find it', bundle);
         return _ember['default'].RSVP.resolve();
       }
       if (this.isBundleLoaded(bundle.name)) {
@@ -70150,7 +70151,8 @@ define('ember-cli-bundle-loader/utils/-resource-helper', ['exports', 'ember', 'e
           return _ember['default'].run(null, reject, evt);
         });
       })['catch'](function () {
-        return document.head.removeChild(scriptElement[0]);
+        document.head.removeChild(scriptElement[0]);
+        return _ember['default'].RSVP.reject();
       });
       document.head.appendChild(scriptElement[0]);
 
@@ -70169,7 +70171,8 @@ define('ember-cli-bundle-loader/utils/-resource-helper', ['exports', 'ember', 'e
           return _ember['default'].run(null, reject, evt);
         });
       })['catch'](function () {
-        return document.head.removeChild(linkElement[0]);
+        document.head.removeChild(linkElement[0]);
+        return _ember['default'].RSVP.reject();
       });
       document.head.appendChild(linkElement[0]);
 

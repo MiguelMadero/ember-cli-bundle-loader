@@ -7,7 +7,8 @@ var bundles = [{
   packages: ['package1'],
   urls: ['assets/package1.js','assets/package1.css'],
   routeNames: ['^package1'],
-  dependsOn: ['package2']
+  dependsOn: ['package2'],
+  blacklistedRouteNames: ['^blacklistedRouteName']
 }];
 
 if (process.env['EMBER_TRY_SCENARIO'] && process.env['EMBER_TRY_SCENARIO'] !== 'ember-1-13') {
@@ -29,6 +30,7 @@ describe('getBundleConfiguration', function () {
       urls: ['assets/my-package.js', 'assets/my-package.css'],
       routeNames: ['^my-package'],
       dependsOn: [],
+      blacklistedRouteNames: [],
     }]);
   });
 
@@ -40,6 +42,7 @@ describe('getBundleConfiguration', function () {
       routeNames: ['^my-package'],
       urls: ['assets/my-package.js', 'assets/my-package.css'],
       dependsOn: [],
+      blacklistedRouteNames: [],
     }]));
   });
 
@@ -57,6 +60,7 @@ describe('getBundleConfiguration', function () {
       packages: ['my-package'],
       urls: ['assets/my-package.js', 'assets/my-package.css'],
       dependsOn: [],
+      blacklistedRouteNames: [],
     }]);
   });
 
@@ -74,6 +78,7 @@ describe('getBundleConfiguration', function () {
       routeNames: ['^irrelevant'],
       urls: ['/static/client-app/assets/my-package.js', '/static/client-app/assets/my-package.css'],
       dependsOn: [],
+      blacklistedRouteNames: [],
     }]);
   });
 
@@ -91,6 +96,7 @@ describe('getBundleConfiguration', function () {
       routeNames: ['^my-package'],
       urls: ['irrelevant.js'],
       dependsOn: [],
+      blacklistedRouteNames: [],
     }]);
   });
 
@@ -107,7 +113,8 @@ describe('getBundleConfiguration', function () {
       packages: ['my-package'],
       urls: ['irrelevant.js'],
       routeNames: ['^x'],
-      dependsOn: []
+      dependsOn: [],
+      blacklistedRouteNames: [],
     }]);
   });
 
@@ -124,7 +131,8 @@ describe('getBundleConfiguration', function () {
       packages: ['my-package'],
       dependsOn: ['another-package'],
       routeNames: ['^my-package'],
-      urls: []
+      urls: [],
+      blacklistedRouteNames: [],
     }]);
   });
 });
