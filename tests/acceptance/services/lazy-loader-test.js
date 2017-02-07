@@ -9,6 +9,15 @@ function getSubject () {
   return Dummy.__container__.lookup('service:lazy-loader');
 }
 
+test('loadAssets - promise fails if one of the assets fails to load', function (assert) {
+  const service = getSubject();
+  return service.loadBundle('package-with-wrong-urls').then(()=>
+     assert.notOk('The promise resolved when it was expected to fail')
+   ).catch(() =>
+     assert.ok('The promise failed')
+  );
+});
+
 test('getBundleForRouteName based on the configuration', function(assert) {
   const service = getSubject();
   const actualBundle = service.getBundleForRouteName('package2');
@@ -152,7 +161,7 @@ test('dependsOn doesnt break for circular dependencies', function(assert) {
   assert.notEqual(assets2.indexOf('bundleB'), -1);
 });
 
-test('namesForBundles returns the bundes based on the load order specified by the dependencies', function(assert) {
+test('namesForBundles returns the bundles based on the load order specified by the dependencies', function(assert) {
   const service = getSubject();
   service.setBundles([{
     name: '1',
