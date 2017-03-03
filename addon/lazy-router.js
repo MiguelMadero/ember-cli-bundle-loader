@@ -37,7 +37,10 @@ export default Ember.Router.extend({
 
       if (typeof handler._setRouteName === 'function') {
         handler._setRouteName(name);
-        handler._populateQPMeta();
+        // handler._populateQPMeta function removed in Ember 2.13
+        if (handler._populateQPMeta) { 
+          handler._populateQPMeta();
+        }
       } else {
         handler.routeName = name;
       }
