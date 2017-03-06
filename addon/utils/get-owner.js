@@ -2,9 +2,7 @@ import Ember from 'ember';
 const { getOwner } = Ember;
 
 export function getContainer (context) {
-  var hasGetOwner = typeof getOwner === "function";
-  var container = hasGetOwner ? getOwner(context) : context.container;
-  return container;
+  return context.container ? context.container : getOwner(context);
 }
 export function getFactory (context, factoryName){
   var container = getContainer(context);
@@ -13,11 +11,11 @@ export function getFactory (context, factoryName){
 }
 export function registerFactory (context, fullName, factory) {
   var container = getContainer(context);
-  var hasGetOwner = typeof getOwner === "function";
-  if (hasGetOwner) {
-    container.base.register(fullName, factory);
-    return;
-  }
   var registry = container._registry || container.registry;
-  registry.register(fullName, factory);
+  if (registry) {
+    // For 1.13 without using getOwner's "FakeContainer"
+    registry.register(fullName, factory);
+  } else {
+    container.base.register(fullName, factory);
+  }
 }
