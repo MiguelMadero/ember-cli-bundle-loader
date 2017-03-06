@@ -1,4 +1,5 @@
 
+
 # Ember-cli-bundle-loader [![Build Status](https://travis-ci.org/MiguelMadero/ember-cli-bundle-loader.svg?branch=master)](https://travis-ci.org/MiguelMadero/ember-cli-bundle-loader) [![Download count all time](https://img.shields.io/npm/dt/ember-cli-bundle-loader.svg)](https://www.npmjs.com/package/ember-cli-bundle-loader) [![Ember Observer Score](http://emberobserver.com/badges/ember-cli-bundle-loader.svg)](http://emberobserver.com/addons/ember-cli-bundle-loader)
 
 [![Code Climate](https://codeclimate.com/github/MiguelMadero/ember-cli-bundle-loader/badges/gpa.svg)](https://codeclimate.com/github/MiguelMadero/ember-cli-bundle-loader)
