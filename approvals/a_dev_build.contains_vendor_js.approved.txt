@@ -69283,8 +69283,8 @@ requireModule("ember");
   var HAS_NATIVE_PROXY = typeof Proxy === 'function';
 
   var SAFE_LOOKUP_FACTORY_METHOD = '_lookupFactory';
-  function factoryFor(fullName) {
-    var factory = this[SAFE_LOOKUP_FACTORY_METHOD](fullName);
+  function factoryFor(fullName, options) {
+    var factory = this[SAFE_LOOKUP_FACTORY_METHOD](fullName, options);
 
     if (!factory) {
       return;

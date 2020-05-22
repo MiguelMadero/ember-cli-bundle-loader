@@ -24,7 +24,7 @@
   "license": "MIT",
   "devDependencies": {
     "approvals": "1.2.0",
-    "broccoli-asset-rev": "^2.2.0",
+    "broccoli-asset-rev": "git+https://github.com/zenefits/broccoli-asset-rev#v3.0.0-zenefits.0",
     "cheerio": "^0.22.0",
     "ember-ajax": "0.7.1",
     "ember-cli": "2.4.2",
